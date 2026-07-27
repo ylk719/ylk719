@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Chat Home Mockup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-bg">
+      <div class="blur-orb orb-a"></div>
+      <div class="blur-orb orb-b"></div>
+      <div class="blur-orb orb-c"></div>
+      <div class="star-layer"></div>
+    </div>
+
+    <main class="screen">
+      <section class="choice-stack" id="choiceStack"></section>
+
+      <p class="section-tag">Top Widgets</p>
+
+      <section class="icon-grid" id="iconGrid"></section>
+
+      <section class="photobook-card">
+        <div class="card-head">
+          <h2 id="photoTitle">PhotoBook</h2>
+          <p id="photoDate">今日 周日</p>
+        </div>
+
+        <div class="card-body">
+          <div class="photo-strip" id="photoStrip"></div>
+          <button
+            class="favorite-btn"
+            id="favoriteBtn"
+            type="button"
+            aria-label="收藏"
+            aria-pressed="false"
+          >
+            <span class="heart-outline"></span>
+          </button>
+        </div>
+      </section>
+
+      <p class="section-tag lower-tag">Top Widgets</p>
+
+      <button class="search-pill" type="button" id="searchPill">
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"></circle>
+            <path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </span>
+        <span id="searchText">搜索</span>
+      </button>
+
+      <nav class="dock" id="dockBar" aria-label="底部快捷栏"></nav>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
