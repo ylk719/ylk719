@@ -1,544 +1,583 @@
-/* ===== 全局重置与全屏沉浸 ===== */
+/* ===== 全局重置 ===== */
 *, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 0; padding: 0; box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
+  -webkit-user-select: none; user-select: none;
 }
 
 html {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background: #000;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: auto;
+  width: 100%; height: 100vh; overflow: hidden;
+  background: #000; overscroll-behavior: none;
 }
 
 body {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background: #000;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  width: 100%; height: 100vh; overflow: hidden; background: #000;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== 桌面容器 ===== */
+/* ===== 桌面 ===== */
 #desktop {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background: linear-gradient(
-    160deg,
-    #0f0c29 0%,
-    #302b63 25%,
-    #24243e 40%,
-    #0f0c29 55%,
-    #1a1a3e 70%,
-    #302b63 85%,
-    #0f0c29 100%
-  );
+  width: 100%; height: 100vh; overflow: hidden; position: relative;
+  background: linear-gradient(160deg, #0f0c29 0%, #302b63 25%, #24243e 40%, #0f0c29 55%, #1a1a3e 70%, #302b63 85%, #0f0c29 100%);
   background-size: 400% 400%;
-  animation: gradientShift 20s ease infinite;
+  animation: grad 20s ease infinite;
 }
 
-@keyframes gradientShift {
+@keyframes grad {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* 壁纸模糊光斑层 */
 #desktop::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  content: ''; position: absolute; inset: 0;
   background:
     radial-gradient(ellipse 60% 50% at 20% 30%, rgba(120, 80, 220, 0.35) 0%, transparent 70%),
     radial-gradient(ellipse 50% 40% at 75% 60%, rgba(0, 120, 255, 0.25) 0%, transparent 70%),
     radial-gradient(ellipse 40% 30% at 50% 80%, rgba(180, 60, 160, 0.2) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  pointer-events: none; z-index: 0;
 }
 
-/* ===== 页面滑动容器 ===== */
+/* ===== 滑动容器 ===== */
 #pages-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 200%;
   height: 100%;
   display: flex;
-  z-index: 1;
-  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
   will-change: transform;
-  /* 内容区域的安全区域内边距 - 让内容避开刘海和底部白条 */
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
 }
 
-#pages-wrapper.dragging {
-  transition: none;
-}
-
-/* ===== 每一屏页面 ===== */
 .page {
   width: 50%;
   height: 100%;
   position: relative;
+  overflow: hidden;
+}
+
+/* ===== 页面指示点 ===== */
+#page-dots {
+  position: fixed;
+  bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 8px;
+  z-index: 50;
 }
 
-.page-content {
-  flex: 1;
-  width: 100%;
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== 第二页 ===== */
+.page2-top {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 50px);
+  left: 0; right: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 60px 20px 0 20px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  padding: 0 16px;
+  gap: 12px;
+  align-items: flex-start;
 }
 
-/* ===== 搜索框 ===== */
-.search-bar {
-  width: 90%;
-  max-width: 360px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  margin-bottom: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.search-icon {
-  width: 16px;
-  height: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  flex-shrink: 0;
-}
-
-.search-bar input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 15px;
-  margin-left: 6px;
-  font-family: inherit;
-  cursor: default;
-}
-
-.search-bar input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* ===== 图标网格 ===== */
-.icon-grid {
-  width: 100%;
-  max-width: 360px;
+.page2-apps {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px 0;
-  justify-items: center;
-  padding: 0 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 10px;
+  flex: 1;
+  align-content: start;
+  padding-top: 6px;
 }
 
-/* ===== 单个图标项 ===== */
-.icon-item {
+.page2-apps .app-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  width: 70px;
+  cursor: pointer;
 }
 
-.icon-face {
-  width: 60px;
-  height: 60px;
+.page2-apps .app-icon {
+  width: 56px; height: 56px;
   border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.1) inset;
+  transition: transform 0.15s ease;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.page2-apps .app-icon::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 14px 14px 0 0; pointer-events: none;
+}
+
+.page2-apps .app-icon::after {
+  content: ''; position: absolute; inset: 0; border-radius: 14px;
+  border: 0.5px solid rgba(255,255,255,0.2); pointer-events: none;
+}
+
+.page2-apps .app-icon svg {
+  position: relative; z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+.page2-apps .app-name {
+  font-size: 11px;
+  font-weight: 400;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  letter-spacing: 0.3px;
+}
+
+.page2-apps .app-item:active .app-icon {
+  transform: scale(0.88);
+}
+
+/* 大图框 */
+.page2-bigframe {
+  flex: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  aspect-ratio: 1/1;
   position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease;
+}
+
+.page2-bigframe:active {
+  transform: scale(0.97);
+}
+
+.bigframe-img {
+  width: 100%; height: 100%; object-fit: cover; display: none;
+}
+
+.bigframe-img.loaded {
+  display: block;
+}
+
+.page2-bigframe.has-img .bigframe-ph {
+  display: none;
+}
+
+.bigframe-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+}
+
+.bigframe-ph svg {
+  width: 40px; height: 40px;
+}
+
+/* ===== 中央组件容器（上半部分）===== */
+.widget-card {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 50px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 170px;
+  z-index: 10;
+}
+
+/* ===== 圆形头像 ===== */
+.avatar-area {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.avatar-circle {
+  width: 100px; height: 100px;
+  border-radius: 50%;
   overflow: hidden;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.3),
-    0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* 毛玻璃光泽效果 */
-.icon-face::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  border-radius: 14px 14px 0 0;
-  pointer-events: none;
-}
-
-.icon-face::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 14px;
-  border: 0.5px solid rgba(255, 255, 255, 0.2);
-  pointer-events: none;
-}
-
-.icon-face svg {
+  cursor: pointer;
   position: relative;
-  z-index: 1;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
-.icon-item:active .icon-face {
-  transform: scale(0.88);
-  box-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.3),
-    0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
+.avatar-circle:active {
+  transform: scale(0.94);
 }
 
-.icon-label {
-  font-size: 11px;
+.avatar-circle img {
+  width: 100%; height: 100%; object-fit: cover; display: none;
+}
+
+.avatar-circle img.loaded {
+  display: block;
+}
+
+.avatar-circle.has-img .avatar-ph {
+  display: none;
+}
+
+.avatar-ph svg { width: 34px; height: 34px; }
+
+.avatar-ph {
+  display: flex; align-items: center; justify-content: center; opacity: 0.5;
+}
+
+/* ===== 毛玻璃浮窗 ===== */
+.float-bubble {
+  position: absolute;
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 16px;
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
   color: #fff;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  line-height: 1.2;
-  max-width: 70px;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ===== 页面指示点 ===== */
-.page-dots {
+.float-bubble:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.bubble-icon {
+  font-size: 15px; line-height: 1;
+}
+
+.bubble-label {
+  font-size: 12px; font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  letter-spacing: 0.2px;
+}
+
+/* 四角对称 - 围绕头像四周 */
+.bubble-tl {
+  top: 18px; left: 4px;
+}
+
+.bubble-tr {
+  top: 18px; right: 4px;
+}
+
+.bubble-bl {
+  bottom: 44px; left: 4px;
+}
+
+.bubble-br {
+  bottom: 44px; right: 4px;
+}
+
+/* ===== APP 图标网格 ===== */
+.app-grid {
   position: absolute;
-  bottom: 100px;
-  left: 0;
-  right: 0;
+  top: calc(env(safe-area-inset-top, 0px) + 220px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  z-index: 10;
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  z-index: 2;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.dot.active {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-/* ===== Dock栏 ===== */
-#dock {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding: 8px 16px;
-  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-  background: rgba(30, 30, 40, 0.55);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-}
-
-.dock-inner {
+.app-row {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  max-width: 360px;
-  margin: 0 auto;
+  justify-content: space-between;
+  padding: 0 4px;
 }
 
-.dock-icon {
+.app-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 6px;
+  cursor: pointer;
 }
 
-.dock-face {
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
-}
-
-.dock-icon:active .dock-face {
+.app-item:active .app-icon {
   transform: scale(0.88);
 }
 
-/* ===== 全屏模式检测提示覆盖层 ===== */
-#standalone-guide {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99999;
-  background: rgba(0, 0, 0, 0.94);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+.app-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.1) inset;
+  transition: transform 0.15s ease;
+  /* 磨砂质感 */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.app-icon::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 14px 14px 0 0; pointer-events: none;
+}
+
+.app-icon::after {
+  content: ''; position: absolute; inset: 0; border-radius: 14px;
+  border: 0.5px solid rgba(255,255,255,0.2); pointer-events: none;
+}
+
+.app-icon svg {
+  position: relative; z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+.app-name {
+  font-size: 11px;
+  font-weight: 400;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  letter-spacing: 0.3px;
+}
+
+/* ===== 下半部分：毛玻璃组件 ===== */
+.glass-panel {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 415px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 24px;
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* 顶部横向区域 */
+.panel-top {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px 28px;
-  padding-top: calc(env(safe-area-inset-top, 0px) + 40px);
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px);
-  color: #fff;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "PingFang SC", sans-serif;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
-#standalone-guide .guide-icon {
-  font-size: 64px;
-  margin-bottom: 20px;
-}
-
-#standalone-guide .guide-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: #fff;
-}
-
-#standalone-guide .guide-status {
-  font-size: 14px;
-  color: #ff6b6b;
-  margin-bottom: 20px;
-  padding: 8px 16px;
-  background: rgba(255, 107, 107, 0.15);
-  border-radius: 8px;
-}
-
-#standalone-guide .guide-steps {
-  text-align: left;
+/* 左上标题文字 */
+.panel-title {
+  color: rgba(255, 255, 255, 0.9);
   font-size: 15px;
-  line-height: 2;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 30px;
-  max-width: 320px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
 }
 
-#standalone-guide .guide-steps .step-num {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #0a84ff;
-  color: #fff;
-  text-align: center;
-  line-height: 24px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-right: 8px;
-  flex-shrink: 0;
+.panel-title:active {
+  opacity: 0.7;
 }
 
-#standalone-guide .guide-steps .step {
+/* 右上日期+爱心 */
+.panel-meta {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
-}
-
-#standalone-guide .guide-note {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  margin-top: 8px;
-  line-height: 1.6;
-}
-
-#standalone-guide .guide-btn {
-  display: inline-block;
-  padding: 12px 40px;
-  background: #0a84ff;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  gap: 6px;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
-#standalone-guide .guide-btn:active {
-  background: #0070e0;
-  transform: scale(0.96);
+.meta-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== 响应式适配 ===== */
+.meta-icon {
+  font-size: 14px;
+  color: rgba(255, 180, 200, 0.9);
+  text-shadow: 0 1px 3px rgba(255, 100, 130, 0.3);
+}
 
-/* 小屏幕手机（如 iPhone SE / iPhone 6/7/8） */
+/* 底部三宫格 */
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.panel-frame {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.panel-frame:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.panel-frame .frame-img {
+  width: 100%; height: 100%; object-fit: cover; display: none;
+}
+
+.panel-frame .frame-img.loaded {
+  display: block;
+}
+
+.panel-frame.has-img .frame-ph {
+  display: none;
+}
+
+.frame-ph {
+  font-size: 28px;
+  opacity: 0.6;
+}
+
+/* ===== 图标通用 ===== */
+.icon-face {
+  width: 60px; height: 60px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.1) inset;
+  transition: transform 0.15s ease;
+}
+
+.icon-face::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 14px 14px 0 0; pointer-events: none;
+}
+
+.icon-face::after {
+  content: ''; position: absolute; inset: 0; border-radius: 14px;
+  border: 0.5px solid rgba(255,255,255,0.2); pointer-events: none;
+}
+
+.icon-face svg { position: relative; z-index: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2)); }
+
+/* ===== Dock 栏 ===== */
+#dock {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  display: flex; justify-content: center;
+}
+
+.dock-ellipse {
+  display: flex; justify-content: center; align-items: center;
+  gap: 20px; padding: 12px 28px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-radius: 999px; margin: 0 24px;
+  border: 0.5px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+}
+
+.dock-icon { display: flex; align-items: center; justify-content: center; }
+.dock-face { width: 60px; height: 60px; border-radius: 14px; }
+.dock-icon:active .dock-face { transform: scale(0.88); }
+
+/* ===== 响应式 ===== */
 @media screen and (max-height: 680px) {
-  .page-content {
-    padding-top: 40px;
-  }
-
-  .search-bar {
-    margin-bottom: 20px;
-    height: 32px;
-  }
-
-  .icon-grid {
-    gap: 18px 0;
-  }
-
-  .icon-face {
-    width: 54px;
-    height: 54px;
-    border-radius: 12px;
-  }
-
-  .dock-face {
-    width: 54px;
-    height: 54px;
-    border-radius: 12px;
-  }
-
-  .icon-face svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .dock-face svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .icon-label {
-    font-size: 10px;
-  }
-
-  .page-dots {
-    bottom: 88px;
-  }
+  .widget-card { top: calc(env(safe-area-inset-top, 0px) + 35px); width: 240px; height: 150px; }
+  .avatar-circle { width: 80px; height: 80px; }
+  .avatar-ph svg { width: 26px; height: 26px; }
+  .float-bubble { padding: 6px 11px; }
+  .bubble-icon { font-size: 13px; }
+  .bubble-label { font-size: 11px; }
+  .bubble-tl, .bubble-tr { top: 6px; }
+  .bubble-bl, .bubble-br { bottom: 28px; }
+  .app-grid { top: calc(env(safe-area-inset-top, 0px) + 205px); width: 260px; gap: 14px; }
+  .app-icon { width: 48px; height: 48px; }
+  .app-name { font-size: 10px; }
+  .glass-panel { top: calc(env(safe-area-inset-top, 0px) + 340px); width: 270px; padding: 12px 14px; }
+  .panel-title { font-size: 13px; }
+  .meta-text { font-size: 11px; }
+  .meta-icon { font-size: 12px; }
+  .panel-grid { gap: 8px; }
+  .frame-ph { font-size: 22px; }
+  .page2-top { top: calc(env(safe-area-inset-top, 0px) + 35px); padding: 0 12px; gap: 10px; }
+  .page2-apps { gap: 10px 8px; }
+  .page2-apps .app-icon { width: 48px; height: 48px; }
+  .page2-apps .app-name { font-size: 10px; }
+  .page2-bigframe { border-radius: 16px; }
 }
 
-/* 大屏幕手机（如 iPhone 12/13/14 Pro Max, iPhone 15） */
-@media screen and (min-height: 800px) {
-  .page-content {
-    padding-top: 70px;
-  }
-
-  .icon-grid {
-    gap: 28px 0;
-  }
-
-  .icon-face {
-    width: 64px;
-    height: 64px;
-    border-radius: 15px;
-  }
-
-  .dock-face {
-    width: 64px;
-    height: 64px;
-    border-radius: 15px;
-  }
-
-  .icon-label {
-    font-size: 12px;
-  }
+@media screen and (min-height: 850px) {
+  .widget-card { top: calc(env(safe-area-inset-top, 0px) + 60px); width: 280px; height: 180px; }
+  .avatar-circle { width: 110px; height: 110px; }
+  .avatar-ph svg { width: 38px; height: 38px; }
+  .float-bubble { padding: 9px 16px; }
+  .bubble-icon { font-size: 17px; }
+  .bubble-label { font-size: 13px; }
+  .bubble-tl, .bubble-tr { top: 14px; }
+  .bubble-bl, .bubble-br { bottom: 40px; }
+  .app-grid { top: calc(env(safe-area-inset-top, 0px) + 270px); gap: 20px; }
+  .glass-panel { top: calc(env(safe-area-inset-top, 0px) + 445px); width: 320px; }
+  .panel-title { font-size: 16px; }
+  .meta-text { font-size: 13px; }
+  .page2-top { top: calc(env(safe-area-inset-top, 0px) + 60px); gap: 14px; }
+  .page2-apps .app-icon { width: 60px; height: 60px; }
 }
 
-/* 超大屏幕（如 iPhone 15 Pro Max） */
-@media screen and (min-height: 900px) {
-  .page-content {
-    padding-top: 80px;
-  }
-
-  .icon-grid {
-    gap: 32px 0;
-  }
-}
-
-/* 横屏处理 - 强制竖屏视觉 */
 @media screen and (orientation: landscape) {
-  #desktop {
-    width: 100%;
-    height: 100vh;
-  }
-
-  .page-content {
-    padding-top: 30px;
-  }
-
-  .icon-grid {
-    gap: 14px 0;
-  }
-
-  .icon-face {
-    width: 48px;
-    height: 48px;
-    border-radius: 11px;
-  }
-
-  .dock-face {
-    width: 48px;
-    height: 48px;
-    border-radius: 11px;
-  }
-
-  .icon-face svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .dock-face svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .icon-label {
-    font-size: 9px;
-  }
-
-  .search-bar {
-    margin-bottom: 12px;
-    height: 30px;
-  }
-
-  .page-dots {
-    bottom: 76px;
-  }
-
-  #dock {
-    padding: 6px 16px;
-    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
-  }
+  .widget-card { top: calc(env(safe-area-inset-top, 0px) + 25px); width: 220px; height: 140px; }
+  .avatar-circle { width: 70px; height: 70px; }
+  .avatar-ph svg { width: 22px; height: 22px; }
+  .float-bubble { padding: 5px 10px; }
+  .bubble-icon { font-size: 12px; }
+  .bubble-label { font-size: 10px; }
+  .bubble-tl, .bubble-tr { top: 4px; }
+  .bubble-bl, .bubble-br { bottom: 24px; }
+  .app-grid { top: calc(env(safe-area-inset-top, 0px) + 185px); width: 260px; gap: 12px; }
+  .app-icon { width: 44px; height: 44px; }
+  .app-name { font-size: 9px; }
+  .glass-panel { top: calc(env(safe-area-inset-top, 0px) + 300px); width: 260px; padding: 10px 12px; }
+  .panel-title { font-size: 12px; }
+  .meta-text { font-size: 10px; }
+  .meta-icon { font-size: 11px; }
+  .panel-grid { gap: 8px; }
+  .frame-ph { font-size: 20px; }
+  .page2-top { top: calc(env(safe-area-inset-top, 0px) + 25px); padding: 0 12px; gap: 10px; }
+  .page2-apps .app-icon { width: 44px; height: 44px; }
+  .page2-apps .app-name { font-size: 9px; }
+  .page2-bigframe { border-radius: 14px; }
 }
