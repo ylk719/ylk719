@@ -1,93 +1,258 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
-    />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="theme-color" content="#dbe7fb" />
-    <title>AI Chat Home Mockup</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css?v=20260727b" />
-  </head>
-  <body>
-    <main class="app-shell">
-      <section class="phone-stage" aria-label="仿苹果手机主页">
-        <div class="phone-bg">
-          <div class="blur-orb orb-a"></div>
-          <div class="blur-orb orb-b"></div>
-          <div class="blur-orb orb-c"></div>
-          <div class="star-layer"></div>
-        </div>
-
-        <div class="pages-viewport" id="pagesViewport">
-          <div class="pages-track" id="pagesTrack">
-            <section class="home-page page-main" aria-label="主页一">
-              <div class="page-scroll">
-                <section class="choice-stack" id="choiceStack"></section>
-
-                <p class="section-tag">Top Widgets</p>
-
-                <section class="icon-grid" id="iconGridPrimary"></section>
-
-                <section class="photobook-card">
-                  <div class="card-head">
-                    <h2 id="photoTitle">PhotoBook</h2>
-                    <p id="photoDate">今日 周日</p>
-                  </div>
-
-                  <div class="card-body">
-                    <div class="photo-strip" id="photoStrip"></div>
-                    <button
-                      class="favorite-btn"
-                      id="favoriteBtn"
-                      type="button"
-                      aria-label="收藏"
-                      aria-pressed="false"
-                    >
-                      <span class="heart-outline"></span>
-                    </button>
-                  </div>
-                </section>
-
-                <p class="section-tag lower-tag">Top Widgets</p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000">
+  <meta name="msapplication-navbutton-color" content="#000000">
+  <link rel="manifest" href='data:application/manifest+json,{"name":"iOS Desktop","short_name":"iOS Desktop","description":"仿苹果iOS风格手机桌面PWA","start_url":"/index.html","display":"fullscreen","orientation":"portrait","background_color":"#000000","theme_color":"#000000","icons":[{"src":"data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27><rect width=%27512%27 height=%27512%27 rx=%27108%27 fill=%27%230a84ff%27/><text x=%27256%27 y=%27340%27 font-size=%27280%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27system-ui%27>📱</text></svg>","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}'>
+  <title>iOS Desktop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="desktop">
+    <!-- 桌面滑动容器 -->
+    <div id="pages-wrapper">
+      <!-- 第一屏 -->
+      <div class="page" id="page-1">
+        <div class="page-content">
+          <!-- 搜索框 -->
+          <div class="search-bar">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" placeholder="搜索" readonly>
+          </div>
+          <!-- 第一屏图标网格 -->
+          <div class="icon-grid">
+            <!-- Row 1 -->
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF6B6B, #FF3B30);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm10 0h2v2h-2zm-6-4h8v2h-8z"/>
+                </svg>
               </div>
-            </section>
-
-            <section class="home-page page-secondary" aria-label="主页二">
-              <div class="page-scroll">
-                <section class="secondary-hero">
-                  <p class="secondary-kicker" id="secondaryKicker">AI Chat Space</p>
-                  <h2 class="secondary-title" id="secondaryTitle">第二页可左右滑动</h2>
-                  <p class="secondary-text" id="secondaryText">
-                    这里保留手机主页的第二屏，用来放更多图标、聊天入口或小组件。
-                  </p>
-                </section>
-
-                <section class="icon-grid secondary-grid" id="iconGridSecondary"></section>
-
-                <section class="widget-row" id="widgetRow"></section>
+              <span class="icon-label">新闻</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
               </div>
-            </section>
+              <span class="icon-label">电话</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #34C759, #248A3D);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </div>
+              <span class="icon-label">Safari</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF9500, #FF6900);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm10 0h2v2h-2zm-6-4h8v2h-8z"/>
+                </svg>
+              </div>
+              <span class="icon-label">备忘录</span>
+            </div>
+            <!-- Row 2 -->
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #AF52DE, #8944AB);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+              </div>
+              <span class="icon-label">音乐</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF2D55, #D91E48);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </div>
+              <span class="icon-label">健康</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #5856D6, #3634A3);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2h2v-4h4v-2h-4V7h-2v4H8v2h4z"/>
+                </svg>
+              </div>
+              <span class="icon-label">日历</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #64D2FF, #0A84FF);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+              </div>
+              <span class="icon-label">提醒</span>
+            </div>
+            <!-- Row 3 -->
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #30D158, #248A3D);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm10-6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 10V8l5 4-5 4z"/>
+                </svg>
+              </div>
+              <span class="icon-label">时钟</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FFD60A, #FF9F0A);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+              <span class="icon-label">快捷指令</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF6482, #FF2D55);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+              </div>
+              <span class="icon-label">播客</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #32ADE6, #007AFF);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              <span class="icon-label">邮件</span>
+            </div>
           </div>
         </div>
-
-        <div class="bottom-ui">
-          <div class="page-dots" id="pageDots" aria-label="页面切换指示器"></div>
-
-          <nav class="dock" id="dockBar" aria-label="底部快捷栏"></nav>
+        <!-- 页面指示点 -->
+        <div class="page-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
         </div>
-      </section>
-    </main>
+      </div>
 
-    <script src="./script.js?v=20260727b"></script>
-  </body>
+      <!-- 第二屏 -->
+      <div class="page" id="page-2">
+        <div class="page-content">
+          <!-- 第二屏图标网格 -->
+          <div class="icon-grid">
+            <!-- Row 1 -->
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #BF5AF2, #8944AB);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </div>
+              <span class="icon-label">地图</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF9F0A, #FF6900);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+                </svg>
+              </div>
+              <span class="icon-label">信息</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #64D2FF, #5AC8FA);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                </svg>
+              </div>
+              <span class="icon-label">文件</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF375F, #D91E48);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 15c1.66 0 2.99-1.34 2.99-3L15 6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 15 6.7 12H5c0 3.41 2.72 6.23 6 6.72V22h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                </svg>
+              </div>
+              <span class="icon-label">语音备忘</span>
+            </div>
+            <!-- Row 2 -->
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #30B0C7, #0A84FF);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM5 15h14v3H5z"/>
+                </svg>
+              </div>
+              <span class="icon-label">钱包</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FF6482, #FF2D55);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                </svg>
+              </div>
+              <span class="icon-label">设置</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #FFD60A, #FFCC00);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              </div>
+              <span class="icon-label">App Store</span>
+            </div>
+            <div class="icon-item">
+              <div class="icon-face" style="background: linear-gradient(135deg, #32ADE6, #5AC8FA);">
+                <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+                  <path d="M3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14zm-8-2h2v-2h2v-2h-2V7h-2v6h-2v2h2z"/>
+                </svg>
+              </div>
+              <span class="icon-label">翻译</span>
+            </div>
+          </div>
+        </div>
+        <!-- 页面指示点 -->
+        <div class="page-dots">
+          <div class="dot"></div>
+          <div class="dot active"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 固定Dock栏 -->
+    <div id="dock">
+      <div class="dock-inner">
+        <div class="dock-icon">
+          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #34C759, #248A3D);">
+            <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+              <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="dock-icon">
+          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
+            <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="dock-icon">
+          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #FF9500, #FF6900);">
+            <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="dock-icon">
+          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #AF52DE, #8944AB);">
+            <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
