@@ -1,461 +1,243 @@
-const appData = {
-  choices: [
-    {
-      avatar:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
-      text: "「 少女糖霜绘本册 」",
-      selected: true,
-    },
-    {
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
-      text: "Girl's frosting picture book",
-      selected: false,
-    },
-  ],
-  pages: [
-    [
-      {
-        name: "来鸟",
-        icon: "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "咩哩咩哩",
-        icon: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "饿了么",
-        icon: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "DeepSeek",
-        icon: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "美颜相机",
-        icon: "https://images.unsplash.com/photo-1525253086316-d0c936c814f8?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "美团",
-        icon: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "QQ音乐",
-        icon: "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "QQ",
-        icon: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=240&q=80",
-      },
-    ],
-    [
-      {
-        name: "Messages",
-        icon: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Notes",
-        icon: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Dream",
-        icon: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Album",
-        icon: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Chat",
-        icon: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Camera",
-        icon: "https://images.unsplash.com/photo-1525253086316-d0c936c814f8?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Music",
-        icon: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=240&q=80",
-      },
-      {
-        name: "Memo",
-        icon: "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=240&q=80",
-      },
-    ],
-  ],
-  secondaryHero: {
-    kicker: "AI Chat Space",
-    title: "第二页可左右滑动",
-    text: "这里保留手机主页的第二屏，用来放更多图标、聊天入口或小组件。",
-  },
-  widgets: [
-    {
-      title: "聊天入口",
-      text: "这里可以改成 AI 助手卡片、未读消息、快捷会话或最近联系人。",
-    },
-    {
-      title: "页面说明",
-      text: "整个舞台固定为手机比例，分享到主屏幕后不会再按普通网页流式拉伸。",
-    },
-  ],
-  photobook: {
-    title: "PhotoBook",
-    date: "今日 周日",
-    favorite: false,
-    photos: [
-      "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=460&q=80",
-      "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=460&q=80",
-      "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=460&q=80",
-    ],
-  },
-  searchPlaceholder: "搜索",
-  dockIcons: [
-    {
-      name: "设置",
-      icon: "https://images.unsplash.com/photo-1525253086316-d0c936c814f8?auto=format&fit=crop&w=240&q=80",
-    },
-    {
-      name: "微信",
-      icon: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=240&q=80",
-    },
-    {
-      name: "支付宝",
-      icon: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=240&q=80",
-    },
-    {
-      name: "相机",
-      icon: "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=240&q=80",
-    },
-  ],
-};
+(function () {
+  'use strict';
 
-const choiceStack = document.getElementById("choiceStack");
-const iconGridPrimary = document.getElementById("iconGridPrimary");
-const iconGridSecondary = document.getElementById("iconGridSecondary");
-const widgetRow = document.getElementById("widgetRow");
-const photoStrip = document.getElementById("photoStrip");
-const favoriteBtn = document.getElementById("favoriteBtn");
-const photoTitle = document.getElementById("photoTitle");
-const photoDate = document.getElementById("photoDate");
-const dockBar = document.getElementById("dockBar");
-const pageDots = document.getElementById("pageDots");
-const pagesTrack = document.getElementById("pagesTrack");
-const pagesViewport = document.getElementById("pagesViewport");
-const secondaryKicker = document.getElementById("secondaryKicker");
-const secondaryTitle = document.getElementById("secondaryTitle");
-const secondaryText = document.getElementById("secondaryText");
-
-let currentPage = 0;
-let startX = 0;
-let startY = 0;
-let currentOffset = 0;
-let isDragging = false;
-let isHorizontalGesture = null;
-
-const fileInput = document.createElement("input");
-fileInput.type = "file";
-fileInput.accept = "image/*";
-fileInput.style.display = "none";
-document.body.appendChild(fileInput);
-
-let currentUploadCallback = null;
-fileInput.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (file && currentUploadCallback) {
-    const reader = new FileReader();
-    reader.onload = (ev) => currentUploadCallback(ev.target.result);
-    reader.readAsDataURL(file);
+  // ===== 修复 100dvh 在某些浏览器的兼容性 =====
+  function setVH() {
+    var vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
   }
-  e.target.value = "";
-});
-
-function triggerUpload(callback) {
-  currentUploadCallback = callback;
-  fileInput.click();
-}
-
-function createImage(src, alt) {
-  const img = document.createElement("img");
-  img.src = src;
-  img.alt = alt;
-  img.loading = "lazy";
-  return img;
-}
-
-function renderChoices() {
-  choiceStack.innerHTML = "";
-
-  appData.choices.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = "choice-item";
-
-    const avatar = document.createElement("button");
-    avatar.className = "choice-avatar";
-    avatar.type = "button";
-    avatar.title = "点击更换头像";
-    avatar.appendChild(createImage(item.avatar, `选项头像 ${index + 1}`));
-    avatar.addEventListener("click", () => {
-      triggerUpload((url) => {
-        appData.choices[index].avatar = url;
-        renderChoices();
-      });
-    });
-
-    const bubble = document.createElement("div");
-    bubble.className = "choice-bubble";
-
-    const text = document.createElement("span");
-    text.className = "choice-text";
-    text.textContent = item.text;
-    text.contentEditable = "true";
-    text.spellcheck = false;
-    text.addEventListener("blur", (e) => {
-      appData.choices[index].text = e.target.textContent;
-    });
-
-    bubble.append(text);
-    row.append(avatar, bubble);
-
-    choiceStack.appendChild(row);
-  });
-}
-
-function renderIcons(target, items) {
-  target.innerHTML = "";
-
-  items.forEach((item) => {
-    const wrapper = document.createElement("article");
-    wrapper.className = "app-item";
-
-    const icon = document.createElement("div");
-    icon.className = "app-icon";
-    icon.appendChild(createImage(item.icon, item.name));
-
-    const title = document.createElement("p");
-    title.className = "app-name";
-    title.textContent = item.name;
-
-    wrapper.append(icon, title);
-    target.appendChild(wrapper);
-  });
-}
-
-function renderWidgets() {
-  secondaryKicker.textContent = appData.secondaryHero.kicker;
-  secondaryTitle.textContent = appData.secondaryHero.title;
-  secondaryText.textContent = appData.secondaryHero.text;
-  widgetRow.innerHTML = "";
-
-  appData.widgets.forEach((item) => {
-    const card = document.createElement("article");
-    card.className = "mini-widget";
-
-    const title = document.createElement("p");
-    title.className = "mini-widget-title";
-    title.textContent = item.title;
-
-    const text = document.createElement("p");
-    text.className = "mini-widget-text";
-    text.textContent = item.text;
-
-    card.append(title, text);
-    widgetRow.appendChild(card);
-  });
-}
-
-function renderPhotobook() {
-  photoTitle.textContent = appData.photobook.title;
-  photoTitle.contentEditable = "true";
-  photoTitle.spellcheck = false;
-
-  photoDate.textContent = appData.photobook.date;
-  photoDate.contentEditable = "true";
-  photoDate.spellcheck = false;
-
-  photoStrip.innerHTML = "";
-
-  appData.photobook.photos.forEach((src, index) => {
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = "photo-card";
-    card.title = "点击上传新图片";
-    card.appendChild(createImage(src, `相册图片 ${index + 1}`));
-    card.addEventListener("click", () => {
-      triggerUpload((url) => {
-        appData.photobook.photos[index] = url;
-        renderPhotobook();
-      });
-    });
-    photoStrip.appendChild(card);
+  setVH();
+  window.addEventListener('resize', setVH);
+  window.addEventListener('orientationchange', function () {
+    setTimeout(setVH, 100);
   });
 
-  favoriteBtn.classList.toggle("is-active", appData.photobook.favorite);
-  favoriteBtn.setAttribute("aria-pressed", String(appData.photobook.favorite));
-}
+  // ===== 核心滑动逻辑 =====
+  var pagesWrapper = document.getElementById('pages-wrapper');
+  var page1 = document.getElementById('page-1');
+  var page2 = document.getElementById('page-2');
+  var totalPages = 2;
+  var currentPage = 0;
 
-function renderDock() {
-  dockBar.innerHTML = "";
+  // 触摸状态
+  var startX = 0;
+  var startY = 0;
+  var currentX = 0;
+  var isDragging = false;
+  var isHorizontal = null; // null=未判断, true=水平, false=垂直
+  var startTime = 0;
 
-  appData.dockIcons.forEach((item, index) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "dock-item";
-
-    const icon = document.createElement("div");
-    icon.className = "dock-icon";
-    icon.appendChild(createImage(item.icon, item.name));
-
-    const name = document.createElement("p");
-    name.className = "dock-name";
-    name.textContent = item.name;
-    name.contentEditable = "true";
-    name.spellcheck = false;
-    name.addEventListener("blur", (e) => {
-      appData.dockIcons[index].name = e.target.textContent;
-    });
-
-    wrapper.append(icon, name);
-    dockBar.appendChild(wrapper);
-  });
-}
-
-function renderDots() {
-  pageDots.innerHTML = "";
-
-  appData.pages.forEach((_, index) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.className = `page-dot${index === currentPage ? " is-active" : ""}`;
-    dot.setAttribute("aria-label", `切换到第 ${index + 1} 页`);
-    dot.addEventListener("click", () => setPage(index));
-    pageDots.appendChild(dot);
-  });
-}
-
-function updateTrack(offsetPercent = 0) {
-  const base = currentPage * -50;
-  const next = base + offsetPercent;
-
-  if (offsetPercent === 0) {
-    pagesTrack.style.removeProperty("transform");
-    document.documentElement.style.setProperty("--page-index", String(currentPage));
-    return;
+  // 获取屏幕宽度
+  function getScreenWidth() {
+    return window.innerWidth || document.documentElement.clientWidth;
   }
 
-  pagesTrack.style.transform = `translate3d(${next}%, 0, 0)`;
-}
-
-function setPage(index) {
-  currentPage = Math.max(0, Math.min(index, appData.pages.length - 1));
-  pagesTrack.classList.remove("is-dragging");
-  pagesTrack.style.removeProperty("transform");
-  document.documentElement.style.setProperty("--page-index", String(currentPage));
-  renderDots();
-}
-
-function getEventPos(event) {
-  if (event.type.includes("mouse")) {
-    return { x: event.pageX, y: event.pageY };
-  }
-  return { x: event.touches[0].clientX, y: event.touches[0].clientY };
-}
-
-function onDragStart(event) {
-  if (event.target.closest('[contenteditable="true"]')) {
-    return;
-  }
-  const pos = getEventPos(event);
-  startX = pos.x;
-  startY = pos.y;
-  currentOffset = 0;
-  isDragging = true;
-  isHorizontalGesture = null;
-  pagesTrack.classList.add("is-dragging");
-}
-
-function onDragMove(event) {
-  if (!isDragging) {
-    return;
+  // 切换到指定页面
+  function goToPage(index) {
+    if (index < 0) { index = 0; }
+    if (index >= totalPages) { index = totalPages - 1; }
+    currentPage = index;
+    var offset = -currentPage * 50;
+    pagesWrapper.style.transform = 'translateX(' + offset + '%)';
+    updateDots();
   }
 
-  const pos = getEventPos(event);
-  const deltaX = pos.x - startX;
-  const deltaY = pos.y - startY;
+  // 更新页面指示点
+  function updateDots() {
+    var allDots = document.querySelectorAll('.page-dots');
+    for (var i = 0; i < allDots.length; i++) {
+      var dots = allDots[i].querySelectorAll('.dot');
+      for (var j = 0; j < dots.length; j++) {
+        if (j === currentPage) {
+          dots[j].classList.add('active');
+        } else {
+          dots[j].classList.remove('active');
+        }
+      }
+    }
+  }
 
-  if (isHorizontalGesture === null) {
-    if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) {
+  // ===== 触摸事件处理 =====
+  pagesWrapper.addEventListener('touchstart', function (e) {
+    var touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    currentX = 0;
+    isDragging = true;
+    isHorizontal = null;
+    startTime = Date.now();
+    pagesWrapper.classList.add('dragging');
+  }, { passive: true });
+
+  pagesWrapper.addEventListener('touchmove', function (e) {
+    if (!isDragging) { return; }
+
+    var touch = e.touches[0];
+    var diffX = touch.clientX - startX;
+    var diffY = touch.clientY - startY;
+
+    // 判断滑动方向（只判断一次）
+    if (isHorizontal === null) {
+      if (Math.abs(diffX) > 5 || Math.abs(diffY) > 5) {
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          isHorizontal = true;
+        } else {
+          isHorizontal = false;
+        }
+      }
+    }
+
+    // 非水平滑动不处理
+    if (isHorizontal === false) {
+      isDragging = false;
+      pagesWrapper.classList.remove('dragging');
       return;
     }
-    isHorizontalGesture = Math.abs(deltaX) > Math.abs(deltaY);
-  }
 
-  if (!isHorizontalGesture) {
-    pagesTrack.classList.remove("is-dragging");
-    pagesTrack.style.removeProperty("transform");
+    // 水平滑动 - 边界阻力
+    if (currentPage === 0 && diffX > 0) {
+      // 第一屏向右拉，施加阻力
+      diffX = diffX * 0.3;
+    } else if (currentPage === totalPages - 1 && diffX < 0) {
+      // 最后一屏向左拉，施加阻力
+      diffX = diffX * 0.3;
+    }
+
+    currentX = diffX;
+    var baseOffset = -currentPage * 50;
+    var movePercent = (diffX / getScreenWidth()) * 50;
+    var newOffset = baseOffset + movePercent;
+    pagesWrapper.style.transform = 'translateX(' + newOffset + '%)';
+  }, { passive: true });
+
+  pagesWrapper.addEventListener('touchend', function (e) {
+    if (!isDragging) {
+      pagesWrapper.classList.remove('dragging');
+      return;
+    }
+
     isDragging = false;
-    return;
+    pagesWrapper.classList.remove('dragging');
+
+    if (isHorizontal === false) {
+      goToPage(currentPage);
+      return;
+    }
+
+    var elapsed = Date.now() - startTime;
+    var velocity = Math.abs(currentX) / elapsed;
+    var threshold = getScreenWidth() * 0.2;
+
+    // 快速滑动 或 滑动距离超过阈值
+    if (currentX < -threshold || (velocity > 0.5 && currentX < -30)) {
+      // 向左滑 -> 下一页
+      goToPage(currentPage + 1);
+    } else if (currentX > threshold || (velocity > 0.5 && currentX > 30)) {
+      // 向右滑 -> 上一页
+      goToPage(currentPage - 1);
+    } else {
+      // 回弹
+      goToPage(currentPage);
+    }
+  }, { passive: true });
+
+  pagesWrapper.addEventListener('touchcancel', function (e) {
+    isDragging = false;
+    pagesWrapper.classList.remove('dragging');
+    goToPage(currentPage);
+  }, { passive: true });
+
+  // ===== 鼠标事件（PC端调试用）=====
+  var mouseDown = false;
+  var mouseStartX = 0;
+  var mouseCurrentX = 0;
+  var mouseStartTime = 0;
+
+  pagesWrapper.addEventListener('mousedown', function (e) {
+    mouseDown = true;
+    mouseStartX = e.clientX;
+    mouseCurrentX = 0;
+    mouseStartTime = Date.now();
+    pagesWrapper.classList.add('dragging');
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!mouseDown) { return; }
+    var diffX = e.clientX - mouseStartX;
+
+    if (currentPage === 0 && diffX > 0) {
+      diffX = diffX * 0.3;
+    } else if (currentPage === totalPages - 1 && diffX < 0) {
+      diffX = diffX * 0.3;
+    }
+
+    mouseCurrentX = diffX;
+    var baseOffset = -currentPage * 50;
+    var movePercent = (diffX / getScreenWidth()) * 50;
+    var newOffset = baseOffset + movePercent;
+    pagesWrapper.style.transform = 'translateX(' + newOffset + '%)';
+  });
+
+  document.addEventListener('mouseup', function (e) {
+    if (!mouseDown) { return; }
+    mouseDown = false;
+    pagesWrapper.classList.remove('dragging');
+
+    var elapsed = Date.now() - mouseStartTime;
+    var velocity = Math.abs(mouseCurrentX) / elapsed;
+    var threshold = getScreenWidth() * 0.2;
+
+    if (mouseCurrentX < -threshold || (velocity > 0.5 && mouseCurrentX < -30)) {
+      goToPage(currentPage + 1);
+    } else if (mouseCurrentX > threshold || (velocity > 0.5 && mouseCurrentX > 30)) {
+      goToPage(currentPage - 1);
+    } else {
+      goToPage(currentPage);
+    }
+  });
+
+  // ===== 阻止默认行为 =====
+  document.addEventListener('gesturestart', function (e) { e.preventDefault(); }, { passive: false });
+  document.addEventListener('gesturechange', function (e) { e.preventDefault(); }, { passive: false });
+  document.addEventListener('gestureend', function (e) { e.preventDefault(); }, { passive: false });
+
+  // 双击缩放禁止
+  var lastTouchEnd = 0;
+  document.addEventListener('touchend', function (e) {
+    var now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, { passive: false });
+
+  // ===== 防止页面弹跳（iOS橡皮筋）=====
+  document.body.addEventListener('touchmove', function (e) {
+    if (e.target.closest('.page-content')) {
+      var el = e.target.closest('.page-content');
+      var scrollTop = el.scrollTop;
+      var scrollHeight = el.scrollHeight;
+      var clientHeight = el.clientHeight;
+
+      if (scrollTop <= 0 && e.touches[0].clientY > 0) {
+        // 到顶部
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        // 到底部
+      }
+    }
+  }, { passive: true });
+
+  // ===== 初始化 =====
+  goToPage(0);
+
+  // PWA Service Worker 注册（如果存在）
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {
+        // sw.js 不存在时静默忽略
+      });
+    });
   }
-
-  if (event.type.includes("mouse")) {
-    event.preventDefault();
-  }
-
-  const width = pagesViewport.clientWidth || 1;
-  currentOffset = (deltaX / width) * 50;
-
-  if ((currentPage === 0 && currentOffset > 0) || (currentPage === appData.pages.length - 1 && currentOffset < 0)) {
-    currentOffset *= 0.35;
-  }
-
-  updateTrack(currentOffset);
-}
-
-function onDragEnd() {
-  if (!isDragging) {
-    isHorizontalGesture = null;
-    return;
-  }
-
-  isDragging = false;
-  pagesTrack.classList.remove("is-dragging");
-
-  if (Math.abs(currentOffset) > 10) {
-    setPage(currentOffset < 0 ? currentPage + 1 : currentPage - 1);
-  } else {
-    setPage(currentPage);
-  }
-
-  currentOffset = 0;
-  isHorizontalGesture = null;
-}
-
-favoriteBtn.addEventListener("click", () => {
-  appData.photobook.favorite = !appData.photobook.favorite;
-  renderPhotobook();
-});
-
-photoTitle.addEventListener("blur", (e) => {
-  appData.photobook.title = e.target.textContent;
-});
-photoDate.addEventListener("blur", (e) => {
-  appData.photobook.date = e.target.textContent;
-});
-
-pagesViewport.addEventListener("touchstart", onDragStart, { passive: true });
-pagesViewport.addEventListener("touchmove", onDragMove, { passive: false });
-pagesViewport.addEventListener("touchend", onDragEnd);
-pagesViewport.addEventListener("touchcancel", onDragEnd);
-
-pagesViewport.addEventListener("mousedown", onDragStart);
-window.addEventListener("mousemove", onDragMove, { passive: false });
-window.addEventListener("mouseup", onDragEnd);
-
-renderChoices();
-renderIcons(iconGridPrimary, appData.pages[0]);
-renderIcons(iconGridSecondary, appData.pages[1]);
-renderWidgets();
-renderPhotobook();
-renderDock();
-renderDots();
-setPage(0);
-
-window.mockupConfig = appData;
+})();
