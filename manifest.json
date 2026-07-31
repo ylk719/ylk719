@@ -1,0 +1,19 @@
+{
+  "name": "iOS Desktop",
+  "short_name": "iOS Desktop",
+  "description": "仿苹果iOS风格手机桌面PWA",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

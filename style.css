@@ -9,25 +9,33 @@
   user-select: none;
 }
 
-html, body {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+html {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+}
+
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #000;
-}
-
-/* 安全区域强制覆盖 */
-body {
-  padding-top: env(safe-area-inset-top, 0) !important;
-  padding-bottom: env(safe-area-inset-bottom, 0) !important;
-  padding-left: env(safe-area-inset-left, 0) !important;
-  padding-right: env(safe-area-inset-right, 0) !important;
 }
 
 /* ===== 桌面容器 ===== */
@@ -35,8 +43,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
   background: linear-gradient(
     160deg,
@@ -85,6 +93,10 @@ body {
   z-index: 1;
   transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
+  /* 内容区域的安全区域内边距 - 让内容避开刘海和底部白条 */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 #pages-wrapper.dragging {
@@ -272,7 +284,7 @@ body {
   right: 0;
   z-index: 100;
   padding: 8px 16px;
-  padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   background: rgba(30, 30, 40, 0.55);
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
@@ -301,6 +313,105 @@ body {
 
 .dock-icon:active .dock-face {
   transform: scale(0.88);
+}
+
+/* ===== 全屏模式检测提示覆盖层 ===== */
+#standalone-guide {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 28px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 40px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px);
+  color: #fff;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "PingFang SC", sans-serif;
+}
+
+#standalone-guide .guide-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+#standalone-guide .guide-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+#standalone-guide .guide-status {
+  font-size: 14px;
+  color: #ff6b6b;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background: rgba(255, 107, 107, 0.15);
+  border-radius: 8px;
+}
+
+#standalone-guide .guide-steps {
+  text-align: left;
+  font-size: 15px;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 30px;
+  max-width: 320px;
+}
+
+#standalone-guide .guide-steps .step-num {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0a84ff;
+  color: #fff;
+  text-align: center;
+  line-height: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+#standalone-guide .guide-steps .step {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#standalone-guide .guide-note {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+#standalone-guide .guide-btn {
+  display: inline-block;
+  padding: 12px 40px;
+  background: #0a84ff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#standalone-guide .guide-btn:active {
+  background: #0070e0;
+  transform: scale(0.96);
 }
 
 /* ===== 响应式适配 ===== */
@@ -441,34 +552,6 @@ body {
 
   #dock {
     padding: 6px 16px;
-    padding-bottom: max(6px, env(safe-area-inset-bottom, 6px));
-  }
-}
-
-/* ===== 禁止弹性滚动（iOS橡皮筋效果） ===== */
-html {
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: auto;
-}
-
-/* ===== 防止iOS安全区域白边 ===== */
-@supports (padding: env(safe-area-inset-top)) {
-  #desktop {
-    padding-top: 0 !important;
-  }
-
-  #dock {
-    padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
-  }
-}
-
-/* ===== 消除iOS底部白条 ===== */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  body {
-    padding-bottom: 0 !important;
-  }
-
-  #dock {
-    padding-bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
   }
 }

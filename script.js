@@ -1,6 +1,53 @@
 (function () {
   'use strict';
 
+  // ===== 全屏模式检测 =====
+  function checkStandalone() {
+    var isStandalone = false;
+    // iOS Safari 检测
+    if (window.navigator.standalone === true) {
+      isStandalone = true;
+    }
+    // Android/Chrome 检测
+    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+      isStandalone = true;
+    }
+    return isStandalone;
+  }
+
+  function showStandaloneGuide() {
+    // 如果已经是全屏模式，不显示提示
+    if (checkStandalone()) {
+      return;
+    }
+
+    var overlay = document.createElement('div');
+    overlay.id = 'standalone-guide';
+    overlay.innerHTML =
+      '<div class="guide-icon">&#x1F4F1;</div>' +
+      '<div class="guide-title">需要全屏模式</div>' +
+      '<div class="guide-status">当前状态: 浏览器模式 (非全屏)</div>' +
+      '<div class="guide-steps">' +
+        '<div class="step"><span class="step-num">1</span>长按桌面旧图标，删除它</div>' +
+        '<div class="step"><span class="step-num">2</span>用 Safari 打开此页面链接</div>' +
+        '<div class="step"><span class="step-num">3</span>等页面完全加载后</div>' +
+        '<div class="step"><span class="step-num">4</span>点底部分享按钮 (方框+上箭头)</div>' +
+        '<div class="step"><span class="step-num">5</span>下滑找到「添加到主屏幕」</div>' +
+        '<div class="step"><span class="step-num">6</span>点「添加」，然后从桌面图标打开</div>' +
+      '</div>' +
+      '<div class="guide-note">必须用 iOS 自带 Safari 操作，用微信或Chrome添加无效。<br>添加后从主屏幕图标打开即为全屏，无搜索栏。</div>' +
+      '<button class="guide-btn" id="guide-dismiss">知道了</button>';
+    document.body.appendChild(overlay);
+
+    var btn = document.getElementById('guide-dismiss');
+    btn.addEventListener('click', function () {
+      overlay.style.display = 'none';
+    });
+  }
+
+  // 页面加载后检测
+  showStandaloneGuide();
+
   // ===== 核心滑动逻辑 =====
   var pagesWrapper = document.getElementById('pages-wrapper');
   var page1 = document.getElementById('page-1');
@@ -13,7 +60,7 @@
   var startY = 0;
   var currentX = 0;
   var isDragging = false;
-  var isHorizontal = null; // null=未判断, true=水平, false=垂直
+  var isHorizontal = null;
   var startTime = 0;
 
   // 获取屏幕宽度
@@ -85,10 +132,8 @@
 
     // 水平滑动 - 边界阻力
     if (currentPage === 0 && diffX > 0) {
-      // 第一屏向右拉，施加阻力
       diffX = diffX * 0.3;
     } else if (currentPage === totalPages - 1 && diffX < 0) {
-      // 最后一屏向左拉，施加阻力
       diffX = diffX * 0.3;
     }
 
@@ -117,15 +162,11 @@
     var velocity = Math.abs(currentX) / elapsed;
     var threshold = getScreenWidth() * 0.2;
 
-    // 快速滑动 或 滑动距离超过阈值
     if (currentX < -threshold || (velocity > 0.5 && currentX < -30)) {
-      // 向左滑 -> 下一页
       goToPage(currentPage + 1);
     } else if (currentX > threshold || (velocity > 0.5 && currentX > 30)) {
-      // 向右滑 -> 上一页
       goToPage(currentPage - 1);
     } else {
-      // 回弹
       goToPage(currentPage);
     }
   }, { passive: true });
