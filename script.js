@@ -1,17 +1,6 @@
 (function () {
   'use strict';
 
-  // ===== 修复 100dvh 在某些浏览器的兼容性 =====
-  function setVH() {
-    var vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-  }
-  setVH();
-  window.addEventListener('resize', setVH);
-  window.addEventListener('orientationchange', function () {
-    setTimeout(setVH, 100);
-  });
-
   // ===== 核心滑动逻辑 =====
   var pagesWrapper = document.getElementById('pages-wrapper');
   var page1 = document.getElementById('page-1');
