@@ -63,9 +63,9 @@ body {
 
 /* ===== 第一页：widget-card 组件 ===== */
 .widget-card {
-  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 20px);
+  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 18px);
   left: 50%; transform: translateX(-50%);
-  width: 260px; height: 180px; z-index: 10;
+  width: 300px; height: 200px; z-index: 10;
 }
 .widget-avatar {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -86,18 +86,21 @@ body {
   border: 0.5px solid rgba(255,255,255,0.15); cursor: pointer; z-index: 4;
   display: flex; align-items: center; gap: 4px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  /* 气泡以头像为中心对称定位 */
+  top: auto; bottom: auto; left: auto; right: auto;
 }
 .bubble-label {
   font-size: 12px; font-weight: 500; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.25); letter-spacing: 0.2px;
 }
-.bubble-tl { top: 28px; left: 20px; }
-.bubble-tr { top: 28px; right: 20px; }
-.bubble-bl { bottom: 28px; left: 20px; }
-.bubble-br { bottom: 28px; right: 20px; }
+/* 四气泡对称排布：距头像边缘等距 */
+.bubble-tl { top: 16px; left: 20px; }
+.bubble-tr { top: 16px; right: 20px; }
+.bubble-bl { bottom: 16px; left: 20px; }
+.bubble-br { bottom: 16px; right: 20px; }
 
 /* ===== APP 图标网格 ===== */
 .app-grid {
-  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 220px);
+  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 235px);
   left: 50%; transform: translateX(-50%); width: 300px; z-index: 10;
   display: flex; flex-direction: column; gap: 18px;
 }
@@ -130,7 +133,7 @@ body {
 
 /* ===== PhotoBook 毛玻璃组件 ===== */
 .glass-panel {
-  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 415px);
+  position: absolute; top: calc(env(safe-area-inset-top, 0px) + 430px);
   left: 50%; transform: translateX(-50%); width: 300px; padding: 14px 16px;
   background: rgba(255,255,255,0.1); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
   border-radius: 24px; border: 0.5px solid rgba(255,255,255,0.15); z-index: 10;
@@ -150,7 +153,7 @@ body {
 .gp-text { font-size: 11px; color: rgba(255,255,255,0.7); cursor: pointer; }
 
 /* ===== 第二页 page2-mid ===== */
-.page2-mid { display: flex; padding: 0 16px; gap: 12px; align-items: flex-start; width: 100%; margin-top: 14px; flex-shrink: 0; }
+.page2-mid { display: flex; padding: 0; gap: 12px; align-items: flex-start; width: 300px; margin-top: 14px; flex-shrink: 0; }
 
 .page2-apps {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 10px; flex: 1; align-content: start; padding-top: 6px;
@@ -189,7 +192,7 @@ body {
 
 /* ===== Story Mode 组件（底图磨砂）===== */
 .story-card {
-  width: 310px; flex-shrink: 0;
+  width: 300px; flex-shrink: 0;
   background: rgba(255,255,255,0.15); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%);
   border-radius: 22px; overflow: hidden; border: 0.5px solid rgba(255,255,255,0.2);
   box-shadow: 0 4px 24px rgba(0,0,0,0.12); z-index: 10; color: #111;
@@ -274,11 +277,12 @@ body {
 /* ===== Dock 栏 ===== */
 #dock {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 100;
-  padding: 8px 16px; padding-bottom: max(4px, env(safe-area-inset-bottom, 4px));
+  padding: 8px 0; padding-bottom: max(4px, env(safe-area-inset-bottom, 4px));
   display: flex; justify-content: center;
 }
 .dock-inner {
   display: flex; gap: 12px; padding: 8px 12px;
+  width: 300px; justify-content: space-between;
   background: rgba(255,255,255,0.15); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%);
   border-radius: 28px; border: 0.5px solid rgba(255,255,255,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
@@ -307,13 +311,19 @@ html { overscroll-behavior: none; -webkit-overflow-scrolling: auto; }
 
 /* ===== 响应式 ===== */
 @media (max-width: 374px) {
-  .widget-card { width: 270px; height: 160px; }
+  .widget-card { width: 270px; height: 180px; }
   .widget-avatar { width: 70px; height: 70px; }
-  .app-grid { width: 270px; }
+  .bubble-tl { top: 14px; left: 16px; }
+  .bubble-tr { top: 14px; right: 16px; }
+  .bubble-bl { bottom: 14px; left: 16px; }
+  .bubble-br { bottom: 14px; right: 16px; }
+  .app-grid { width: 270px; top: calc(env(safe-area-inset-top, 0px) + 215px); }
   .app-icon { width: 48px; height: 48px; }
   .app-name { font-size: 10px; }
-  .glass-panel { width: 270px; }
-  .page2-mid { padding: 0 12px; gap: 10px; }
+  .glass-panel { width: 270px; top: calc(env(safe-area-inset-top, 0px) + 400px); }
+  .dock-inner { width: 270px; gap: 8px; padding: 6px 10px; }
+  .icon-face { width: 52px; height: 52px; }
+  .page2-mid { width: 270px; gap: 10px; }
   .page2-apps { gap: 10px 8px; }
   .page2-apps .app-icon { width: 48px; height: 48px; }
   .page2-apps .app-name { font-size: 10px; }
@@ -321,33 +331,33 @@ html { overscroll-behavior: none; -webkit-overflow-scrolling: auto; }
   .story-card { width: 270px; }
   .story-imgs { gap: 6px; padding: 8px 12px; }
   .story-text-box { font-size: 10px; min-height: 40px; }
-  .dock-inner { gap: 8px; padding: 6px 10px; }
-  .icon-face { width: 52px; height: 52px; }
 }
 
 @media (min-width: 414px) {
   .widget-card { width: 330px; }
   .app-grid { width: 330px; }
   .glass-panel { width: 330px; }
-  .page2-mid { gap: 14px; }
+  .dock-inner { width: 330px; }
+  .page2-mid { width: 330px; gap: 14px; }
   .page2-apps .app-icon { width: 60px; height: 60px; }
   .story-card { width: 330px; }
-  .dock-inner { gap: 16px; }
   .icon-face { width: 64px; height: 64px; }
 }
 
 @media (max-height: 667px) {
-  .widget-card { width: 240px; height: 140px; top: calc(env(safe-area-inset-top, 0px) + 15px); }
+  .widget-card { width: 240px; height: 140px; top: calc(env(safe-area-inset-top, 0px) + 12px); }
   .widget-avatar { width: 60px; height: 60px; }
-  .bubble-tl { top: 18px; left: 16px; }
-  .bubble-tr { top: 18px; right: 16px; }
-  .bubble-bl { bottom: 18px; left: 16px; }
-  .bubble-br { bottom: 18px; right: 16px; }
-  .app-grid { width: 240px; top: calc(env(safe-area-inset-top, 0px) + 170px); }
+  .bubble-tl { top: 10px; left: 12px; }
+  .bubble-tr { top: 10px; right: 12px; }
+  .bubble-bl { bottom: 10px; left: 12px; }
+  .bubble-br { bottom: 10px; right: 12px; }
+  .app-grid { width: 240px; top: calc(env(safe-area-inset-top, 0px) + 165px); }
   .app-icon { width: 44px; height: 44px; }
   .app-name { font-size: 9px; }
-  .glass-panel { width: 240px; top: calc(env(safe-area-inset-top, 0px) + 330px); }
-  .page2-mid { padding: 0 12px; gap: 10px; }
+  .glass-panel { width: 240px; top: calc(env(safe-area-inset-top, 0px) + 310px); }
+  .dock-inner { width: 240px; gap: 4px; padding: 4px 8px; }
+  .icon-face { width: 48px; height: 48px; }
+  .page2-mid { width: 240px; gap: 10px; }
   .page2-apps .app-icon { width: 44px; height: 44px; }
   .page2-apps .app-name { font-size: 9px; }
   .page2-bigframe { border-radius: 14px; }
@@ -358,8 +368,6 @@ html { overscroll-behavior: none; -webkit-overflow-scrolling: auto; }
   .story-actions { gap: 10px; padding: 8px 10px 10px; }
   .story-reroll-btn { font-size: 10px; padding: 6px 14px; }
   .story-act-btn { width: 28px; height: 28px; }
-  .dock-inner { gap: 6px; padding: 4px 8px; }
-  .icon-face { width: 48px; height: 48px; }
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
