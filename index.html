@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="iOS Desktop">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#000000">
-  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-navbutton-color" content="#000000">
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-180.png">
-  <link rel="apple-touch-icon-precomposed" href="icon-180.png">
   <title>iOS Desktop</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,59 +20,54 @@
 
       <!-- ===== 第一页 ===== -->
       <div class="page" id="page1">
-        <!-- 中央组件 -->
-        <div class="widget-card">
-          <div class="float-bubble bubble-tl" data-key="b1">
-            <span class="bubble-icon" data-edit="icon">🍀</span>
-            <span class="bubble-label" data-edit="text">Aeri༚u༚</span>
+
+        <!-- 上半部分：毛玻璃widget组件 -->
+        <div class="widget-card" id="widget-card">
+          <!-- 中心头像 -->
+          <div class="widget-avatar" id="widget-avatar">
+            <img class="widget-avatar-img" id="widget-avatar-img" src="" alt="">
+            <div class="widget-avatar-ph" id="widget-avatar-ph">👤</div>
+            <input type="file" id="widget-avatar-input" accept="image/*" style="display:none">
           </div>
-          <div class="float-bubble bubble-tr" data-key="b2">
-            <span class="bubble-icon" data-edit="icon">🍵</span>
-            <span class="bubble-label" data-edit="text">green•°</span>
+          <!-- 四周气泡 -->
+          <div class="widget-bubble bubble-tl" data-key="wb_tl">
+            <span class="bubble-label" data-edit="text" data-key="wb_tl_text">Dream</span>
           </div>
-          <div class="avatar-area" id="avatar-area">
-            <div class="avatar-circle">
-              <img id="avatar-img" src="" alt="">
-              <div class="avatar-ph" id="avatar-ph">
-                <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)" width="36" height="36"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
-              </div>
-              <input type="file" id="avatar-input" accept="image/*" style="display:none">
-            </div>
+          <div class="widget-bubble bubble-tr" data-key="wb_tr">
+            <span class="bubble-label" data-edit="text" data-key="wb_tr_text">布林</span>
           </div>
-          <div class="float-bubble bubble-bl" data-key="b3">
-            <span class="bubble-icon" data-edit="icon">🤍</span>
-            <span class="bubble-label" data-edit="text">dreamß</span>
+          <div class="widget-bubble bubble-bl" data-key="wb_bl">
+            <span class="bubble-label" data-edit="text" data-key="wb_bl_text">Dream</span>
           </div>
-          <div class="float-bubble bubble-br" data-key="b4">
-            <span class="bubble-icon" data-edit="icon">☁</span>
-            <span class="bubble-label" data-edit="text">bling63°</span>
+          <div class="widget-bubble bubble-br" data-key="wb_br">
+            <span class="bubble-label" data-edit="text" data-key="wb_br_text">布林</span>
           </div>
         </div>
 
-        <!-- APP 图标网格 -->
+        <!-- 中间部分：8个APP网格 -->
         <div class="app-grid">
           <div class="app-row">
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #07C160, #06AD56);">
-                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M8.667 11.85a.917.917 0 1 1 0-1.833.917.917 0 0 1 0 1.833m6.666 0a.917.917 0 1 1 0-1.833.917.917 0 0 1 0 1.833M12 2C5.733 2 .667 6.14.667 11.253c0 2.984 1.722 5.642 4.397 7.363-.2.795-.725 2.408-.822 2.782-.12.467.172.46.342.336.14-.1 2.232-1.517 3.131-2.13 1.386.345 2.844.53 4.35.53C18.267 20.133 23.333 16 23.333 11.253 23.333 6.14 18.267 2 12 2"/></svg>
+              <div class="app-icon" style="background: linear-gradient(135deg, #34C759, #248A3D);">
+                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M12.01 12.46c-.53 0-1.04-.07-1.54-.19L4.62 18l-.06-3.76-.02-2.23c.5.12 1.01.19 1.54.19 3.31 0 6-2.69 6-6 0-.53-.07-1.04-.19-1.54l3.76.06 2.23.02c-.12.5-.19 1.01-.19 1.54 0 3.31 2.69 6 6 6 .53 0 1.04-.07 1.54-.19l-.06 3.76-.02 2.23c-.5-.12-1.01-.19-1.54-.19-3.31 0-6 2.69-6 6 0 .53.07 1.04.19 1.54l-3.76-.06-2.23-.02c.12-.5.19-1.01.19-1.54 0-3.31-2.69-6-6-6z"/></svg>
               </div>
               <span class="app-name">WeChat</span>
             </div>
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #FF6B9D, #FF4785);">
+              <div class="app-icon" style="background: linear-gradient(135deg, #FF2D55, #D91E48);">
                 <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
               </div>
               <span class="app-name">情侣空间</span>
             </div>
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #FF6900, #FF4500);">
+              <div class="app-icon" style="background: linear-gradient(135deg, #FF9500, #FF6900);">
                 <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
               </div>
               <span class="app-name">商城</span>
             </div>
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #FFD700, #FFC100);">
-                <svg viewBox="0 0 24 24" fill="#333" width="26" height="26"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+              <div class="app-icon" style="background: linear-gradient(135deg, #FFCC00, #FF9F0A);">
+                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
               </div>
               <span class="app-name">美团</span>
             </div>
@@ -88,60 +80,145 @@
               <span class="app-name">论坛</span>
             </div>
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #FF3B30, #C9271F);">
-                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+              <div class="app-icon" style="background: linear-gradient(135deg, #FF3B30, #C5232E);">
+                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
               </div>
               <span class="app-name">日程</span>
             </div>
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #AF52DE, #7B2CBF);">
-                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M12 2l1.5 4.5h4.5l-3.6 2.6 1.4 4.3-3.8-2.8-3.8 2.8 1.4-4.3-3.6-2.6h4.5z M6 14l.8 2.4h2.5l-2 1.5.8 2.4-2.1-1.6-2.1 1.6.8-2.4-2-1.5h2.5z M18 14l.8 2.4h2.5l-2 1.5.8 2.4-2.1-1.6-2.1 1.6.8-2.4-2-1.5h2.5z"/></svg>
+              <div class="app-icon" style="background: linear-gradient(135deg, #AF52DE, #8944AB);">
+                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
               </div>
               <span class="app-name">占卜</span>
             </div>
             <div class="app-item">
-              <div class="app-icon" style="background: linear-gradient(135deg, #34C759, #248A3D);">
-                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM11 13H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+              <div class="app-icon" style="background: linear-gradient(135deg, #64D2FF, #0A84FF);">
+                <svg viewBox="0 0 24 24" fill="white" width="26" height="26"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
               </div>
               <span class="app-name">游戏</span>
             </div>
           </div>
         </div>
 
-        <!-- PhotoBook 毛玻璃组件 -->
-        <div class="glass-panel">
-          <div class="panel-top">
-            <div class="panel-title" id="panel-title" data-edit="text">PhotoBook</div>
-            <div class="panel-meta">
-              <span class="meta-text" id="meta-text" data-edit="text">今日 周日</span>
-              <span class="meta-icon" id="meta-icon" data-edit="icon">♡</span>
+        <!-- 下半部分：PhotoBook毛玻璃组件 -->
+        <div class="glass-panel" id="glass-panel">
+          <div class="gp-top">
+            <span class="gp-title" data-edit="text" data-key="gp_title">PhotoBook</span>
+          </div>
+          <div class="gp-content">
+            <div class="gp-img-frame" data-key="gp1">
+              <img class="gp-frame-img" src="" alt="">
+              <div class="gp-frame-ph">📷</div>
+              <input type="file" class="gp-frame-input" accept="image/*" style="display:none">
+            </div>
+            <div class="gp-img-frame" data-key="gp2">
+              <img class="gp-frame-img" src="" alt="">
+              <div class="gp-frame-ph">📷</div>
+              <input type="file" class="gp-frame-input" accept="image/*" style="display:none">
+            </div>
+            <div class="gp-img-frame" data-key="gp3">
+              <img class="gp-frame-img" src="" alt="">
+              <div class="gp-frame-ph">📷</div>
+              <input type="file" class="gp-frame-input" accept="image/*" style="display:none">
             </div>
           </div>
-          <div class="panel-grid">
-            <div class="panel-frame" data-key="pf1">
-              <img class="frame-img" src="" alt="">
-              <div class="frame-ph">📷</div>
-              <input type="file" class="frame-input" accept="image/*" style="display:none">
-            </div>
-            <div class="panel-frame" data-key="pf2">
-              <img class="frame-img" src="" alt="">
-              <div class="frame-ph">📷</div>
-              <input type="file" class="frame-input" accept="image/*" style="display:none">
-            </div>
-            <div class="panel-frame" data-key="pf3">
-              <img class="frame-img" src="" alt="">
-              <div class="frame-ph">📷</div>
-              <input type="file" class="frame-input" accept="image/*" style="display:none">
-            </div>
-          </div>
+          <div class="gp-text" data-edit="text" data-key="gp_text">记录美好瞬间</div>
         </div>
+
       </div>
 
       <!-- ===== 第二页 ===== -->
       <div class="page" id="page2">
-        <!-- 上半部分：左4 APP + 右大图 -->
-        <div class="page2-top">
-          <!-- 左半：4个APP -->
+
+        <!-- 上半部分：Story Mode 组件 -->
+        <div class="story-card" id="story-card">
+          <!-- 1. 顶部标题栏 -->
+          <div class="story-header">
+            <span class="story-sheep">🐑</span>
+            <span class="story-title" data-edit="text" data-key="story_title">Story Mode</span>
+            <span class="story-sheep">🐑</span>
+            <div class="story-back">
+              <svg viewBox="0 0 24 24" fill="#666" width="14" height="14"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              <span class="story-sub" data-edit="text" data-key="story_sub">STORY</span>
+            </div>
+          </div>
+
+          <!-- 2. 用户信息横条 -->
+          <div class="story-user">
+            <div class="story-avatar" id="story-avatar">
+              <div class="story-avatar-inner">
+                <img class="story-avatar-img" id="story-avatar-img" src="" alt="">
+                <div class="story-avatar-ph">🐑</div>
+              </div>
+              <div class="story-horns">😈</div>
+              <input type="file" id="story-avatar-input" accept="image/*" style="display:none">
+            </div>
+            <div class="story-user-info">
+              <div class="story-username" data-edit="text" data-key="story_user">测试员</div>
+              <div class="story-bio" data-edit="text" data-key="story_bio">If only I were in your eye...</div>
+            </div>
+            <div class="story-hearts">
+              <span style="color:#ff6b8a">♥</span>
+              <span style="color:#ff9eb5">♥</span>
+              <span style="color:#ffc8d6">♥</span>
+              <span class="story-hearts-tag" data-edit="text" data-key="story_tag">#1</span>
+            </div>
+          </div>
+
+          <!-- 3. 图片横向区域 -->
+          <div class="story-imgs">
+            <div class="story-img-frame" data-key="si1">
+              <img class="story-frame-img" src="" alt="">
+              <div class="story-frame-ph">📷</div>
+              <input type="file" class="story-frame-input" accept="image/*" style="display:none">
+            </div>
+            <div class="story-img-frame" data-key="si2">
+              <img class="story-frame-img" src="" alt="">
+              <div class="story-frame-ph">📷</div>
+              <input type="file" class="story-frame-input" accept="image/*" style="display:none">
+            </div>
+            <div class="story-img-frame" data-key="si3">
+              <img class="story-frame-img" src="" alt="">
+              <div class="story-frame-ph">📖</div>
+              <input type="file" class="story-frame-input" accept="image/*" style="display:none">
+            </div>
+            <div class="story-img-frame story-img-add" data-key="si4">
+              <div class="story-wave-edge"></div>
+              <svg viewBox="0 0 24 24" fill="#ccc" width="26" height="26"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              <input type="file" class="story-frame-input" accept="image/*" style="display:none">
+            </div>
+          </div>
+
+          <!-- 4. 文案输入框 -->
+          <div class="story-text-box" data-edit="text" data-key="story_text">跟我一起看星星吧，一起聊哪里是北极星，哪里是你的
+星座，哪里是你的曾经
+【片刻须臾就好】</div>
+
+          <!-- 5. 黑色底部信息横条 -->
+          <div class="story-bottom-bar">
+            <span class="story-date" data-edit="text" data-key="story_date">2026年06月13日</span>
+            <span class="story-time" data-edit="text" data-key="story_time">08:58</span>
+            <span class="story-stars">★★★★★</span>
+            <span class="story-more">⋯</span>
+            <span class="story-delete" id="story-delete">
+              <svg viewBox="0 0 24 24" fill="white" width="14" height="14"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            </span>
+          </div>
+
+          <!-- 6. 底部操作区域 -->
+          <div class="story-actions">
+            <div class="story-act-btn">
+              <svg viewBox="0 0 24 24" fill="#333" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </div>
+            <div class="story-reroll-btn" data-edit="text" data-key="story_reroll">+ Latest Re-roll</div>
+            <div class="story-act-btn">
+              <svg viewBox="0 0 24 24" fill="#333" width="18" height="18"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中间部分：左4 APP + 右大图 -->
+        <div class="page2-mid">
           <div class="page2-apps">
             <div class="app-item">
               <div class="app-icon" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
@@ -178,6 +255,7 @@
             <input type="file" id="bigframe-input" accept="image/*" style="display:none">
           </div>
         </div>
+
       </div>
 
     </div>
@@ -188,31 +266,32 @@
       <div class="dot" data-page="1"></div>
     </div>
 
-    <!-- 固定 Dock 栏 -->
+    <!-- 固定Dock栏 -->
     <div id="dock">
-      <div class="dock-ellipse">
+      <div class="dock-inner">
         <div class="dock-icon">
-          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #34C759, #248A3D);">
+          <div class="icon-face" style="background: linear-gradient(135deg, #34C759, #248A3D);">
             <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
           </div>
         </div>
         <div class="dock-icon">
-          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
+          <div class="icon-face" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
             <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg>
           </div>
         </div>
         <div class="dock-icon">
-          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #FF9500, #FF6900);">
+          <div class="icon-face" style="background: linear-gradient(135deg, #FF9500, #FF6900);">
             <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
         </div>
         <div class="dock-icon">
-          <div class="icon-face dock-face" style="background: linear-gradient(135deg, #AF52DE, #8944AB);">
+          <div class="icon-face" style="background: linear-gradient(135deg, #AF52DE, #8944AB);">
             <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <script src="script.js"></script>
