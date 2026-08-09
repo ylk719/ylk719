@@ -27,6 +27,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+#wallpaper-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
 #desktop {
   width: 100vw;
   height: 100vh;

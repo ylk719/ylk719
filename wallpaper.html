@@ -128,7 +128,7 @@
 <!-- Mobile Frame Mockup -->
 <div class="relative w-[220px] aspect-[9/19] rounded-[32px] border-[6px] border-surface-container-highest shadow-sm overflow-hidden bg-surface-container-low">
 <!-- Wallpaper Image -->
-<div class="absolute inset-0 bg-cover bg-center" data-alt="A high-end minimalist digital art piece featuring smooth, fluid gradients in monochromatic light gray and pristine white tones. The composition is calm, modern, and perfectly suited as a clean, distraction-free smartphone background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBesJ7VYbB7mVwusmO-bQLSp_EpbQc30rrgVf-LcqcSqKlwrK7JvW3YhcB3BmneJxK116MloGTQuGgDLkz0hWqpfbFsGdwP--ClCnXAgzfNuq3nRf8EUQut5Wsl1IZt25eQcl_8opdyTdKDC0PNDUjlkeefxA8tx0NM5Pqt0JltTZizuSr1vtSg4u0Ak21JH82-NawtaNa6KK0HiTI9Iqjxe83NYsVo7s38hFCki0gwZ3kiV2wwZl4oaQ')"></div>
+<div id="preview-wallpaper" class="absolute inset-0 bg-cover bg-center" data-alt="A high-end minimalist digital art piece featuring smooth, fluid gradients in monochromatic light gray and pristine white tones. The composition is calm, modern, and perfectly suited as a clean, distraction-free smartphone background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBesJ7VYbB7mVwusmO-bQLSp_EpbQc30rrgVf-LcqcSqKlwrK7JvW3YhcB3BmneJxK116MloGTQuGgDLkz0hWqpfbFsGdwP--ClCnXAgzfNuq3nRf8EUQut5Wsl1IZt25eQcl_8opdyTdKDC0PNDUjlkeefxA8tx0NM5Pqt0JltTZizuSr1vtSg4u0Ak21JH82-NawtaNa6KK0HiTI9Iqjxe83NYsVo7s38hFCki0gwZ3kiV2wwZl4oaQ')"></div>
 <!-- Mock Lockscreen Elements -->
 <div class="absolute top-10 inset-x-0 flex flex-col items-center text-primary drop-shadow-sm">
 <span class="font-display-title text-display-title text-4xl font-semibold tracking-tighter">09:41</span>
@@ -136,13 +136,14 @@
 </div>
 </div>
 <!-- Set Wallpaper Action -->
-<button class="bg-primary text-on-primary px-10 py-3 rounded-full font-label-caps text-label-caps uppercase tracking-widest hover:opacity-80 active:scale-95 transition-all duration-200 shadow-sm">
+<button id="btn-set-wallpaper" class="bg-primary text-on-primary px-10 py-3 rounded-full font-label-caps text-label-caps uppercase tracking-widest hover:opacity-80 active:scale-95 transition-all duration-200 shadow-sm">
                 设为壁纸
             </button>
 </section>
 <!-- Functional Actions -->
 <section class="flex flex-col gap-4">
-<button class="w-full h-row-height flex items-center justify-between px-inner-padding border border-outline-variant rounded-xl bg-surface hover:bg-surface-container-low active:bg-surface-container transition-colors group">
+<input type="file" id="wallpaper-file" accept="image/*" style="display:none">
+<button id="btn-album" class="w-full h-row-height flex items-center justify-between px-inner-padding border border-outline-variant rounded-xl bg-surface hover:bg-surface-container-low active:bg-surface-container transition-colors group">
 <div class="flex items-center gap-4">
 <span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" data-icon="image">image</span>
 <span class="font-body-lg text-body-lg text-primary font-medium">从相册选择</span>
@@ -159,26 +160,73 @@
 <!-- Grid 2 Columns -->
 <div class="grid grid-cols-2 gap-4">
 <!-- Gallery Item 1 -->
-<div class="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
+<div class="gallery-item group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist photograph capturing extreme macro details of white textured paper overlapping with sharp, clean shadows. The aesthetic is highly editorial, monochromatic, and architectural, creating a sophisticated textured background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBm4u2bMr92g1TXPEV6_-1otBqjXWZdjUlWBISq8u2BnmtBehlwB-iTcCS8EB-CXDjkP2Rf-3mrCTw7CJUgZUwNRqlJSUuShonmfkN8RljkAt-H-JLnuTNW5_Kostrv72bXJEmBC8SWMKEtAit_XPqQr1MdrwhMxR64z6m-_UB-qNR0d8ULJgy1PEof627sYYhiX4qaFU09XT-A9E25Ov9NIXhealQaHlo6nqD-puBONPv72YKkDtKziw')"></div>
 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 </div>
 <!-- Gallery Item 2 -->
-<div class="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
+<div class="gallery-item group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A serene, minimalist landscape showing a stark white sand dune under a pale, cloudless gray sky. The image uses extreme negative space and subtle tonal shifts to create a calming, high-end visual experience." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrexlNqGnbDiu6XEAWflwhndjx6ZE1Lly9g23as0MAIrRep3dMpT7D-FuwYyh6tOVFuyx8cMB6vwjmebgtq9J79xYRGVbf6D0V3cUO2hvuLOFb0spSc9DwwebZYBO5aGH8eyuiIf5C_cL0DZ2Rn2CNO83NmtEYveBQ5rflUT7WhAJTaYgSzOLIk7Nz1Dme63BNQP_ERP-DjT1sQl-is54ABzNhRf7KuAlVxf4GFuWNuAejvT9uk8SG8w')"></div>
 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 </div>
 <!-- Gallery Item 3 -->
-<div class="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
+<div class="gallery-item group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Abstract geometric 3D rendering featuring perfect spheres and crisp edges in an all-white environment. Soft, diffused lighting creates gentle drop shadows, highlighting the purity of the geometric forms in a minimalist style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUI9ObWrOi7w_waBmazNQHL8RqGNaixpx6a4zJClo_JOlcbuwXvmoLNmoGdAGYdW1KYBVzAh6BnqnNdylWTLf0zE68EwLb94Yaxb--fAtSf_Xrk85nWSobxK8nTmjKi281WE_uFT3vjUSdnpE-fZeqT_LryKrQA8gwTlyhHhX5hjc-CugJPX1_Mj2y26UZqR4qbETo4spTkvsLGFyr_2IiTNSrQbSKeVQcPe-oUlk9fRnYsHU709ur7Q')"></div>
 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 </div>
 <!-- Gallery Item 4 -->
-<div class="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
+<div class="gallery-item group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-surface-container">
 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A close-up, high-key photograph of frosted glass with delicate condensation droplets. The background is a soft, blurred light gray, providing a subtle, organic texture that is elegant and unobtrusive." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrjKhZG0aNQVA3_EeDskOzi4q5cr7SS4u-6GKrv4ne41wHkWWbrGLJe5gUXGi-A44kTh97mB56Z4NsOzc_5xu7uOezQ-l5eBflFgogpxuly_iKoU262lwGXd4if7OxPfbRkzTll5mVn9wBYXDNz4PBHDz9EIywfZK6Ozy2zA8am310rKdMQ8LxWArBFLSR1asi_e1VD_fR2SZKJB_3atyMQdZS680aDX-57DH0HvIRPbJq639Ma-molQ')"></div>
 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 </div>
 </div>
 </section>
 </main>
+
+
+
+
+<script>
+(function() {
+  var preview = document.getElementById('preview-wallpaper');
+  var fileInput = document.getElementById('wallpaper-file');
+  var btnAlbum = document.getElementById('btn-album');
+  var btnSet = document.getElementById('btn-set-wallpaper');
+  var galleryItems = document.querySelectorAll('.gallery-item > div:first-child');
+  var currentUrl = '';
+
+  function setPreview(url) {
+    preview.style.backgroundImage = 'url(' + url + ')';
+    currentUrl = url;
+  }
+
+  if (btnAlbum && fileInput) {
+    btnAlbum.addEventListener('click', function() { fileInput.click(); });
+    fileInput.addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) { setPreview(ev.target.result); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  galleryItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+      var style = item.getAttribute('style') || '';
+      var match = style.match(/background-image:\s*url\(['"]?([^'"\)]+)['"]?\)/);
+      if (match && match[1]) setPreview(match[1]);
+    });
+  });
+
+  if (btnSet) {
+    btnSet.addEventListener('click', function() {
+      if (!currentUrl) return;
+      localStorage.setItem('diy_wallpaper', currentUrl);
+      alert('壁纸已设置');
+      location.href = 'index.html';
+    });
+  }
+})();
+</script>
 </body></html>

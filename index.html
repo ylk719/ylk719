@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" style="--vh: 7.04px;"><head>
+<html lang="zh-CN"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,7 +12,8 @@
 </head>
 <body>
   <div id="desktop">
-    <div id="pages-wrapper" style="transform: translateX(0%);">
+    <div id="wallpaper-layer"></div>
+    <div id="pages-wrapper">
       <div class="page">
         <div class="app-grid"></div>
       </div>
@@ -37,6 +38,19 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    (function() {
+      var wp = localStorage.getItem('diy_wallpaper');
+      if (wp) {
+        var layer = document.getElementById('wallpaper-layer');
+        if (layer) {
+          layer.style.backgroundImage = 'url(' + wp + ')';
+          layer.style.opacity = '1';
+        }
+      }
+    })();
+  </script>
+
 
 
 </body></html>
