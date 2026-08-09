@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>设置</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3f4",
+                        "primary-container": "#1b1b1b",
+                        "surface-bright": "#f9f9f9",
+                        "tertiary-fixed": "#e2e2e2",
+                        "outline-variant": "#cfc4c5",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#4c4546",
+                        "surface": "#f9f9f9",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f0f1f1",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e3e2e2",
+                        "on-primary": "#ffffff",
+                        "outline": "#7e7576",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#474747",
+                        "tertiary-container": "#1a1c1c",
+                        "primary": "#000000",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-container": "#838484",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-primary": "#c6c6c6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container-highest": "#e2e2e2",
+                        "secondary": "#5e5e5e",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1c",
+                        "surface-container": "#eeeeee",
+                        "on-primary-container": "#848484",
+                        "inverse-surface": "#2f3131",
+                        "surface-tint": "#5e5e5e",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-secondary-container": "#646464",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-primary-fixed": "#1b1b1b",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#e3e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "background": "#f9f9f9",
+                        "surface-dim": "#dadada"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "edge-margin": "20px",
+                        "divider-height": "1px",
+                        "row-height": "56px",
+                        "stack-gap": "24px",
+                        "inner-padding": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-title": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400" }],
+                        "display-title": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-[env(safe-area-inset-bottom,20px)]">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface border-b border-tertiary dark:border-outline-variant flat no shadows">
+<div class="flex items-center justify-between px-edge-margin h-row-height w-full">
+<a href="index.html" class="text-primary dark:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors duration-200 active:bg-surface-variant rounded-full p-2 -ml-2 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</a>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed absolute left-1/2 transform -translate-x-1/2">设置</h1>
+<div class="w-10"></div> <!-- Spacer for center alignment -->
+</div>
+</header>
+<main class="pt-[calc(56px+24px)] pb-[calc(56px+24px)] px-edge-margin max-w-2xl mx-auto space-y-stack-gap">
+<!-- User Profile Header -->
+<div class="flex items-center space-x-4 pb-4">
+<img class="w-16 h-16 rounded-full object-cover border border-tertiary-fixed" data-alt="A close up, high resolution, minimalist profile avatar of a modern person. Soft, high-key white lighting creates a serene light-mode aesthetic. The background is pure white. The subject is styled in minimal, high-end fashion, exuding a calm and intentional presence suitable for a premium tech interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGQLuHcU5cL-xTXbH4ZxgKOzlse9UyCHe5AA-UyMrYYNJYN5uYRRMXmLAJKa-flgeXbsoMJ6CugzSSkUrvS9QD8MBA7dG0ymZu1OYglVVDqg17u5wwXLwZ1s1BOlYDsfbnrQjQOvZerNpIRFFeha8FnTYMLUh8aofP9zsy2kSLIIzaDv6UGhXFpDe-2jzbArHZCU9VMCBhvjOj9xwsec4_-mtCm6z_WS5L_Rg_ONOVYaZ4-bFSQejBgw"/>
+<div class="flex-1">
+<h2 class="font-headline-sm text-headline-sm text-primary">DIY 用户</h2>
+<p class="font-body-md text-secondary">Apple ID、iCloud、媒体与购买项目</p>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Connectivity Section -->
+<section class="bg-surface-container-lowest rounded-lg border border-tertiary-fixed overflow-hidden">
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="wifi">wifi</span>
+</div>
+<div class="flex-1 border-b border-tertiary-fixed h-full flex items-center group-last:border-b-0">
+<span class="font-body-lg text-primary flex-1">无线局域网</span>
+<span class="font-body-md text-secondary mr-2">DIY-网络</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="bluetooth">bluetooth</span>
+</div>
+<div class="flex-1 border-b border-tertiary-fixed h-full flex items-center group-last:border-b-0">
+<span class="font-body-lg text-primary flex-1">蓝牙</span>
+<span class="font-body-md text-secondary mr-2">打开</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant border-t border-tertiary-fixed">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="cellular_data">attribution</span>
+</div>
+<div class="flex-1 h-full flex items-center">
+<span class="font-body-lg text-primary flex-1">蜂窝网络</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Personalization Section -->
+<section class="bg-surface-container-lowest rounded-lg border border-tertiary-fixed overflow-hidden">
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="palette">palette</span>
+</div>
+<div class="flex-1 border-b border-tertiary-fixed h-full flex items-center group-last:border-b-0">
+<span class="font-body-lg text-primary flex-1">主题</span>
+<span class="font-body-md text-secondary mr-2">浅色</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant border-t border-tertiary-fixed">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="wallpaper">wallpaper</span>
+</div>
+<div class="flex-1 h-full flex items-center">
+<span class="font-body-lg text-primary flex-1">墙纸</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- System Section -->
+<section class="bg-surface-container-lowest rounded-lg border border-tertiary-fixed overflow-hidden">
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="display_settings">display_settings</span>
+</div>
+<div class="flex-1 border-b border-tertiary-fixed h-full flex items-center">
+<span class="font-body-lg text-primary flex-1">显示与亮度</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="volume_up">volume_up</span>
+</div>
+<div class="flex-1 border-b border-tertiary-fixed h-full flex items-center">
+<span class="font-body-lg text-primary flex-1">声音与触感</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
+</div>
+<div class="flex-1 h-full flex items-center">
+<span class="font-body-lg text-primary flex-1">面容 ID 与密码</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- About Phone Section -->
+<section class="bg-surface-container-lowest rounded-lg border border-tertiary-fixed overflow-hidden">
+<div class="flex items-center h-row-height px-inner-padding hover:bg-surface-container-high transition-colors cursor-pointer group active:bg-surface-variant">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="info">info</span>
+</div>
+<div class="flex-1 h-full flex items-center">
+<span class="font-body-lg text-primary flex-1">关于本机</span>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Nav Bar - Hidden on this linear/focused screen -->
+<nav class="hidden md:hidden fixed bottom-0 w-full z-50 bg-surface dark:bg-surface border-t border-tertiary dark:border-outline-variant flat no shadows">
+<div class="flex justify-around items-center h-row-height w-full px-edge-margin">
+<button class="flex flex-col items-center justify-center flex-1 text-secondary dark:text-secondary-fixed opacity-50 hover:opacity-80 transition-transform duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 text-secondary dark:text-secondary-fixed opacity-50 hover:opacity-80 transition-transform duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 text-secondary dark:text-secondary-fixed opacity-50 hover:opacity-80 transition-transform duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+</button>
+<button class="flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed scale-110 transition-transform duration-200 active:scale-95">
+<span class="material-symbols-outlined icon-fill" data-icon="person">person</span>
+</button>
+</div>
+</nav>
+</body></html>
