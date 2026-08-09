@@ -118,7 +118,7 @@
 <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
 </a>
 <h1 class="font-headline-sm text-headline-sm text-primary font-bold">Wallpaper</h1>
-<button class="text-secondary hover:bg-secondary-container rounded-full p-2 -mr-2 transition-colors duration-200 flex items-center justify-center">
+<button id="btn-check" class="text-secondary hover:bg-secondary-container rounded-full p-2 -mr-2 transition-colors duration-200 flex items-center justify-center">
 <span class="material-symbols-outlined" data-icon="check">check</span>
 </button>
 </header>
@@ -221,13 +221,19 @@
     });
   });
 
+  function applyWallpaper() {
+    if (!currentUrl) return;
+    localStorage.setItem('diy_wallpaper', currentUrl);
+    location.replace('index.html');
+  }
+
   if (btnSet) {
-    btnSet.addEventListener('click', function() {
-      if (!currentUrl) return;
-      localStorage.setItem('diy_wallpaper', currentUrl);
-      alert('壁纸已设置');
-      location.href = 'index.html';
-    });
+    btnSet.addEventListener('click', applyWallpaper);
+  }
+
+  var btnCheck = document.getElementById('btn-check');
+  if (btnCheck) {
+    btnCheck.addEventListener('click', applyWallpaper);
   }
 })();
 </script>
