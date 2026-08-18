@@ -2,10 +2,10 @@
 <html lang="zh-CN"><head>
   <meta charset="UTF-8">
 
-  <!-- 视口：覆盖刘海/灵动岛安全区 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- 禁止缩放 + 全屏铺满（解决白边） -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-  <!-- iOS PWA 元标签 -->
+  <!-- 声明为全屏 Web App（隐藏 Safari 地址栏） -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,40 +21,20 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ===== 外层关键容器统一 100vh（不混用 100% / 100dvh / fixed body） ===== */
 html,
 body {
-  height: 100%;
+  height: 100vh;
   background: #FFFFFF; /* 纯白壁纸，无渐变、无图案 */
 }
 
 body {
-  position: fixed;
-  inset: 0;
   overflow: hidden;
   overscroll-behavior: none;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
   -webkit-user-select: none;
   user-select: none;
   touch-action: manipulation; /* 抑制双击缩放 */
-}
-
-/* ===== Dock：真实 iOS 程序坞位置，位于 Home 指示条上方 ===== */
-.dock {
-  position: fixed;
-  bottom: env(safe-area-inset-bottom);
-  left: 12px;
-  right: 12px;
-  height: 90px;
-  border-radius: 28px;
-  border: none; /* 无可见边框，仅靠毛玻璃边缘 */
-  background: rgba(0, 0, 0, 0.08);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.45); /* 极淡顶部高光，增强玻璃质感 */
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 0 8px;
 }
 
 /* ===== 应用图标：坐在毛玻璃盘子上的效果 ===== */
@@ -101,13 +81,46 @@ body {
 .dock-app .icon.pressed {
   transform: scale(0.88);
 }
+
+html, body {
+  /* 禁止双击缩放、下拉弹性空白 */
+  touch-action: manipulation;
+  overscroll-behavior-y: none;
+  
+  /* 确保 body 铺满全屏 */
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* 你的底部 Dock/豆壳栏 */
+.dock-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  
+  /* 关键：贴紧屏幕物理底部，同时给 Home 指示条留出安全距离 */
+  bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  
+  /* 视觉上让它真的"贴底" */
+  box-sizing: border-box;
+  
+  /* 你的原有样式 */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(230, 230, 230, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 24px 24px 0 0; /* 如果你要保留顶部圆角 */
+}
 </style>
   <title>主屏幕</title>
 </head>
 <body>
 
   <!-- 唯一的 UI：底部 Dock（无状态栏、无图标区、无页面圆点） -->
-  <nav class="dock" aria-label="程序坞">
+  <nav class="dock-bar" aria-label="程序坞">
 
     <button class="dock-app" type="button" aria-label="电话">
       <span class="icon">
