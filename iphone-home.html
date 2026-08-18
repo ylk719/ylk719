@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- iOS standalone app -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Home">
+<meta name="theme-color" content="#FFFFFF">
+
+<!-- Inline manifest (single-file PWA): standalone display -->
+<link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;Home&quot;,&quot;short_name&quot;:&quot;Home&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;background_color&quot;:&quot;%23FFFFFF&quot;,&quot;theme_color&quot;:&quot;%23FFFFFF&quot;,&quot;start_url&quot;:&quot;.&quot;}">
+
+<title>Home</title>
+<style>  * {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+    background: #FFFFFF; /* pure solid white, edge to edge */
+    overscroll-behavior-y: contain;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    touch-action: manipulation;
+  }
+
+  /* Main screen: intentionally empty. No icons, no dots, no pages. */
+
+  /* ---------- Dock ---------- */
+  .dock {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom);
+    left: 12px;
+    right: 12px;
+    height: 90px;
+    border-radius: 28px;
+    background: rgba(0, 0, 0, 0.08);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 6px;
+  }
+
+  .dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    -webkit-touch-callout: none;
+    cursor: pointer;
+  }
+
+  /* Frosted glass icon plate */
+  .icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.28);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0.5px rgba(255, 255, 255, 0.95),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.045),
+      inset 1px 0 0.5px rgba(255, 255, 255, 0.4),
+      0 1px 3px rgba(0, 0, 0, 0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+  }
+
+  .icon svg {
+    width: 30px;
+    height: 30px;
+    fill: rgba(29, 29, 31, 0.88);
+    filter: drop-shadow(0 0.5px 0.5px rgba(255, 255, 255, 0.6));
+    pointer-events: none;
+  }
+
+  /* iOS-style press feedback */
+  .dock-item.pressed .icon {
+    transform: scale(0.9);
+  }
+
+  .label {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: rgba(29, 29, 31, 0.9);
+    text-shadow: 0 0.5px 0.5px rgba(255, 255, 255, 0.7);
+  }
+
+  /* ===== Settings app: iOS grouped table view ===== */
+  .settings-page {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    background: #F2F2F7;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.32s;
+  }
+  .settings-page.open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0s;
+  }
+
+  .settings-nav {
+    flex: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(44px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
+    background: rgba(249, 249, 249, 0.82);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: inset 0 -0.5px 0 rgba(60, 60, 67, 0.12);
+  }
+  .settings-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #000;
+  }
+  .back-btn {
+    position: absolute;
+    left: 8px;
+    top: env(safe-area-inset-top);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 0 8px;
+    background: transparent;
+    font-family: inherit;
+    font-size: 17px;
+    color: #007AFF;
+    cursor: pointer;
+  }
+  .back-btn:active { opacity: 0.5; }
+  .back-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: #007AFF;
+  }
+
+  .settings-scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 0 calc(env(safe-area-inset-bottom) + 32px);
+  }
+
+  .group-header {
+    font-size: 13px;
+    line-height: 18px;
+    color: #6D6D72;
+    padding: 0 32px;
+    margin: 22px 0 7px;
+  }
+
+  .table-group {
+    background: #FFFFFF;
+    border-radius: 10px;
+    margin: 0 16px;
+    overflow: hidden;
+  }
+
+  .table-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 11px 16px;
+  }
+  .table-row + .table-row::before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    right: 0;
+    top: 0;
+    height: 0.5px;
+    background: rgba(60, 60, 67, 0.12);
+  }
+
+  .row-label {
+    flex: none;
+    font-size: 17px;
+    color: #000;
+  }
+
+  .row-input {
+    flex: 1;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 17px;
+    color: #3C3C43;
+    text-align: right;
+    background: transparent;
+    outline: none;
+  }
+  .row-input::placeholder { color: #C7C7CC; }
+
+  .row-select {
+    flex: 1;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 17px;
+    color: #3C3C43;
+    text-align: right;
+    text-align-last: right;
+    background: transparent;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .row-select:disabled { color: #C7C7CC; }
+
+  .button-row { padding: 11px 16px; }
+  .action-btn {
+    width: 100%;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    background: #007AFF;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .action-btn:active { opacity: 0.75; }
+  .action-btn:disabled { opacity: 0.5; }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #FFFFFF;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg {
+    font-size: 13px;
+    line-height: 18px;
+    color: #FF3B30;
+    padding: 10px 32px 0;
+    margin: 0;
+  }
+
+  /* ===== Page 1 · Profile card widget ===== */
+  .profile-card {
+    position: fixed;
+    top: calc(env(safe-area-inset-top) + 16px);
+    left: 12px;
+    right: 12px;
+    z-index: 1;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding-bottom: 10px;
+  }
+
+  /* Arch cover: top corners follow the card, bottom edge curves smoothly downward */
+  .profile-cover {
+    position: relative;
+    height: 132px;
+    border-radius: 24px 24px 50% 50% / 24px 24px 30px 30px;
+    overflow: hidden;
+  }
+  .cover-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .cover-frost {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
+    backdrop-filter: blur(6px) saturate(140%);
+    box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.8);
+  }
+
+  .profile-avatar {
+    position: relative;
+    z-index: 2;
+    width: 78px;
+    height: 78px;
+    margin: -39px auto 0;
+    border-radius: 50%;
+    border: 3px solid #FFFFFF;
+    background: #FFFFFF;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  }
+  .profile-avatar svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .profile-info {
+    text-align: center;
+    padding: 0 20px;
+  }
+  .p-name {
+    margin: 8px 0 0;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #1D1D1F;
+  }
+  .p-user {
+    margin: 3px 0 0;
+    font-size: 13px;
+    font-weight: 400;
+    color: #6E6E73;
+  }
+  .p-bio {
+    margin: 6px 0 0;
+    font-size: 12px;
+    letter-spacing: 0.01em;
+    color: #AEAEB2;
+  }
+  .p-loc {
+    margin: 5px 0 0;
+    font-size: 11px;
+    color: #32ADE6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+  }
+  .p-loc svg {
+    width: 11px;
+    height: 11px;
+    fill: currentColor;
+    flex: none;
+  }
+
+  /* ===== Page 1 · 2×2 app grid (below profile card, left) ===== */
+  .app-grid {
+    position: fixed;
+    top: calc(env(safe-area-inset-top) + 300px);
+    left: 12px;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 60px);
+    gap: 20px 22px;
+  }
+  .grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .grid-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0.5px rgba(255, 255, 255, 0.95),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.04),
+      0 1px 3px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+  }
+  .grid-item:active .grid-icon {
+    transform: scale(0.9);
+  }
+  .grid-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: rgba(29, 29, 31, 0.85);
+    pointer-events: none;
+  }
+  .grid-label {
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #8E8E93;
+  }
+
+  /* ===== Page 1 · Photo widget (right of app grid) ===== */
+  .photo-widget {
+    position: fixed;
+    top: calc(env(safe-area-inset-top) + 300px); /* aligned with app grid */
+    left: 168px; /* 12 + 60 + 22 + 60 + 14 */
+    width: 160px;
+    height: 160px; /* square */
+    z-index: 1;
+    border-radius: 20px;
+    background: transparent;
+    padding: 0;
+  }
+  .pw-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Empty white home screen -->
+
+  <!-- ===== Page 1 · Profile card widget ===== -->
+  <section class="profile-card" aria-label="个人资料">
+    <div class="profile-cover">
+      <svg class="cover-art" viewBox="0 0 400 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="pcSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#86A9C4"></stop>
+            <stop offset="0.55" stop-color="#C6D8E4"></stop>
+            <stop offset="1" stop-color="#E9F0F4"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="132" fill="url(#pcSky)"></rect>
+        <!-- pale moon -->
+        <circle cx="330" cy="34" r="20" fill="#F7F4EA" opacity="0.9"></circle>
+        <circle cx="338" cy="28" r="17" fill="#A9C2D4" opacity="0.9"></circle>
+        <!-- clouds -->
+        <g fill="#FFFFFF" opacity="0.42">
+          <ellipse cx="72" cy="30" rx="42" ry="12"></ellipse>
+          <ellipse cx="118" cy="38" rx="26" ry="8"></ellipse>
+          <ellipse cx="252" cy="22" rx="30" ry="9"></ellipse>
+          <ellipse cx="300" cy="46" rx="36" ry="10"></ellipse>
+        </g>
+        <!-- distant hills -->
+        <path d="M0 110 Q60 88 130 104 T280 100 T400 108 L400 132 L0 132 Z" fill="#FFFFFF" opacity="0.28"></path>
+        <!-- umbrella silhouette -->
+        <g opacity="0.55">
+          <path d="M50 78 a14 14 0 0 1 28 0 z" fill="#3D5A73"></path>
+          <line x1="64" y1="78" x2="64" y2="94" stroke="#3D5A73" stroke-width="1.6"></line>
+        </g>
+        <!-- rain -->
+        <g stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round">
+          <line x1="28" y1="18" x2="32" y2="34" opacity="0.5"></line>
+          <line x1="58" y1="40" x2="62" y2="56" opacity="0.38"></line>
+          <line x1="88" y1="12" x2="92" y2="28" opacity="0.52"></line>
+          <line x1="118" y1="34" x2="122" y2="50" opacity="0.34"></line>
+          <line x1="148" y1="16" x2="152" y2="32" opacity="0.5"></line>
+          <line x1="178" y1="42" x2="182" y2="58" opacity="0.4"></line>
+          <line x1="208" y1="14" x2="212" y2="30" opacity="0.52"></line>
+          <line x1="238" y1="36" x2="242" y2="52" opacity="0.36"></line>
+          <line x1="268" y1="18" x2="272" y2="34" opacity="0.5"></line>
+          <line x1="298" y1="44" x2="302" y2="60" opacity="0.4"></line>
+          <line x1="328" y1="20" x2="332" y2="36" opacity="0.48"></line>
+          <line x1="358" y1="38" x2="362" y2="54" opacity="0.36"></line>
+          <line x1="384" y1="14" x2="388" y2="30" opacity="0.5"></line>
+          <line x1="44" y1="62" x2="48" y2="76" opacity="0.3"></line>
+          <line x1="104" y1="66" x2="108" y2="80" opacity="0.3"></line>
+          <line x1="164" y1="60" x2="168" y2="74" opacity="0.32"></line>
+          <line x1="224" y1="64" x2="228" y2="78" opacity="0.3"></line>
+          <line x1="284" y1="68" x2="288" y2="82" opacity="0.3"></line>
+          <line x1="344" y1="62" x2="348" y2="76" opacity="0.32"></line>
+        </g>
+      </svg>
+      <div class="cover-frost"></div>
+    </div>
+
+    <div class="profile-avatar" aria-hidden="true">
+      <svg viewBox="0 0 80 80">
+        <defs>
+          <linearGradient id="pcAv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#E8EEF4"></stop>
+            <stop offset="1" stop-color="#F7F9FB"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="80" height="80" fill="url(#pcAv)"></rect>
+        <path d="M40 15c-12.2 0-21 8.6-21 20.5V57c0 .8.9 1.3 1.6.8l4.4-3.3 4.9 3.6c.7.5 1.6.5 2.3 0l4.4-3.4c.8-.6 1.9-.6 2.7 0l4.4 3.4c.7.5 1.6.5 2.3 0l4.9-3.6 4.4 3.3c.7.5 1.6 0 1.6-.8V35.5C61 23.6 52.2 15 40 15z" fill="#FBFAFD"></path>
+        <ellipse cx="33.5" cy="38" rx="2.3" ry="3.2" fill="#4A4A4F"></ellipse>
+        <ellipse cx="46.5" cy="38" rx="2.3" ry="3.2" fill="#4A4A4F"></ellipse>
+        <ellipse cx="27.5" cy="45" rx="3.6" ry="2.2" fill="#FFB3C7" opacity="0.85"></ellipse>
+        <ellipse cx="52.5" cy="45" rx="3.6" ry="2.2" fill="#FFB3C7" opacity="0.85"></ellipse>
+        <ellipse cx="40" cy="45.5" rx="1.6" ry="2" fill="#4A4A4F" opacity="0.55"></ellipse>
+      </svg>
+    </div>
+
+    <div class="profile-info">
+      <h2 class="p-name">討厭鬼</h2>
+      <p class="p-user">@Wint1esn0_TwT</p>
+      <p class="p-bio">妳又失約 我們拉過勾的那場雨天</p>
+      <p class="p-loc">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"></path></svg>
+        台北 · 台灣
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Page 1 · 2×2 app grid (below profile card, left) ===== -->
+  <section class="app-grid" aria-label="应用">
+    <div class="grid-item">
+      <div class="grid-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 3.5C5.4 3.5 2.5 5.9 2.5 8.85c0 1.66.92 3.14 2.36 4.1L4.3 15.9l3.1-1.6c.5.1 1 .17 1.6.17.3 0 .6-.02.9-.05-.16-.55-.25-1.13-.25-1.73 0-3.15 2.66-5.7 5.94-5.7.24 0 .47.01.7.04C15.24 4.9 12.4 3.5 9 3.5z"></path>
+          <path d="M15.35 8.5c-2.9 0-5.25 2.03-5.25 4.53s2.35 4.53 5.25 4.53c.56 0 1.1-.08 1.6-.22l2.9 1.5-.7-2.5c.9-.8 1.45-1.98 1.45-3.3 0-2.5-2.35-4.54-5.25-4.54z"></path>
+        </svg>
+      </div>
+      <span class="grid-label">微信</span>
+    </div>
+
+    <div class="grid-item">
+      <div class="grid-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path></svg>
+      </div>
+      <span class="grid-label">日程</span>
+    </div>
+
+    <div class="grid-item">
+      <div class="grid-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 12H7v-2h10v2zm0-4H7V9h10v2zm0-4H7V5h10v2z"></path></svg>
+      </div>
+      <span class="grid-label">手账</span>
+    </div>
+
+    <div class="grid-item">
+      <div class="grid-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path></svg>
+      </div>
+      <span class="grid-label">手机</span>
+    </div>
+  </section>
+
+  <!-- ===== Page 1 · Photo widget (right of app grid) ===== -->
+  <section class="photo-widget" aria-label="照片小组件">
+    <svg class="pw-photo" viewBox="0 0 200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="200" height="260" fill="#F4F1EA"></rect>
+      <circle cx="100" cy="150" r="140" fill="#EFE9DE"></circle>
+      <!-- chest -->
+      <ellipse cx="100" cy="246" rx="64" ry="54" fill="#F6DDB4"></ellipse>
+      <!-- ears -->
+      <path d="M46 104 34 46 84 76 Z" fill="#F6DDB4"></path>
+      <path d="M154 104 166 46 116 76 Z" fill="#F6DDB4"></path>
+      <path d="M50 96 43 60 74 79 Z" fill="#F2B8A0"></path>
+      <path d="M150 96 157 60 126 79 Z" fill="#F2B8A0"></path>
+      <!-- head -->
+      <circle cx="100" cy="140" r="64" fill="#F6DDB4"></circle>
+      <!-- clover on head -->
+      <path d="M100 74 q4 10 0 18" stroke="#4E9E56" stroke-width="4" fill="none" stroke-linecap="round"></path>
+      <circle cx="100" cy="46" r="13" fill="#5CB865"></circle>
+      <circle cx="86" cy="59" r="13" fill="#5CB865"></circle>
+      <circle cx="114" cy="59" r="13" fill="#5CB865"></circle>
+      <circle cx="100" cy="60" r="12" fill="#4E9E56"></circle>
+      <!-- face -->
+      <path d="M74 136 q9 -11 18 0" stroke="#4A3F35" stroke-width="4.5" fill="none" stroke-linecap="round"></path>
+      <path d="M108 136 q9 -11 18 0" stroke="#4A3F35" stroke-width="4.5" fill="none" stroke-linecap="round"></path>
+      <ellipse cx="72" cy="155" rx="9" ry="6" fill="#F2A9A0" opacity="0.75"></ellipse>
+      <ellipse cx="128" cy="155" rx="9" ry="6" fill="#F2A9A0" opacity="0.75"></ellipse>
+      <path d="M96 150 h8 l-4 6 z" fill="#D98A6A"></path>
+      <path d="M100 156 q-4 9 -13 5 M100 156 q4 9 13 5" stroke="#4A3F35" stroke-width="3.5" fill="none" stroke-linecap="round"></path>
+      <!-- whiskers -->
+      <g stroke="#D9BE93" stroke-width="2.5" stroke-linecap="round">
+        <line x1="30" y1="140" x2="56" y2="146"></line>
+        <line x1="28" y1="156" x2="55" y2="156"></line>
+        <line x1="30" y1="172" x2="56" y2="166"></line>
+        <line x1="170" y1="140" x2="144" y2="146"></line>
+        <line x1="172" y1="156" x2="145" y2="156"></line>
+        <line x1="170" y1="172" x2="144" y2="166"></line>
+      </g>
+      <!-- paws -->
+      <ellipse cx="76" cy="238" rx="17" ry="12" fill="#F6DDB4"></ellipse>
+      <ellipse cx="124" cy="238" rx="17" ry="12" fill="#F6DDB4"></ellipse>
+      <path d="M70 234 v8 M82 234 v8 M118 234 v8 M130 234 v8" stroke="#E8C894" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </section>
+
+  <nav class="dock" aria-label="Dock">
+    <div class="dock-item" role="button" aria-label="钱包">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7h-3V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM5 5h11v2H5V5zm16 14H5v-6h16v6zm0-8H5V9h16v2z"></path></svg>
+      </div>
+      <span class="label">钱包</span>
+    </div>
+
+    <div class="dock-item" role="button" aria-label="外观">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.2-.64-1.67-.08-.1-.13-.21-.13-.33 0-.28.22-.5.5-.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 8 6.5 8 8 8.67 8 9.5 7.33 11 6.5 11zm3-4C8.67 7 8 6.33 8 5.5S8.67 4 9.5 4s1.5.67 1.5 1.5S10.33 7 9.5 7zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 4 14.5 4s1.5.67 1.5 1.5S15.33 7 14.5 7zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 8 17.5 8s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg>
+      </div>
+      <span class="label">外观</span>
+    </div>
+
+    <div class="dock-item" role="button" aria-label="世界书">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"></path></svg>
+      </div>
+      <span class="label">世界书</span>
+    </div>
+
+    <div class="dock-item" role="button" aria-label="设置" id="app-settings">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.21.06-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"></path></svg>
+      </div>
+      <span class="label">设置</span>
+    </div>
+  </nav>
+
+  <!-- ===== Settings app: full-screen iOS grouped table view ===== -->
+  <section class="settings-page" id="settingsPage" aria-hidden="true">
+    <header class="settings-nav">
+      <button type="button" class="back-btn" id="settingsBack" aria-label="返回主屏幕">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.7 4.3 8 12l7.7 7.7 1.4-1.4L10.8 12l6.3-6.3z"></path></svg>
+        <span>返回</span>
+      </button>
+      <h1 class="settings-title">设置</h1>
+    </header>
+
+    <div class="settings-scroll">
+      <p class="group-header">API 配置</p>
+
+      <div class="table-group">
+        <div class="table-row">
+          <label class="row-label" for="apiBaseUrl">API Base URL</label>
+          <input class="row-input" type="text" id="apiBaseUrl" placeholder="https://api.example.com/v1" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url">
+        </div>
+        <div class="table-row">
+          <label class="row-label" for="apiKey">API Key</label>
+          <input class="row-input" type="password" id="apiKey" placeholder="输入你的 API Key" autocomplete="off">
+        </div>
+      </div>
+
+      <p class="group-header">获取模型</p>
+      <div class="table-group">
+        <div class="table-row button-row">
+          <button type="button" class="action-btn" id="fetchModelsBtn">
+            <span class="spinner" id="fetchSpinner" hidden=""></span>
+            <span id="fetchBtnText">Fetch Models</span>
+          </button>
+        </div>
+        <div class="table-row">
+          <label class="row-label" for="modelSelect">模型</label>
+          <select class="row-select" id="modelSelect" disabled="">
+            <option value="" disabled="" selected="">获取后选择</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="error-msg" id="fetchError" hidden=""></p>
+
+      <div class="table-group">
+        <div class="table-row button-row">
+          <button type="button" class="action-btn" id="saveSettingsBtn">保存</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script src="#"></script>
+
+
+</body></html>
