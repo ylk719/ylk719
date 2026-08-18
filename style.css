@@ -1,420 +1,88 @@
-  * {
-    margin: 0;
-    padding: 0;
-    border: none;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
+/* ===== 重置：纯白、无滚动、从屏幕最顶端开始 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  html, body {
-    height: 100%;
-    background: #FFFFFF; /* pure solid white, edge to edge */
-    overscroll-behavior-y: contain;
-    -webkit-user-select: none;
-    user-select: none;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-    touch-action: manipulation;
-  }
+html,
+body {
+  height: 100%;
+  background: #FFFFFF; /* 纯白壁纸，无渐变、无图案 */
+}
 
-  /* Main screen: intentionally empty. No icons, no dots, no pages. */
+body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation; /* 抑制双击缩放 */
+}
 
-  /* ---------- Dock ---------- */
-  .dock {
-    position: fixed;
-    bottom: env(safe-area-inset-bottom);
-    left: 12px;
-    right: 12px;
-    height: 90px;
-    border-radius: 28px;
-    background: rgba(0, 0, 0, 0.08);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    backdrop-filter: blur(20px) saturate(180%);
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 0 6px;
-  }
+/* ===== Dock：真实 iOS 程序坞位置，位于 Home 指示条上方 ===== */
+.dock {
+  position: fixed;
+  bottom: env(safe-area-inset-bottom);
+  left: 12px;
+  right: 12px;
+  height: 90px;
+  border-radius: 28px;
+  border: none; /* 无可见边框，仅靠毛玻璃边缘 */
+  background: rgba(0, 0, 0, 0.08);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.45); /* 极淡顶部高光，增强玻璃质感 */
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 8px;
+}
 
-  .dock-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    -webkit-touch-callout: none;
-    cursor: pointer;
-  }
+/* ===== 应用图标：坐在毛玻璃盘子上的效果 ===== */
+.dock-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+}
 
-  /* Frosted glass icon plate */
-  .icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.28);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
-    backdrop-filter: blur(12px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0.5px rgba(255, 255, 255, 0.95),
-      inset 0 -1px 1px rgba(0, 0, 0, 0.045),
-      inset 1px 0 0.5px rgba(255, 255, 255, 0.4),
-      0 1px 3px rgba(0, 0, 0, 0.07);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1);
-    will-change: transform;
-  }
+.dock-app .icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  border: none; /* 无边框 */
+  background: rgba(255, 255, 255, 0.42); /* 半透明 + 模糊，非实色 */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.65), /* 内侧高光 */
+    inset 0 -1px 2px rgba(0, 0, 0, 0.04);      /* 内侧底部阴影 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.16s ease;
+}
 
-  .icon svg {
-    width: 30px;
-    height: 30px;
-    fill: rgba(29, 29, 31, 0.88);
-    filter: drop-shadow(0 0.5px 0.5px rgba(255, 255, 255, 0.6));
-    pointer-events: none;
-  }
+/* 图标下的小标签：系统字体 */
+.dock-app .label {
+  font-size: 11px;
+  line-height: 1;
+  color: #1C1C1E;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
 
-  /* iOS-style press feedback */
-  .dock-item.pressed .icon {
-    transform: scale(0.9);
-  }
-
-  .label {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.01em;
-    color: rgba(29, 29, 31, 0.9);
-    text-shadow: 0 0.5px 0.5px rgba(255, 255, 255, 0.7);
-  }
-
-  /* ===== Settings app: iOS grouped table view ===== */
-  .settings-page {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    background: #F2F2F7;
-    display: flex;
-    flex-direction: column;
-    transform: translateX(100%);
-    visibility: hidden;
-    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.32s;
-  }
-  .settings-page.open {
-    transform: translateX(0);
-    visibility: visible;
-    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0s;
-  }
-
-  .settings-nav {
-    flex: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: calc(44px + env(safe-area-inset-top));
-    padding-top: env(safe-area-inset-top);
-    background: rgba(249, 249, 249, 0.82);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    backdrop-filter: blur(20px) saturate(180%);
-    box-shadow: inset 0 -0.5px 0 rgba(60, 60, 67, 0.12);
-  }
-  .settings-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: #000;
-  }
-  .back-btn {
-    position: absolute;
-    left: 8px;
-    top: env(safe-area-inset-top);
-    height: 44px;
-    display: flex;
-    align-items: center;
-    gap: 1px;
-    padding: 0 8px;
-    background: transparent;
-    font-family: inherit;
-    font-size: 17px;
-    color: #007AFF;
-    cursor: pointer;
-  }
-  .back-btn:active { opacity: 0.5; }
-  .back-btn svg {
-    width: 22px;
-    height: 22px;
-    fill: #007AFF;
-  }
-
-  .settings-scroll {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 8px 0 calc(env(safe-area-inset-bottom) + 32px);
-  }
-
-  .group-header {
-    font-size: 13px;
-    line-height: 18px;
-    color: #6D6D72;
-    padding: 0 32px;
-    margin: 22px 0 7px;
-  }
-
-  .table-group {
-    background: #FFFFFF;
-    border-radius: 10px;
-    margin: 0 16px;
-    overflow: hidden;
-  }
-
-  .table-row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-height: 44px;
-    padding: 11px 16px;
-  }
-  .table-row + .table-row::before {
-    content: "";
-    position: absolute;
-    left: 16px;
-    right: 0;
-    top: 0;
-    height: 0.5px;
-    background: rgba(60, 60, 67, 0.12);
-  }
-
-  .row-label {
-    flex: none;
-    font-size: 17px;
-    color: #000;
-  }
-
-  .row-input {
-    flex: 1;
-    min-width: 0;
-    font-family: inherit;
-    font-size: 17px;
-    color: #3C3C43;
-    text-align: right;
-    background: transparent;
-    outline: none;
-  }
-  .row-input::placeholder { color: #C7C7CC; }
-
-  .row-select {
-    flex: 1;
-    min-width: 0;
-    font-family: inherit;
-    font-size: 17px;
-    color: #3C3C43;
-    text-align: right;
-    text-align-last: right;
-    background: transparent;
-    outline: none;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  .row-select:disabled { color: #C7C7CC; }
-
-  .button-row { padding: 11px 16px; }
-  .action-btn {
-    width: 100%;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border-radius: 12px;
-    background: #007AFF;
-    color: #FFFFFF;
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .action-btn:active { opacity: 0.75; }
-  .action-btn:disabled { opacity: 0.5; }
-
-  .spinner {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #FFFFFF;
-    animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error-msg {
-    font-size: 13px;
-    line-height: 18px;
-    color: #FF3B30;
-    padding: 10px 32px 0;
-    margin: 0;
-  }
-
-  /* ===== Page 1 · Profile card widget ===== */
-  .profile-card {
-    position: fixed;
-    top: calc(env(safe-area-inset-top) + 16px);
-    left: 12px;
-    right: 12px;
-    z-index: 1;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.15);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    backdrop-filter: blur(20px) saturate(150%);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    padding-bottom: 10px;
-  }
-
-  /* Arch cover: top corners follow the card, bottom edge curves smoothly downward */
-  .profile-cover {
-    position: relative;
-    height: 132px;
-    border-radius: 24px 24px 50% 50% / 24px 24px 30px 30px;
-    overflow: hidden;
-  }
-  .cover-art {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-  .cover-frost {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(6px) saturate(140%);
-    backdrop-filter: blur(6px) saturate(140%);
-    box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.8);
-  }
-
-  .profile-avatar {
-    position: relative;
-    z-index: 2;
-    width: 78px;
-    height: 78px;
-    margin: -39px auto 0;
-    border-radius: 50%;
-    border: 3px solid #FFFFFF;
-    background: #FFFFFF;
-    overflow: hidden;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  }
-  .profile-avatar svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .profile-info {
-    text-align: center;
-    padding: 0 20px;
-  }
-  .p-name {
-    margin: 8px 0 0;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: #1D1D1F;
-  }
-  .p-user {
-    margin: 3px 0 0;
-    font-size: 13px;
-    font-weight: 400;
-    color: #6E6E73;
-  }
-  .p-bio {
-    margin: 6px 0 0;
-    font-size: 12px;
-    letter-spacing: 0.01em;
-    color: #AEAEB2;
-  }
-  .p-loc {
-    margin: 5px 0 0;
-    font-size: 11px;
-    color: #32ADE6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-  }
-  .p-loc svg {
-    width: 11px;
-    height: 11px;
-    fill: currentColor;
-    flex: none;
-  }
-
-  /* ===== Page 1 · 2×2 app grid (below profile card, left) ===== */
-  .app-grid {
-    position: fixed;
-    top: calc(env(safe-area-inset-top) + 300px);
-    left: 12px;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(2, 60px);
-    gap: 20px 22px;
-  }
-  .grid-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-  }
-  .grid-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.2);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
-    backdrop-filter: blur(12px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0.5px rgba(255, 255, 255, 0.95),
-      inset 0 -1px 1px rgba(0, 0, 0, 0.04),
-      0 1px 3px rgba(0, 0, 0, 0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1);
-    will-change: transform;
-  }
-  .grid-item:active .grid-icon {
-    transform: scale(0.9);
-  }
-  .grid-icon svg {
-    width: 28px;
-    height: 28px;
-    fill: rgba(29, 29, 31, 0.85);
-    pointer-events: none;
-  }
-  .grid-label {
-    font-size: 11px;
-    line-height: 1;
-    letter-spacing: -0.01em;
-    color: #8E8E93;
-  }
-
-  /* ===== Page 1 · Photo widget (right of app grid) ===== */
-  .photo-widget {
-    position: fixed;
-    top: calc(env(safe-area-inset-top) + 300px); /* aligned with app grid */
-    left: 168px; /* 12 + 60 + 22 + 60 + 14 */
-    width: 160px;
-    height: 160px; /* square */
-    z-index: 1;
-    border-radius: 20px;
-    background: transparent;
-    padding: 0;
-  }
-  .pw-photo {
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-    display: block;
-  }
+/* ===== 按压反馈（iOS 式轻缩） ===== */
+.dock-app:active .icon,
+.dock-app .icon.pressed {
+  transform: scale(0.88);
+}
