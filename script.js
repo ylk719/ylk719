@@ -1,98 +1,145 @@
-'use strict';
+/* 仿 iPhone 主屏幕 — 仅渲染 Dock 4 个 App */
 
-/* ========================================
-   仿 iPhone 主屏幕 — 仅 Dock（4 个 App）
-   图标全部用内联 SVG 代码自动生成
-   ======================================== */
+const ICON_STROKE = "#5a5a5a";
 
-/* ---- Dock 内 4 个 App（SVG 图标 + 名称） ----
-   图标外层 = 透明毛玻璃（CSS backdrop-filter）
-   图标中心图案 = 实心不透明彩色 SVG
-*/
+/* ---- 生成 iOS 风格齿轮路径 ---- */
+function polar(cx, cy, r, angle) {
+    return {
+        x: +(cx + r * Math.cos(angle)).toFixed(2),
+        y: +(cy + r * Math.sin(angle)).toFixed(2)
+    };
+}
+
+function generateGearPath(cx, cy, teeth, outerR, rootR, tipRatio) {
+    const pts = [];
+    const step = (Math.PI * 2) / teeth;
+    const halfTip = step * tipRatio / 2;
+    const halfGap = step * 0.07;
+
+    for (let i = 0; i < teeth; i++) {
+        const c = i * step - Math.PI / 2;
+
+        const rl = polar(cx, cy, rootR, c - halfTip - halfGap);
+        const tl = polar(cx, cy, outerR, c - halfTip);
+        const tr = polar(cx, cy, outerR, c + halfTip);
+        const rr = polar(cx, cy, rootR, c + halfTip + halfGap);
+
+        if (i === 0) pts.push(`M ${rl.x} ${rl.y}`);
+        // 上升到齿尖
+        pts.push(`L ${tl.x} ${tl.y}`);
+        // 齿尖弧
+        pts.push(`A ${outerR} ${outerR} 0 0 1 ${tr.x} ${tr.y}`);
+        // 下降到齿根
+        pts.push(`L ${rr.x} ${rr.y}`);
+        // 齿根弧到下一颗齿
+        const nc = ((i + 1) % teeth) * step - Math.PI / 2;
+        const nrl = polar(cx, cy, rootR, nc - halfTip - halfGap);
+        pts.push(`A ${rootR} ${rootR} 0 0 1 ${nrl.x} ${nrl.y}`);
+    }
+    pts.push('Z');
+    return pts.join(' ');
+}
+
+// iOS 设置图标：12 齿，齿短而密，中心大孔
+const gearPath = generateGearPath(16, 16, 12, 13.5, 11, 0.35);
+
 const dockApps = [
     {
-        // 世界书 — 实心书本图案
-        name: '世界书',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="世界书">
-                <path fill="#0d9488" d="M12 5.5C10.8 4.6 9 4 7 4S3.2 4.6 2 5.5v13C3.2 17.6 5 17 7 17s3.8.6 5 1.5c1.2-.9 3-1.5 5-1.5s3.8.6 5 1.5v-13C20.8 4.6 19 4 17 4s-3.8.6-5 1.5z"/>
-                <path fill="none" stroke="#5eead4" stroke-width="0.7" d="M12 5.5v13"/>
-                <path fill="none" stroke="#5eead4" stroke-width="0.6" d="M7 8.2c1.4 0 2.8.3 4 .9M7 11.2c1.4 0 2.8.3 4 .9M13 9.1c1.2-.6 2.6-.9 4-.9M13 12.1c1.2-.6 2.6-.9 4-.9"/>
-              </svg>`,
+        name: "世界书",
+        svg: `
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${ICON_STROKE}" stroke-linecap="round" stroke-linejoin="round">
+                <!-- 翻开的书本：左页 -->
+                <path d="M16 9 C12 7, 7 6, 4 6 L4 25 C7 25, 12 26, 16 28 Z" stroke-width="1.3"/>
+                <!-- 翻开的书本：右页 -->
+                <path d="M16 9 C20 7, 25 6, 28 6 L28 25 C25 25, 20 26, 16 28 Z" stroke-width="1.3"/>
+                <!-- 书脊 -->
+                <line x1="16" y1="9" x2="16" y2="28" stroke-width="1"/>
+                <!-- 左页文字线 -->
+                <line x1="7" y1="11" x2="13" y2="10.3" stroke-width="0.6"/>
+                <line x1="7" y1="14" x2="13" y2="13.3" stroke-width="0.6"/>
+                <line x1="7" y1="17" x2="13" y2="16.3" stroke-width="0.6"/>
+                <line x1="7" y1="20" x2="13" y2="19.3" stroke-width="0.6"/>
+                <line x1="7" y1="23" x2="13" y2="22.3" stroke-width="0.6"/>
+                <!-- 右页文字线 -->
+                <line x1="19" y1="10.3" x2="25" y2="11" stroke-width="0.6"/>
+                <line x1="19" y1="13.3" x2="25" y2="14" stroke-width="0.6"/>
+                <line x1="19" y1="16.3" x2="25" y2="17" stroke-width="0.6"/>
+                <line x1="19" y1="19.3" x2="25" y2="20" stroke-width="0.6"/>
+                <line x1="19" y1="22.3" x2="25" y2="23" stroke-width="0.6"/>
+            </svg>
+        `
     },
     {
-        // 钱包 — 实心钱包图案
-        name: '钱包',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="钱包">
-                <path fill="#ea580c" d="M21 7H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2z"/>
-                <path fill="#fbbf24" d="M16 11.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                <path fill="#ea580c" d="M5 5h11c.55 0 1 .45 1 1v1H5c-.55 0-1-.45-1-1s.45-1 1-1z"/>
-              </svg>`,
+        name: "钱包",
+        svg: `
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${ICON_STROKE}" stroke-linecap="round" stroke-linejoin="round">
+                <!-- 钱包主体（折叠式） -->
+                <path d="M5 12 C5 10, 7 9, 9 9 L23 9 C25 9, 27 10, 27 12 V23 C27 25, 25 26, 23 26 H9 C7 26, 5 25, 5 23 Z" stroke-width="1.3"/>
+                <!-- 卡槽分割线 -->
+                <line x1="5" y1="15" x2="27" y2="15" stroke-width="0.8"/>
+                <!-- 卡扣按钮 -->
+                <circle cx="22" cy="20.5" r="2" stroke-width="1.1"/>
+                <!-- 装饰横线 -->
+                <line x1="8" y1="20.5" x2="17" y2="20.5" stroke-width="0.6"/>
+            </svg>
+        `
     },
     {
-        // 外观 — 实心调色板图案
-        name: '外观',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="外观">
-                <path fill="#7c3aed" d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1.1.9-2 2-2h1.5c2.5 0 4.5-2 4.5-4.5C21 5.5 17 3 12 3z"/>
-                <circle cx="7" cy="11" r="1.4" fill="#5856d6"/>
-                <circle cx="9.5" cy="7.5" r="1.4" fill="#ff2d55"/>
-                <circle cx="14.5" cy="7.5" r="1.4" fill="#34c759"/>
-                <circle cx="17" cy="11" r="1.4" fill="#ff9500"/>
-              </svg>`,
+        name: "外观",
+        svg: `
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${ICON_STROKE}" stroke-linecap="round" stroke-linejoin="round">
+                <!-- 猫爪：主掌垫（心形大肉垫） -->
+                <path d="M16 17 C12 13, 9 15, 9 19 C9 22, 12 24, 16 26 C20 24, 23 22, 23 19 C23 15, 20 13, 16 17 Z" stroke-width="1.3"/>
+                <!-- 趾垫 1（左外） -->
+                <ellipse cx="8" cy="13" rx="2.2" ry="3" stroke-width="1.1"/>
+                <!-- 趾垫 2（左内） -->
+                <ellipse cx="12.5" cy="8" rx="2.2" ry="3" stroke-width="1.1" transform="rotate(-15 12.5 8)"/>
+                <!-- 趾垫 3（右内） -->
+                <ellipse cx="19.5" cy="8" rx="2.2" ry="3" stroke-width="1.1" transform="rotate(15 19.5 8)"/>
+                <!-- 趾垫 4（右外） -->
+                <ellipse cx="24" cy="13" rx="2.2" ry="3" stroke-width="1.1"/>
+            </svg>
+        `
     },
     {
-        // 设置 — 实心齿轮图案
-        name: '设置',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="设置">
-                <path fill="#3f3f46" fill-rule="evenodd" d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.65 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.49.39 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
-              </svg>`,
-    },
+        name: "设置",
+        svg: `
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="${ICON_STROKE}" stroke-linecap="round" stroke-linejoin="round">
+                <!-- iOS 风格齿轮：12 齿，程序化生成精确路径 -->
+                <path d="${gearPath}" stroke-width="1.2"/>
+                <!-- 中心孔 -->
+                <circle cx="16" cy="16" r="4.5" stroke-width="1.1"/>
+            </svg>
+        `
+    }
 ];
 
-/* ---- DOM 引用 ---- */
-const dockInner = document.getElementById('dockInner');
-
-/* ---- 创建 Dock App（图标 + 名称） ---- */
-function createDockApp(app) {
-    const item = document.createElement('div');
-    item.className = 'dock-app';
-
-    // 图标容器
-    const icon = document.createElement('div');
-    icon.className = 'dock-app-icon';
-
-    icon.insertAdjacentHTML('beforeend', app.svg);
-
-    // App 名称
-    const name = document.createElement('span');
-    name.className = 'dock-app-name';
-    name.textContent = app.name;
-
-    item.appendChild(icon);
-    item.appendChild(name);
-
-    // 点击反馈（轻触缩放）
-    item.addEventListener('click', () => {
-        item.style.transform = 'scale(0.86)';
-        setTimeout(() => { item.style.transform = ''; }, 130);
-    });
-
-    return item;
-}
-
-/* ---- 渲染 Dock ---- */
 function renderDock() {
-    dockApps.forEach((app) => dockInner.appendChild(createDockApp(app)));
+    const dockInner = document.getElementById('dockInner');
+    if (!dockInner) {
+        console.error('Dock container not found');
+        return;
+    }
+
+    dockInner.innerHTML = dockApps.map((app, index) => `
+        <div class="dock-app" data-name="${app.name}" role="button" tabindex="0" aria-label="${app.name}">
+            <div class="dock-app-icon">
+                ${app.svg}
+            </div>
+            <span class="dock-app-name">${app.name}</span>
+        </div>
+    `).join('');
+
+    const apps = dockInner.querySelectorAll('.dock-app');
+    apps.forEach((app, index) => {
+        app.addEventListener('click', () => {
+            console.log('打开 App:', dockApps[index].name);
+        });
+    });
 }
 
-/* ---- 阻止默认行为 ---- */
-document.addEventListener('contextmenu', (e) => e.preventDefault());
-document.addEventListener('gesturestart', (e) => e.preventDefault());
-document.addEventListener('dblclick', (e) => e.preventDefault());
-
-// 防止页面拖拽/缩放
-document.body.addEventListener('touchmove', (e) => {
-    if (e.touches.length > 1) e.preventDefault();
-}, { passive: false });
-
-/* ---- 初始化 ---- */
-renderDock();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderDock);
+} else {
+    renderDock();
+}
