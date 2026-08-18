@@ -1,6 +1,6 @@
 /* ========================================
    仿 iPhone 主屏幕 — 全屏 Web App（仅 Dock）
-   白色壁纸 + 毛玻璃 Dock + App 名称
+   淡粉色壁纸 + 毛玻璃 Dock + App 名称
    ======================================== */
 
 /* ---- Reset & Base ---- */
@@ -61,29 +61,16 @@ html, body {
     justify-content: space-around;
     height: 104px;
     border-radius: 34px;
-    /* 毛玻璃效果 — 降低不透明度增强通透感 */
-    background: rgba(255,255,255,0.45);
+    background: rgba(255, 255, 255, 0.55);
     -webkit-backdrop-filter: blur(42px) saturate(180%);
     backdrop-filter: blur(42px) saturate(180%);
-    border: 0.5px solid rgba(255,255,255,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow:
-        0 4px 24px rgba(0,0,0,0.06),
-        inset 0 1px 0 rgba(255,255,255,0.7);
+        0 4px 24px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     padding: 0 14px;
     margin: 0 4px;
     pointer-events: auto;
-    -webkit-animation: dockAppear 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-    animation: dockAppear 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-}
-
-@-webkit-keyframes dockAppear {
-    from { opacity: 0; -webkit-transform: translateY(40px) scale(0.92); }
-    to   { opacity: 1; -webkit-transform: translateY(0) scale(1); }
-}
-
-@keyframes dockAppear {
-    from { opacity: 0; transform: translateY(40px) scale(0.92); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ---- Dock App（图标 + 名称容器） ---- */
@@ -109,14 +96,13 @@ html, body {
     width: 58px;
     height: 58px;
     border-radius: 14px;
-    /* 毛玻璃效果 — 极低透明度 */
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.5);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     backdrop-filter: blur(28px) saturate(180%);
-    border: 0.5px solid rgba(255,255,255,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow:
-        0 2px 8px rgba(0,0,0,0.04),
-        inset 0 1px 0 rgba(255,255,255,0.6);
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,30 +118,19 @@ html, body {
     left: 0;
     right: 0;
     height: 50%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
     border-radius: 14px 14px 0 0;
     pointer-events: none;
 }
 
-/* SVG 图标（实心、不透明，清晰显示在毛玻璃背景之上） */
+/* SVG 图标 */
 .dock-app-icon svg {
     position: relative;
     z-index: 1;
     display: block;
     width: 33px;
     height: 33px;
-    -webkit-animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-@-webkit-keyframes iconPop {
-    from { opacity: 0; -webkit-transform: scale(0.4); }
-    to   { opacity: 1; -webkit-transform: scale(1); }
-}
-
-@keyframes iconPop {
-    from { opacity: 0; transform: scale(0.4); }
-    to   { opacity: 1; transform: scale(1); }
+    flex-shrink: 0;
 }
 
 /* ---- App 名称 ---- */
@@ -172,7 +147,7 @@ html, body {
     letter-spacing: 0.1px;
 }
 
-/* ---- 响应式适配（保持与原布局间隔一致） ---- */
+/* ---- 响应式适配 ---- */
 @media (max-width: 360px) {
     .dock-app-icon {
         width: 54px;
@@ -199,7 +174,7 @@ html, body {
     .dock-app-name { font-size: 11px; }
 }
 
-/* ---- 横屏隐藏（仅支持竖屏） ---- */
+/* ---- 横屏隐藏 ---- */
 @media (orientation: landscape) and (max-height: 500px) {
     .home-screen {
         display: flex;
@@ -208,7 +183,7 @@ html, body {
     }
     .home-screen::before {
         content: '请旋转至竖屏使用';
-        color: rgba(0,0,0,0.5);
+        color: rgba(0, 0, 0, 0.5);
         font-size: 16px;
         z-index: 10;
     }
