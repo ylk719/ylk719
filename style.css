@@ -6,15 +6,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ===== 外层关键容器统一 100vh（不混用 100% / 100dvh / fixed body） ===== */
 html,
 body {
-  height: 100%;
+  height: 100vh;
   background: #FFFFFF; /* 纯白壁纸，无渐变、无图案 */
 }
 
 body {
-  position: fixed;
-  inset: 0;
   overflow: hidden;
   overscroll-behavior: none;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
