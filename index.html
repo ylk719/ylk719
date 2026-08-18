@@ -11,216 +11,258 @@
     <meta name="theme-color" content="#fce4ec">
     <meta name="format-detection" content="telephone=no">
 
-    <link rel="manifest" href="manifest.json">
+    <!-- 内联 manifest（data URI，无外部文件） -->
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%E4%B8%BB%E5%B1%8F%E5%B9%95%22%2C%22short_name%22%3A%22%E4%B8%BB%E5%B1%8F%E5%B9%95%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23fce4ec%22%2C%22theme_color%22%3A%22%23fce4ec%22%2C%22start_url%22%3A%22.%2F%22%7D">
+
+    <!-- 主屏幕图标（内联 data URI） -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23fce4ec'/%3E%3C/svg%3E">
 
-    <style>/* ========================================
-   仿 iPhone 主屏幕 — 全屏 Web App（仅 Dock）
-   淡粉色壁纸 + 毛玻璃 Dock + App 名称
-   ======================================== */
-
-/* ---- Reset & Base ---- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-}
-
-html, body {
-    width: 100%;
-    height: 100vh;
-    min-height: 100vh;
-    overflow: hidden;
-    background: #fce4ec;
-    overscroll-behavior: none;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-                 "Helvetica Neue", "PingFang SC", "Noto Sans CJK SC", sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
-
-/* ---- 主屏幕容器（Home 容器） ---- */
-.home-screen {
-    width: 100%;
-    height: 100vh;
-    min-height: 100vh;
-    overflow: hidden;
-    position: relative;
-}
-
-/* ---- 壁纸背景（淡粉色） ---- */
-.wallpaper {
-    position: fixed;
-    inset: 0;
-    background: #fce4ec;
-    z-index: 0;
-}
-
-/* ---- Dock（底部固定栏） ---- */
-.dock {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 8px 6px;
-    padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
-    z-index: 3;
-    pointer-events: none;
-}
-
-.dock-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    height: 104px;
-    border-radius: 34px;
-    background: rgba(255, 255, 255, 0.55);
-    -webkit-backdrop-filter: blur(42px) saturate(180%);
-    backdrop-filter: blur(42px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow:
-        0 4px 24px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    padding: 0 14px;
-    margin: 0 4px;
-    pointer-events: auto;
-}
-
-/* ---- Dock App（图标 + 名称容器） ---- */
-.dock-app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    -webkit-transition: -webkit-transform 0.12s ease;
-    transition: transform 0.12s ease;
-}
-
-.dock-app:active {
-    -webkit-transform: scale(0.86);
-    transform: scale(0.86);
-    -webkit-transition: -webkit-transform 0.06s ease;
-    transition: transform 0.06s ease;
-}
-
-/* ---- Dock App 图标（毛玻璃质感） ---- */
-.dock-app-icon {
-    width: 58px;
-    height: 58px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.5);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-/* 图标顶部高光 */
-.dock-app-icon::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
-    border-radius: 14px 14px 0 0;
-    pointer-events: none;
-}
-
-/* SVG 图标 */
-.dock-app-icon svg {
-    position: relative;
-    z-index: 1;
-    display: block;
-    width: 33px;
-    height: 33px;
-    flex-shrink: 0;
-}
-
-/* ---- App 名称 ---- */
-.dock-app-name {
-    font-size: 10px;
-    line-height: 1.2;
-    color: #5a5a5a;
-    text-align: center;
-    max-width: 68px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 400;
-    letter-spacing: 0.1px;
-}
-
-/* ---- 响应式适配 ---- */
-@media (max-width: 360px) {
-    .dock-app-icon {
-        width: 54px;
-        height: 54px;
-    }
-    .dock-app-icon svg {
-        width: 30px;
-        height: 30px;
-    }
-    .dock-inner { height: 98px; border-radius: 30px; }
-    .dock-app-name { font-size: 9px; }
-}
-
-@media (min-width: 414px) {
-    .dock-app-icon {
-        width: 64px;
-        height: 64px;
-    }
-    .dock-app-icon svg {
-        width: 36px;
-        height: 36px;
-    }
-    .dock-inner { height: 112px; border-radius: 36px; }
-    .dock-app-name { font-size: 11px; }
-}
-
-/* ---- 横屏隐藏 ---- */
-@media (orientation: landscape) and (max-height: 500px) {
-    .home-screen {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .home-screen::before {
-        content: '请旋转至竖屏使用';
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 16px;
-        z-index: 10;
-    }
-    .dock { display: none; }
-}
-</style>
     <title>主屏幕</title>
+
+    <style>
+        /* ---- Reset & Base ---- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+            overflow: hidden;
+            background: #fce4ec;
+            overscroll-behavior: none;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                         "Helvetica Neue", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- 主屏幕容器 ---- */
+        .home-screen {
+            width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ---- 壁纸背景（淡粉色） ---- */
+        .wallpaper {
+            position: fixed;
+            inset: 0;
+            background: #fce4ec;
+            z-index: 0;
+        }
+
+        /* ---- Dock（底部固定栏） ---- */
+        .dock {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px 6px;
+            padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+            z-index: 3;
+        }
+
+        .dock-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            height: 104px;
+            border-radius: 34px;
+            background: rgba(255, 255, 255, 0.55);
+            -webkit-backdrop-filter: blur(42px) saturate(180%);
+            backdrop-filter: blur(42px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            padding: 0 14px;
+            margin: 0 4px;
+        }
+
+        /* ---- Dock App（图标 + 名称容器） ---- */
+        .dock-app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            -webkit-transition: -webkit-transform 0.12s ease;
+            transition: transform 0.12s ease;
+        }
+
+        .dock-app:active {
+            -webkit-transform: scale(0.86);
+            transform: scale(0.86);
+            -webkit-transition: -webkit-transform 0.06s ease;
+            transition: transform 0.06s ease;
+        }
+
+        /* ---- Dock App 图标（毛玻璃质感） ---- */
+        .dock-app-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.5);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            backdrop-filter: blur(28px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 图标顶部高光 */
+        .dock-app-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
+            border-radius: 14px 14px 0 0;
+            pointer-events: none;
+        }
+
+        /* SVG 图标 */
+        .dock-app-icon svg {
+            position: relative;
+            z-index: 1;
+            display: block;
+            width: 33px;
+            height: 33px;
+            flex-shrink: 0;
+        }
+
+        /* ---- App 名称 ---- */
+        .dock-app-name {
+            font-size: 10px;
+            line-height: 1.2;
+            color: #5a5a5a;
+            text-align: center;
+            max-width: 68px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 400;
+            letter-spacing: 0.1px;
+        }
+
+        /* ---- 响应式适配 ---- */
+        @media (max-width: 360px) {
+            .dock-app-icon { width: 54px; height: 54px; }
+            .dock-app-icon svg { width: 30px; height: 30px; }
+            .dock-inner { height: 98px; border-radius: 30px; }
+            .dock-app-name { font-size: 9px; }
+        }
+
+        @media (min-width: 414px) {
+            .dock-app-icon { width: 64px; height: 64px; }
+            .dock-app-icon svg { width: 36px; height: 36px; }
+            .dock-inner { height: 112px; border-radius: 36px; }
+            .dock-app-name { font-size: 11px; }
+        }
+
+        /* ---- 横屏隐藏 ---- */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .home-screen {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .home-screen::before {
+                content: '请旋转至竖屏使用';
+                color: rgba(0, 0, 0, 0.5);
+                font-size: 16px;
+                z-index: 10;
+            }
+            .dock { display: none; }
+        }
+    </style>
 </head>
 <body>
     <div class="home-screen">
         <div class="wallpaper"></div>
 
-        <div class="dock" id="dock">
-            <div class="dock-inner" id="dockInner">
-                <!-- 降级：如果 JS 未执行，至少显示文字 -->
-                <noscript>请启用 JavaScript</noscript>
+        <div class="dock">
+            <div class="dock-inner">
+
+                <!-- 世界书 -->
+                <div class="dock-app">
+                    <div class="dock-app-icon">
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#5a5a5a" stroke-linecap="round" stroke-linejoin="round" width="33" height="33">
+                            <path d="M16 9 C12 7, 7 6, 4 6 L4 25 C7 25, 12 26, 16 28 Z" stroke-width="1.3"></path>
+                            <path d="M16 9 C20 7, 25 6, 28 6 L28 25 C25 25, 20 26, 16 28 Z" stroke-width="1.3"></path>
+                            <line x1="16" y1="9" x2="16" y2="28" stroke-width="1"></line>
+                            <line x1="7" y1="11" x2="13" y2="10.3" stroke-width="0.6"></line>
+                            <line x1="7" y1="14" x2="13" y2="13.3" stroke-width="0.6"></line>
+                            <line x1="7" y1="17" x2="13" y2="16.3" stroke-width="0.6"></line>
+                            <line x1="7" y1="20" x2="13" y2="19.3" stroke-width="0.6"></line>
+                            <line x1="7" y1="23" x2="13" y2="22.3" stroke-width="0.6"></line>
+                            <line x1="19" y1="10.3" x2="25" y2="11" stroke-width="0.6"></line>
+                            <line x1="19" y1="13.3" x2="25" y2="14" stroke-width="0.6"></line>
+                            <line x1="19" y1="16.3" x2="25" y2="17" stroke-width="0.6"></line>
+                            <line x1="19" y1="19.3" x2="25" y2="20" stroke-width="0.6"></line>
+                            <line x1="19" y1="22.3" x2="25" y2="23" stroke-width="0.6"></line>
+                        </svg>
+                    </div>
+                    <span class="dock-app-name">世界书</span>
+                </div>
+
+                <!-- 钱包 -->
+                <div class="dock-app">
+                    <div class="dock-app-icon">
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#5a5a5a" stroke-linecap="round" stroke-linejoin="round" width="33" height="33">
+                            <path d="M5 12 C5 10, 7 9, 9 9 L23 9 C25 9, 27 10, 27 12 V23 C27 25, 25 26, 23 26 H9 C7 26, 5 25, 5 23 Z" stroke-width="1.3"></path>
+                            <line x1="5" y1="15" x2="27" y2="15" stroke-width="0.8"></line>
+                            <circle cx="22" cy="20.5" r="2" stroke-width="1.1"></circle>
+                            <line x1="8" y1="20.5" x2="17" y2="20.5" stroke-width="0.6"></line>
+                        </svg>
+                    </div>
+                    <span class="dock-app-name">钱包</span>
+                </div>
+
+                <!-- 外观（猫爪） -->
+                <div class="dock-app">
+                    <div class="dock-app-icon">
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#5a5a5a" stroke-linecap="round" stroke-linejoin="round" width="33" height="33">
+                            <path d="M16 17 C12 13, 9 15, 9 19 C9 22, 12 24, 16 26 C20 24, 23 22, 23 19 C23 15, 20 13, 16 17 Z" stroke-width="1.3"></path>
+                            <ellipse cx="8" cy="13" rx="2.2" ry="3" stroke-width="1.1"></ellipse>
+                            <ellipse cx="12.5" cy="8" rx="2.2" ry="3" stroke-width="1.1" transform="rotate(-15 12.5 8)"></ellipse>
+                            <ellipse cx="19.5" cy="8" rx="2.2" ry="3" stroke-width="1.1" transform="rotate(15 19.5 8)"></ellipse>
+                            <ellipse cx="24" cy="13" rx="2.2" ry="3" stroke-width="1.1"></ellipse>
+                        </svg>
+                    </div>
+                    <span class="dock-app-name">外观</span>
+                </div>
+
+                <!-- 设置 -->
+                <div class="dock-app">
+                    <div class="dock-app-icon">
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#5a5a5a" stroke-linecap="round" stroke-linejoin="round" width="33" height="33">
+                            <path d="M 14.59 5.09 L 14.76 2.56 A 13.50 13.50 0 0 1 17.24 2.56 L 17.41 5.09 A 11.00 11.00 0 0 1 20.24 5.85 L 21.65 3.74 A 13.50 13.50 0 0 1 23.79 4.98 L 22.67 7.26 A 11.00 11.00 0 0 1 24.74 9.33 L 27.02 8.21 A 13.50 13.50 0 0 1 28.26 10.35 L 26.15 11.76 A 11.00 11.00 0 0 1 26.91 14.59 L 29.44 14.76 A 13.50 13.50 0 0 1 29.44 17.24 L 26.91 17.41 A 11.00 11.00 0 0 1 26.15 20.24 L 28.26 21.65 A 13.50 13.50 0 0 1 27.02 23.79 L 24.74 22.67 A 11.00 11.00 0 0 1 22.67 24.74 L 23.79 27.02 A 13.50 13.50 0 0 1 21.65 28.26 L 20.24 26.15 A 11.00 11.00 0 0 1 17.41 26.91 L 17.24 29.44 A 13.50 13.50 0 0 1 14.76 29.44 L 14.59 26.91 A 11.00 11.00 0 0 1 11.76 26.15 L 10.35 28.26 A 13.50 13.50 0 0 1 8.21 27.02 L 9.33 24.74 A 11.00 11.00 0 0 1 7.26 22.67 L 4.98 23.79 A 13.50 13.50 0 0 1 3.74 21.65 L 5.85 20.24 A 11.00 11.00 0 0 1 5.09 17.41 L 2.56 17.24 A 13.50 13.50 0 0 1 2.56 14.76 L 5.09 14.59 A 11.00 11.00 0 0 1 5.85 11.76 L 3.74 10.35 A 13.50 13.50 0 0 1 4.98 8.21 L 7.26 9.33 A 11.00 11.00 0 0 1 9.33 7.26 L 8.21 4.98 A 13.50 13.50 0 0 1 10.35 3.74 L 11.76 5.85 A 11.00 11.00 0 0 1 14.59 5.09 Z" stroke-width="1.2"></path>
+                            <circle cx="16" cy="16" r="4.5" stroke-width="1.1"></circle>
+                        </svg>
+                    </div>
+                    <span class="dock-app-name">设置</span>
+                </div>
+
             </div>
         </div>
     </div>
-
-    <script src="#"></script>
-
 
 </body></html>
