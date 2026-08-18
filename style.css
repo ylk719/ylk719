@@ -10,92 +10,108 @@
 html,
 body {
   height: 100vh;
+  margin: 0;
+  padding: 0;
   background: #FFFFFF; /* 纯白壁纸，无渐变、无图案 */
+  touch-action: manipulation; /* 禁止双击缩放 */
+  overscroll-behavior: none;  /* 禁止下拉弹性空白 */
+  overscroll-behavior-y: none;
 }
 
 body {
   overflow: hidden;
-  overscroll-behavior: none;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
   -webkit-user-select: none;
   user-select: none;
-  touch-action: manipulation; /* 抑制双击缩放 */
 }
 
-/* ===== 应用图标：坐在毛玻璃盘子上的效果 ===== */
-.dock-app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  background: none;
-  font: inherit;
-  cursor: pointer;
-  -webkit-touch-callout: none;
-}
-
-.dock-app .icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
-  border: none; /* 无边框 */
-  background: rgba(255, 255, 255, 0.42); /* 半透明 + 模糊，非实色 */
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.65), /* 内侧高光 */
-    inset 0 -1px 2px rgba(0, 0, 0, 0.04);      /* 内侧底部阴影 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.16s ease;
-}
-
-/* 图标下的小标签：系统字体 */
-.dock-app .label {
-  font-size: 11px;
-  line-height: 1;
-  color: #1C1C1E;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-
-/* ===== 按压反馈（iOS 式轻缩） ===== */
-.dock-app:active .icon,
-.dock-app .icon.pressed {
-  transform: scale(0.88);
-}
-
-html, body {
-  /* 禁止双击缩放、下拉弹性空白 */
-  touch-action: manipulation;
-  overscroll-behavior-y: none;
-  
-  /* 确保 body 铺满全屏 */
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-/* 你的底部 Dock/豆壳栏 */
+/* ========== Dock 整体（底层毛玻璃） ========== */
 .dock-bar {
   position: fixed;
   left: 0;
   right: 0;
-  
-  /* 关键：贴紧屏幕物理底部，同时给 Home 指示条留出安全距离 */
   bottom: 0;
-  padding-bottom: env(safe-area-inset-bottom);
-  
-  /* 视觉上让它真的"贴底" */
-  box-sizing: border-box;
-  
-  /* 你的原有样式 */
+  z-index: 100;
+
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: rgba(230, 230, 230, 0.85);
-  backdrop-filter: blur(10px);
-  border-radius: 24px 24px 0 0; /* 如果你要保留顶部圆角 */
+
+  /* 底部加安全距离，顶部对称 */
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) 12px;
+
+  /* 只有顶部圆角，底部贴边不被截断 */
+  border-radius: 32px 32px 0 0;
+
+  /* 底层毛玻璃 */
+  background: rgba(235, 235, 235, 0.45);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+  /* 顶部细白边 + 微弱投影 */
+  border-top: 0.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+
+  box-sizing: border-box;
+}
+
+/* ========== 每个 App 项（独立毛玻璃卡片） ========== */
+.dock-bar .dock-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  /* 固定宽高，做成小圆角卡片 */
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+
+  /* 独立毛玻璃 */
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+
+  /* 玻璃边缘高光 */
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+              0 1px 3px rgba(0, 0, 0, 0.04);
+
+  /* 去掉默认点击高亮 + 按钮重置 */
+  -webkit-tap-highlight-color: transparent;
+  font: inherit;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+
+  transition: transform 0.16s ease;
+}
+
+/* 图标容器：纯居中（卡片本身已是毛玻璃，无需独立玻璃层） */
+.dock-bar .dock-app .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 图标 */
+.dock-bar .dock-app svg,
+.dock-bar .dock-app img {
+  width: 26px;
+  height: 26px;
+  color: #333;
+}
+
+/* 文字 */
+.dock-bar .dock-app .label {
+  font-size: 10px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ===== 按压反馈（iOS 式轻缩，缩放整个卡片） ===== */
+.dock-bar .dock-app:active,
+.dock-bar .dock-app.pressed {
+  transform: scale(0.88);
 }

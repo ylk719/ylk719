@@ -3,10 +3,8 @@
 const dockApps = document.querySelectorAll('.dock-app');
 
 dockApps.forEach((app) => {
-  const icon = app.querySelector('.icon');
-
-  const press = () => icon.classList.add('pressed');
-  const release = () => icon.classList.remove('pressed');
+  const press = () => app.classList.add('pressed');
+  const release = () => app.classList.remove('pressed');
 
   app.addEventListener('touchstart', press, { passive: true });
   app.addEventListener('touchend', release);
