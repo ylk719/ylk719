@@ -1,117 +1,325 @@
-/* ===== 重置：纯白、无滚动、从屏幕最顶端开始 ===== */
+/* ========================================
+   仿 iPhone 主屏幕 — 全屏 Web App
+   ======================================== */
+
+/* ---- Reset & Base ---- */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 
-/* ===== 外层关键容器统一 100vh（不混用 100% / 100dvh / fixed body） ===== */
-html,
-body {
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  background: #FFFFFF; /* 纯白壁纸，无渐变、无图案 */
-  touch-action: manipulation; /* 禁止双击缩放 */
-  overscroll-behavior: none;  /* 禁止下拉弹性空白 */
-  overscroll-behavior-y: none;
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    overscroll-behavior: none;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                 "Helvetica Neue", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-body {
-  overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
-  -webkit-user-select: none;
-  user-select: none;
+/* ---- 主屏幕容器 ---- */
+.home-screen {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
 }
 
-/* ========== Dock 整体（底层毛玻璃） ========== */
-.dock-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100;
-
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-
-  /* 底部加安全距离，顶部对称 */
-  padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) 12px;
-
-  /* 只有顶部圆角，底部贴边不被截断 */
-  border-radius: 32px 32px 0 0;
-
-  /* 底层毛玻璃 */
-  background: rgba(235, 235, 235, 0.45);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-
-  /* 顶部细白边 + 微弱投影 */
-  border-top: 0.5px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-
-  box-sizing: border-box;
+/* ---- 壁纸背景 ---- */
+.wallpaper {
+    position: fixed;
+    inset: 0;
+    background-image: url('wallpaper.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: 0;
 }
 
-/* ========== 每个 App 项（独立毛玻璃卡片） ========== */
-.dock-bar .dock-app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-
-  /* 固定宽高，做成小圆角卡片 */
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-
-  /* 独立毛玻璃 */
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
-
-  /* 玻璃边缘高光 */
-  border: 0.5px solid rgba(255, 255, 255, 0.5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
-              0 1px 3px rgba(0, 0, 0, 0.04);
-
-  /* 去掉默认点击高亮 + 按钮重置 */
-  -webkit-tap-highlight-color: transparent;
-  font: inherit;
-  cursor: pointer;
-  -webkit-touch-callout: none;
-
-  transition: transform 0.16s ease;
+/* 壁纸上方微暗遮罩，增强图标文字可读性 */
+.wallpaper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.02) 30%,
+        rgba(0,0,0,0.02) 70%,
+        rgba(0,0,0,0.12) 100%);
 }
 
-/* 图标容器：纯居中（卡片本身已是毛玻璃，无需独立玻璃层） */
-.dock-bar .dock-app .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ---- 页面容器（可滑动区域） ---- */
+.pages-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+    touch-action: pan-y;
 }
 
-/* 图标 */
-.dock-bar .dock-app svg,
-.dock-bar .dock-app img {
-  width: 26px;
-  height: 26px;
-  color: #333;
+.pages-track {
+    display: flex;
+    width: 200%;
+    height: 100%;
+    transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
 }
 
-/* 文字 */
-.dock-bar .dock-app .label {
-  font-size: 10px;
-  color: #333;
-  font-weight: 500;
-  white-space: nowrap;
+.pages-track.no-transition {
+    transition: none;
 }
 
-/* ===== 按压反馈（iOS 式轻缩，缩放整个卡片） ===== */
-.dock-bar .dock-app:active,
-.dock-bar .dock-app.pressed {
-  transform: scale(0.88);
+/* ---- 单页 ---- */
+.page {
+    width: 50%;
+    height: 100%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:
+        calc(env(safe-area-inset-top, 0px) + 8px)
+        10px
+        150px;
+}
+
+/* ---- App 网格 ---- */
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 16px;
+    column-gap: 0;
+    width: 100%;
+    max-width: 380px;
+}
+
+/* ---- App 单元 ---- */
+.app-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.6);
+}
+
+@keyframes iconAppear {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ---- App 图标 ---- */
+.app-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: var(--icon-bg, linear-gradient(135deg, #555, #333));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    transition: transform 0.12s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 图标顶部高光 */
+.app-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
+}
+
+.app-item:active .app-icon {
+    transform: scale(0.86);
+    transition: transform 0.06s ease;
+}
+
+.app-emoji {
+    font-size: 31px;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    z-index: 1;
+}
+
+/* ---- App 名称 ---- */
+.app-name {
+    font-size: 11px;
+    line-height: 1.2;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.55);
+    max-width: 74px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+    letter-spacing: 0.1px;
+}
+
+/* ---- 页面指示器（小圆点） ---- */
+.page-indicators {
+    position: absolute;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 122px);
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.indicator {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.30);
+    transition: background 0.35s ease, transform 0.35s ease;
+}
+
+.indicator.active {
+    background: rgba(255,255,255,1);
+    transform: scale(1.0);
+}
+
+/* ---- Dock（底部固定栏） ---- */
+.dock {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 6px env(safe-area-inset-bottom, 0px);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.dock-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 82px;
+    border-radius: 34px;
+    /* 明显的毛玻璃效果 */
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(42px) saturate(180%);
+    -webkit-backdrop-filter: blur(42px) saturate(180%);
+    border: 0.5px solid rgba(255,255,255,0.22);
+    box-shadow:
+        0 4px 24px rgba(0,0,0,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    padding: 0 14px;
+    margin: 0 4px;
+    pointer-events: auto;
+}
+
+/* ---- Dock 内 App 图标（毛玻璃质感） ---- */
+.dock-app {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    /* 毛玻璃效果，半透明模糊质感 */
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 0.5px solid rgba(255,255,255,0.18);
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Dock 图标顶部高光 */
+.dock-app::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0));
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
+}
+
+.dock-app:active {
+    transform: scale(0.86);
+    transition: transform 0.06s ease;
+}
+
+.dock-app .app-emoji {
+    font-size: 29px;
+    z-index: 1;
+}
+
+/* ---- 响应式适配 ---- */
+@media (max-width: 360px) {
+    .app-icon,
+    .dock-app {
+        width: 54px;
+        height: 54px;
+    }
+    .app-emoji { font-size: 28px; }
+    .dock-app .app-emoji { font-size: 27px; }
+    .app-grid { row-gap: 12px; }
+    .dock-inner { height: 76px; border-radius: 30px; }
+}
+
+@media (min-width: 414px) {
+    .app-icon,
+    .dock-app {
+        width: 64px;
+        height: 64px;
+    }
+    .app-emoji { font-size: 33px; }
+    .dock-app .app-emoji { font-size: 32px; }
+    .dock-inner { height: 86px; border-radius: 36px; }
+}
+
+/* ---- 横屏隐藏（仅支持竖屏） ---- */
+@media (orientation: landscape) and (max-height: 500px) {
+    .home-screen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .home-screen::before {
+        content: '请旋转至竖屏使用';
+        color: rgba(255,255,255,0.8);
+        font-size: 16px;
+        z-index: 10;
+    }
+    .pages-container,
+    .page-indicators,
+    .dock { display: none; }
 }
