@@ -44,6 +44,124 @@ html, body {
 }
 
 /* ========================================
+   顶部 Profile 组件
+   ======================================== */
+.profile-card {
+    --photo-h: 172px;
+    position: absolute;
+    top: calc(env(safe-area-inset-top, 0px) + 18px);
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: 85%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(40, 28, 34, 0.18);
+}
+
+.profile-photo {
+    position: relative;
+    width: 100%;
+    height: var(--photo-h);
+    overflow: hidden;
+    background: #dfdfdf;
+}
+
+.profile-photo-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    -webkit-filter: grayscale(1) contrast(1.04) brightness(0.97);
+    filter: grayscale(1) contrast(1.04) brightness(0.97);
+}
+
+/* 白色立体小星星（贴附在照片表面） */
+.star {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    -webkit-filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.28));
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.28));
+}
+.star-1 { top: 20px; left: 20px; width: 18px; height: 18px; }
+.star-2 { top: 30px; right: 34px; width: 26px; height: 26px; }
+.star-3 { top: 12px; right: 72px; width: 12px; height: 12px; }
+
+/* 正圆白框头像，压边叠于照片底部 */
+.profile-avatar {
+    position: absolute;
+    top: calc(var(--photo-h) - 35px);
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    -webkit-filter: grayscale(1);
+    filter: grayscale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    z-index: 3;
+}
+
+/* 头像下方文字区：与照片同处一张白底卡片内 */
+.profile-info {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 16px 20px;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+}
+
+.profile-handle {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #9a9a9a;
+    letter-spacing: 0.2px;
+}
+
+.profile-bio {
+    margin-top: 8px;
+    font-size: 12.5px;
+    font-weight: 300;
+    color: #8b8b8b;
+    line-height: 1.5;
+    max-width: 92%;
+}
+
+.profile-loc {
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: #8b8b8b;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.profile-loc-icon {
+    font-size: 12px;
+    line-height: 1;
+}
+
+/* ========================================
    Dock —— 液态玻璃
    ======================================== */
 .dock {
@@ -209,4 +327,477 @@ html, body {
         z-index: 10;
     }
     .dock { display: none; }
+}
+
+/* ========================================
+   设置界面 —— 液态玻璃覆盖层
+   ======================================== */
+.settings-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #fce4ec;
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+    -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.32, 0.72, 0.32, 1);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0.32, 1);
+    overflow: hidden;
+}
+
+.settings-screen.open {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}
+
+/* 设置页（主界面 / API 页） */
+.settings-page {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background:
+        radial-gradient(120% 50% at 80% -5%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 55%),
+        #fce4ec;
+    -webkit-transition: -webkit-transform 0.32s cubic-bezier(0.32, 0.72, 0.32, 1);
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.32, 1);
+}
+
+/* API 页默认在右侧屏幕外 */
+.settings-api {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+}
+
+/* 进入 API 页时：主界面左移、API 页滑入 */
+.settings-screen.api-visible .settings-main {
+    -webkit-transform: translateX(-28%);
+    transform: translateX(-28%);
+}
+.settings-screen.api-visible .settings-api {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}
+
+/* 壁纸页默认在右侧屏幕外 */
+.settings-wallpaper {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+}
+
+/* 进入壁纸页时：主界面左移、壁纸页滑入 */
+.settings-screen.wallpaper-visible .settings-main {
+    -webkit-transform: translateX(-28%);
+    transform: translateX(-28%);
+}
+.settings-screen.wallpaper-visible .settings-wallpaper {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}
+
+/* ---- 顶部导航 ---- */
+.settings-nav {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    padding-top: max(8px, env(safe-area-inset-top, 0px));
+    flex-shrink: 0;
+    margin-bottom: 10px;
+}
+
+.settings-nav-back {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.35);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.settings-nav-back:active {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+}
+
+.settings-title {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #3a3a3a;
+    letter-spacing: 0.2px;
+}
+
+.settings-nav-spacer {
+    width: 44px;
+    flex-shrink: 0;
+}
+
+/* ---- 设置列表 ---- */
+.settings-list {
+    margin: 6px 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.35);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+        0 6px 24px rgba(190, 140, 160, 0.14),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 15px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s ease;
+}
+
+.settings-row:active {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.settings-row + .settings-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.settings-row-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-row-label {
+    flex: 1;
+    font-size: 16px;
+    color: #3a3a3a;
+}
+
+.settings-row-chevron {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.settings-footnote {
+    margin: 14px 28px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #a08a92;
+    text-align: center;
+}
+
+/* ---- API 设置表单 ---- */
+.settings-form {
+    padding: 4px 16px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-label {
+    font-size: 13px;
+    color: #8a6a78;
+    font-weight: 600;
+    padding-left: 4px;
+    letter-spacing: 0.2px;
+}
+
+.field-input {
+    width: 100%;
+    height: 50px;
+    padding: 0 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.5);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55);
+    font-size: 15px;
+    color: #3a3a3a;
+    font-family: inherit;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.field-input::placeholder {
+    color: #c8a8b4;
+}
+
+.field-input:focus {
+    border-color: rgba(232, 138, 168, 0.75);
+    box-shadow:
+        0 0 0 3px rgba(232, 138, 168, 0.16),
+        inset 0 1px 1px rgba(255, 255, 255, 0.55);
+}
+
+/* 密钥输入 + 显示/隐藏 */
+.field-secret {
+    position: relative;
+}
+
+.field-secret .field-input {
+    padding-right: 72px;
+}
+
+.secret-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    color: #8a6a78;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 按钮 */
+.btn {
+    height: 50px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    border: none;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.12s ease, opacity 0.12s ease, box-shadow 0.18s ease;
+}
+
+.btn:active {
+    -webkit-transform: scale(0.97);
+    transform: scale(0.97);
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, #f0a6c0 0%, #e57fa6 100%);
+    box-shadow:
+        0 8px 22px rgba(229, 127, 166, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-secondary {
+    color: #8a6a78;
+    background: rgba(255, 255, 255, 0.45);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* 提示 */
+.hint {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #a08a92;
+    min-height: 20px;
+    margin: -8px 4px 0;
+}
+
+.hint.success { color: #3aa06a; }
+.hint.error { color: #d14b6a; }
+
+/* ---- 模型选择 ---- */
+.model-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 模型选择框（下拉选择器形态） */
+.model-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 50px;
+    padding: 0 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.5);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.model-selector-value {
+    flex: 1;
+    font-size: 15px;
+    color: #3a3a3a;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.model-selector-value.placeholder {
+    color: #c8a8b4;
+}
+
+.model-selector-chevron {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+/* 展开状态：箭头翻转 */
+.model-selector.open .model-selector-chevron {
+    transform: rotate(180deg);
+}
+
+.model-selector.selected {
+    border-color: rgba(232, 138, 168, 0.75);
+    box-shadow:
+        0 0 0 3px rgba(232, 138, 168, 0.16),
+        inset 0 1px 1px rgba(255, 255, 255, 0.55);
+}
+
+/* 模型列表 */
+.model-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px;
+}
+
+/* 列表收起状态（保存后收起） */
+.model-list.collapsed {
+    display: none;
+}
+
+.model-item {
+    padding: 13px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.4);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    color: #3a3a3a;
+    cursor: pointer;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+    word-break: break-all;
+}
+
+.model-item:active {
+    -webkit-transform: scale(0.985);
+    transform: scale(0.985);
+}
+
+.model-item.selected {
+    background: rgba(255, 255, 255, 0.72);
+    border-color: #e88aa8;
+    box-shadow: 0 0 0 3px rgba(232, 138, 168, 0.16);
+    font-weight: 600;
+}
+
+/* ========================================
+   壁纸设置
+   ======================================== */
+.wallpaper-settings {
+    padding: 4px 16px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wallpaper-preview {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 9 / 16;
+    align-self: center;
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.35);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+        0 10px 30px rgba(190, 140, 160, 0.16),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wallpaper-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: #a08a92;
+    font-size: 15px;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.preview-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: none;
+}
+
+.wallpaper-actions {
+    display: flex;
+}
+
+.wallpaper-actions .btn {
+    flex: 1;
 }
