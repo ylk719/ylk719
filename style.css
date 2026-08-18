@@ -1,6 +1,6 @@
 /* ========================================
-   仿 iPhone 主屏幕 — 全屏 Web App（仅 Dock）
-   淡粉色壁纸 + 毛玻璃 Dock + App 名称
+   仿 iPhone 主屏幕 — 液态玻璃 Dock + 图标
+   淡粉色壁纸 · 透明毛玻璃 · 高光与边缘反光
    ======================================== */
 
 /* ---- Reset & Base ---- */
@@ -26,7 +26,7 @@ html, body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ---- 主屏幕容器（Home 容器） ---- */
+/* ---- 主屏幕容器 ---- */
 .home-screen {
     width: 100%;
     height: 100vh;
@@ -43,7 +43,9 @@ html, body {
     z-index: 0;
 }
 
-/* ---- Dock（底部固定栏） ---- */
+/* ========================================
+   Dock —— 液态玻璃
+   ======================================== */
 .dock {
     position: fixed;
     bottom: 0;
@@ -52,36 +54,62 @@ html, body {
     padding: 8px 6px;
     padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
     z-index: 3;
-    pointer-events: none;
 }
 
 .dock-inner {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-around;
     height: 104px;
     border-radius: 34px;
-    background: rgba(255, 255, 255, 0.55);
-    -webkit-backdrop-filter: blur(42px) saturate(180%);
-    backdrop-filter: blur(42px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow:
-        0 4px 24px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     padding: 0 14px;
     margin: 0 4px;
-    pointer-events: auto;
+    overflow: hidden;
+
+    /* 液态玻璃：极低白色透明度 + 强模糊 + 提升亮度让玻璃通透 */
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.06);
+    backdrop-filter: blur(40px) saturate(180%) brightness(1.06);
+
+    /* 边缘描边 + 上下亮度差，模拟玻璃厚度 */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+        0 12px 40px rgba(190, 140, 160, 0.22),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.12);
 }
 
-/* ---- Dock App（图标 + 名称容器） ---- */
+/* Dock 的镜像高光（斜向玻璃反光） */
+.dock-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(120% 70% at 18% 10%, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 46%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 42%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 让 App 位于高光之上 */
+.dock-inner > .dock-app {
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   Dock App
+   ======================================== */
 .dock-app {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
     cursor: pointer;
-    -webkit-transition: -webkit-transform 0.12s ease;
-    transition: transform 0.12s ease;
+    -webkit-transition: -webkit-transform 0.14s ease;
+    transition: transform 0.14s ease;
 }
 
 .dock-app:active {
@@ -91,39 +119,44 @@ html, body {
     transition: transform 0.06s ease;
 }
 
-/* ---- Dock App 图标（毛玻璃质感） ---- */
+/* ---- 图标底座：液态玻璃 ---- */
 .dock-app-icon {
     width: 58px;
     height: 58px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.5);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
+
+    /* 液态玻璃：接近透明的白 + 模糊 + 提亮 */
+    background: rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
+    backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
+
+    /* 玻璃边缘 + 轻微投影 */
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow:
+        0 4px 14px rgba(190, 140, 160, 0.16),
+        inset 0 1px 1px rgba(255, 255, 255, 0.45),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.12);
 }
 
-/* 图标顶部高光 */
+/* 图标镜像高光：左上角镜面反射 + 整体斜向反光 */
 .dock-app-icon::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
-    border-radius: 14px 14px 0 0;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(130% 60% at 22% 12%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0) 48%);
     pointer-events: none;
+    z-index: 0;
 }
 
-/* SVG 图标 */
+/* SVG 图案位于高光之上，清晰实心 */
 .dock-app-icon svg {
     position: relative;
     z-index: 1;
@@ -149,27 +182,15 @@ html, body {
 
 /* ---- 响应式适配 ---- */
 @media (max-width: 360px) {
-    .dock-app-icon {
-        width: 54px;
-        height: 54px;
-    }
-    .dock-app-icon svg {
-        width: 30px;
-        height: 30px;
-    }
+    .dock-app-icon { width: 54px; height: 54px; }
+    .dock-app-icon svg { width: 30px; height: 30px; }
     .dock-inner { height: 98px; border-radius: 30px; }
     .dock-app-name { font-size: 9px; }
 }
 
 @media (min-width: 414px) {
-    .dock-app-icon {
-        width: 64px;
-        height: 64px;
-    }
-    .dock-app-icon svg {
-        width: 36px;
-        height: 36px;
-    }
+    .dock-app-icon { width: 64px; height: 64px; }
+    .dock-app-icon svg { width: 36px; height: 36px; }
     .dock-inner { height: 112px; border-radius: 36px; }
     .dock-app-name { font-size: 11px; }
 }
