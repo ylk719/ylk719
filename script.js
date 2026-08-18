@@ -5,35 +5,45 @@
    图标全部用内联 SVG 代码自动生成
    ======================================== */
 
-/* ---- Dock 内 4 个 App（SVG 图标 + 名称） ---- */
+/* ---- Dock 内 4 个 App（SVG 图标 + 名称） ----
+   图标外层 = 透明毛玻璃（CSS backdrop-filter）
+   图标中心图案 = 实心不透明彩色 SVG
+*/
 const dockApps = [
     {
-        name: '电话',
-        glow: 'linear-gradient(135deg, rgba(52,199,89,0.88), rgba(48,173,80,0.72))',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="电话">
-                <path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        // 世界书 — 实心书本图案
+        name: '世界书',
+        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="世界书">
+                <path fill="#0d9488" d="M12 5.5C10.8 4.6 9 4 7 4S3.2 4.6 2 5.5v13C3.2 17.6 5 17 7 17s3.8.6 5 1.5c1.2-.9 3-1.5 5-1.5s3.8.6 5 1.5v-13C20.8 4.6 19 4 17 4s-3.8.6-5 1.5z"/>
+                <path fill="none" stroke="#5eead4" stroke-width="0.7" d="M12 5.5v13"/>
+                <path fill="none" stroke="#5eead4" stroke-width="0.6" d="M7 8.2c1.4 0 2.8.3 4 .9M7 11.2c1.4 0 2.8.3 4 .9M13 9.1c1.2-.6 2.6-.9 4-.9M13 12.1c1.2-.6 2.6-.9 4-.9"/>
               </svg>`,
     },
     {
-        name: '信息',
-        glow: 'linear-gradient(135deg, rgba(90,200,250,0.85), rgba(0,122,255,0.72))',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="信息">
-                <path fill="#fff" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        // 钱包 — 实心钱包图案
+        name: '钱包',
+        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="钱包">
+                <path fill="#ea580c" d="M21 7H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2z"/>
+                <path fill="#fbbf24" d="M16 11.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                <path fill="#ea580c" d="M5 5h11c.55 0 1 .45 1 1v1H5c-.55 0-1-.45-1-1s.45-1 1-1z"/>
               </svg>`,
     },
     {
-        name: '指南针',
-        glow: 'linear-gradient(135deg, rgba(255,159,10,0.82), rgba(255,69,58,0.70))',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="指南针">
-                <circle cx="12" cy="12" r="9.5" fill="none" stroke="#fff" stroke-width="1.6"/>
-                <path fill="#fff" d="M15.6 8.4L13 13l-4.6 2.6L11 11l4.6-2.6z"/>
+        // 外观 — 实心调色板图案
+        name: '外观',
+        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="外观">
+                <path fill="#7c3aed" d="M12 3a9 9 0 0 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1.1.9-2 2-2h1.5c2.5 0 4.5-2 4.5-4.5C21 5.5 17 3 12 3z"/>
+                <circle cx="7" cy="11" r="1.4" fill="#5856d6"/>
+                <circle cx="9.5" cy="7.5" r="1.4" fill="#ff2d55"/>
+                <circle cx="14.5" cy="7.5" r="1.4" fill="#34c759"/>
+                <circle cx="17" cy="11" r="1.4" fill="#ff9500"/>
               </svg>`,
     },
     {
-        name: '音乐',
-        glow: 'linear-gradient(135deg, rgba(255,45,85,0.85), rgba(175,82,222,0.72))',
-        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="音乐">
-                <path fill="#fff" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        // 设置 — 实心齿轮图案
+        name: '设置',
+        svg: `<svg viewBox="0 0 24 24" width="33" height="33" aria-label="设置">
+                <path fill="#3f3f46" fill-rule="evenodd" d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.65 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.49.39 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
               </svg>`,
     },
 ];
@@ -50,12 +60,6 @@ function createDockApp(app) {
     const icon = document.createElement('div');
     icon.className = 'dock-app-icon';
 
-    // 半透明彩色光晕底（保留毛玻璃透出底层纹理）
-    const glow = document.createElement('div');
-    glow.className = 'glow';
-    glow.style.background = app.glow;
-
-    icon.appendChild(glow);
     icon.insertAdjacentHTML('beforeend', app.svg);
 
     // App 名称
