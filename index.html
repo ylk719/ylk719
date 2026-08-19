@@ -646,7 +646,7 @@ html, body {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 165px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 195px);
     display: flex;
     flex-direction: column;
     gap: 9px;
@@ -2917,9 +2917,8 @@ html.edit-mode-active, html.edit-mode-active body {
         // 设置界面打开时、或从 Dock / 设置层上按下时，不触发翻页
         if (settingsScreen && settingsScreen.classList.contains('open')) return;
         if (e.target && e.target.closest && (e.target.closest('.dock') || e.target.closest('.settings-screen'))) return;
-        // 可编辑元素（点图片弹相册 / 点文字就地改）不参与翻页手势
-        if (e.target && e.target.closest && e.target.closest('[data-editable]')) return;
-        // 鼠标仅左键触发；触控 / 笔直接进入
+        // 轻点可编辑元素时编辑、滑动时翻页：由「位移」自动区分，这里不拦截可编辑元素
+        // （编辑改由 click 触发，滑动不会产生 click）
         if (e.pointerType === 'mouse' && e.button !== 0) return;
         swipeStartX = e.clientX;
         swipeStartY = e.clientY;
@@ -3031,7 +3030,7 @@ html.edit-mode-active, html.edit-mode-active body {
         home.addEventListener('touchstart', function (e) {
             if (isEditActive()) return;
             if (settingsScreen && settingsScreen.classList.contains('open')) return;
-            if (e.target && e.target.closest && (e.target.closest('.dock') || e.target.closest('.settings-screen') || e.target.closest('[data-editable]'))) return;
+            if (e.target && e.target.closest && (e.target.closest('.dock') || e.target.closest('.settings-screen'))) return;
             if (e.touches.length === 0) return;
             tsActive = true; tsDragged = false;
             tsX = e.touches[0].clientX; tsY = e.touches[0].clientY;
@@ -3139,7 +3138,14 @@ html.edit-mode-active, html.edit-mode-active body {
         contentFileInput = document.createElement('input');
         contentFileInput.type = 'file';
         contentFileInput.accept = 'image/*';
-        contentFileInput.style.display = 'none';
+        // 用「不可见但保留在文档中」的方式承载，确保 iOS Safari 能稳定弹出相册
+        contentFileInput.style.position = 'fixed';
+        contentFileInput.style.left = '-9999px';
+        contentFileInput.style.top = '0';
+        contentFileInput.style.width = '1px';
+        contentFileInput.style.height = '1px';
+        contentFileInput.style.opacity = '0';
+        contentFileInput.setAttribute('aria-hidden', 'true');
         contentFileInput.addEventListener('change', function (ev) {
             var file = ev.target.files && ev.target.files[0];
             ev.target.value = '';
@@ -3279,8 +3285,9 @@ html.edit-mode-active, html.edit-mode-active body {
             if (node) node.setAttribute('data-editable', f.image ? 'image' : 'text');
         }
 
-        // document 级别 pointerdown 捕获阶段委托
-        document.addEventListener('pointerdown', function (ev) {
+        // 用「轻点(click)」触发编辑：浏览器会天然区分「点」与「滑」，
+        // 滑动翻页不会产生 click，从而不再误触编辑（也不会抢占翻页手势）。
+        document.addEventListener('click', function (ev) {
             var t = ev.target;
             if (!t || !t.closest) return;
 
@@ -3323,7 +3330,7 @@ html.edit-mode-active, html.edit-mode-active body {
             } else {
                 beginTextEdit(editable);
             }
-        }, true); // 捕获阶段：在 onSwipeStart（冒泡阶段）之前执行
+        }, true);
     }
 
     /* 加载已保存配置并应用 */
