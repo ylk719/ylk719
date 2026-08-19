@@ -1924,6 +1924,18 @@
         // 密码键盘
         initPasscodeKeypad();
 
+        // 回到前台 / 页面重新可见时立即刷新时间（防止手机休眠导致时间卡住）
+        var refreshClock = function () {
+            if (document.visibilityState === undefined || document.visibilityState === 'visible') {
+                updateLockClock();
+            }
+        };
+        document.addEventListener('visibilitychange', refreshClock);
+        if (window.addEventListener) {
+            window.addEventListener('pageshow', refreshClock);
+            window.addEventListener('focus', refreshClock);
+        }
+
         // 锁屏壁纸设置页导航
         if (openLockWallpaperBtn) {
             openLockWallpaperBtn.addEventListener('click', function () {
