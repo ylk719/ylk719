@@ -123,14 +123,26 @@ html, body {
     z-index: 2;
     pointer-events: none;
 }
-
 .page-indicator .dot {
+    position: relative;
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.55);
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
+    pointer-events: auto;
+    cursor: pointer;
+}
+.page-indicator .dot::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
 }
 
 .page-indicator .dot.active {
@@ -1553,7 +1565,7 @@ html.edit-mode-active, html.edit-mode-active body {
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 .lock-clock {
-    font-size: 72px;
+    font-size: 108px;
     font-weight: 200;
     letter-spacing: 2px;
     line-height: 1;
@@ -2949,7 +2961,7 @@ html.edit-mode-active, html.edit-mode-active body {
             goToPage(currentPage);
             return;
         }
-        var threshold = Math.min(90, window.innerWidth * 0.22);
+        var threshold = Math.min(60, window.innerWidth * 0.15);
         var target = currentPage;
         if (dx <= -threshold && currentPage < PAGE_COUNT - 1) target++;
         else if (dx >= threshold && currentPage > 0) target--;
@@ -2997,6 +3009,64 @@ html.edit-mode-active, html.edit-mode-active body {
         // 桌面触控板横向滑动、水平滚轮切页
         home.addEventListener('wheel', onSwipeWheel, { passive: false });
         updatePageIndicator();
+
+        /* 兜底 1：点按页面指示点直接跳页（滑动失效时仍可切页） */
+        for (var di = 0; di < pageDots.length; di++) {
+            (function (dot, idx) {
+                dot.addEventListener('click', function (e) {
+                    if (e && e.stopPropagation) e.stopPropagation();
+                    goToPage(idx);
+                });
+            })(pageDots[di], di);
+        }
+
+        /* 兜底 2：旧 WebView 不支持 PointerEvent 时，用 Touch 事件接管翻页 */
+        if (!window.PointerEvent) {
+            initPageSwipeTouchFallback(home);
+        }
+    }
+
+    function initPageSwipeTouchFallback(home) {
+        var tsX = 0, tsY = 0, tsActive = false, tsDragged = false;
+        home.addEventListener('touchstart', function (e) {
+            if (isEditActive()) return;
+            if (settingsScreen && settingsScreen.classList.contains('open')) return;
+            if (e.target && e.target.closest && (e.target.closest('.dock') || e.target.closest('.settings-screen') || e.target.closest('[data-editable]'))) return;
+            if (e.touches.length === 0) return;
+            tsActive = true; tsDragged = false;
+            tsX = e.touches[0].clientX; tsY = e.touches[0].clientY;
+            pagesTrack.style.transition = 'none';
+        }, { passive: false });
+        home.addEventListener('touchmove', function (e) {
+            if (!tsActive || e.touches.length === 0) return;
+            var dx = e.touches[0].clientX - tsX;
+            var dy = e.touches[0].clientY - tsY;
+            if (!tsDragged && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) tsDragged = true;
+            if (!tsDragged) return;
+            if (e.cancelable) e.preventDefault();
+            var base = -currentPage * window.innerWidth;
+            var off = base + dx;
+            if ((currentPage === 0 && dx > 0) || (currentPage === PAGE_COUNT - 1 && dx < 0)) off = base + dx * 0.35;
+            pagesTrack.style.transform = 'translateX(' + off + 'px)';
+        }, { passive: false });
+        home.addEventListener('touchend', function (e) {
+            if (!tsActive) return;
+            tsActive = false;
+            var dx = (e.changedTouches && e.changedTouches.length > 0) ? (e.changedTouches[0].clientX - tsX) : 0;
+            pagesTrack.style.transition = '';
+            if (!tsDragged) { goToPage(currentPage); return; }
+            var threshold = Math.min(60, window.innerWidth * 0.15);
+            var target = currentPage;
+            if (dx <= -threshold && currentPage < PAGE_COUNT - 1) target++;
+            else if (dx >= threshold && currentPage > 0) target--;
+            goToPage(target);
+        }, { passive: false });
+        home.addEventListener('touchcancel', function () {
+            if (!tsActive) return;
+            tsActive = false;
+            pagesTrack.style.transition = '';
+            goToPage(currentPage);
+        }, { passive: false });
     }
 
     /* ========================================
