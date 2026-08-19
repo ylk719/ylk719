@@ -1433,10 +1433,14 @@
     var lockUnlocked = false;  // 会话内是否已解锁
 
     /* ---- 时钟更新 ---- */
+    function pad2(n) {
+        n = String(n);
+        return n.length < 2 ? '0' + n : n;
+    }
     function updateLockClock() {
         var now = new Date();
-        var h = String(now.getHours()).padStart(2, '0');
-        var m = String(now.getMinutes()).padStart(2, '0');
+        var h = pad2(now.getHours());
+        var m = pad2(now.getMinutes());
         if (lockClock) lockClock.textContent = h + ':' + m;
         if (lockDate) {
             var days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
@@ -1580,33 +1584,34 @@
             lockScreen.style.opacity = '';
         });
 
-        /* --- Touch 事件后备 --- */
+        /* --- Touch 事件（移动端主要使用） --- */
         lockScreen.addEventListener('touchstart', function (e) {
             if (e.touches.length === 0) return;
             dragging = true;
             startY = e.touches[0].clientY;
-        }, { passive: true });
+        }, { passive: false });
 
         lockScreen.addEventListener('touchmove', function (e) {
             if (!dragging || e.touches.length === 0) return;
+            e.preventDefault();
             var dy = e.touches[0].clientY - startY;
             if (dy < 0) {
                 lockScreen.style.transform = 'translateY(' + dy + 'px)';
                 lockScreen.style.opacity = String(Math.max(0.2, 1 + dy / 400));
             }
-        }, { passive: true });
+        }, { passive: false });
 
         lockScreen.addEventListener('touchend', function (e) {
             if (!dragging) return;
             dragging = false;
             var dy = (e.changedTouches.length > 0 ? e.changedTouches[0].clientY : startY) - startY;
-            if (dy < -120) {
+            if (dy < -80) {
                 doUnlock();
             } else {
                 lockScreen.style.transform = '';
                 lockScreen.style.opacity = '';
             }
-        }, { passive: true });
+        }, { passive: false });
 
         /* --- 点击底部滑块也可解锁（桌面端 / 自动化测试友好） --- */
         var slider = $('lockSlider');
@@ -1977,14 +1982,14 @@
     }
 
     function init() {
-        bindEvents();
-        initPageSwipe();
-        initEditMode();
-        initContentSettings();
-        initLockScreen();
-        loadWallpaper();  // 页面加载即恢复已保存的壁纸
-        loadContentConfig();  // 页面加载即恢复已保存的自定义头像 / 文字
-        syncColorfulWidget();
+        try { bindEvents(); } catch (e) { console.error('bindEvents:', e); }
+        try { initPageSwipe(); } catch (e) { console.error('initPageSwipe:', e); }
+        try { initEditMode(); } catch (e) { console.error('initEditMode:', e); }
+        try { initContentSettings(); } catch (e) { console.error('initContentSettings:', e); }
+        try { initLockScreen(); } catch (e) { console.error('initLockScreen:', e); }
+        try { loadWallpaper(); } catch (e) { console.error('loadWallpaper:', e); }
+        try { loadContentConfig(); } catch (e) { console.error('loadContentConfig:', e); }
+        try { syncColorfulWidget(); } catch (e) { console.error('syncColorfulWidget:', e); }
         window.addEventListener('resize', syncColorfulWidget);
         window.addEventListener('orientationchange', syncColorfulWidget);
     }
