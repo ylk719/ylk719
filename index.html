@@ -26,6 +26,7 @@
    ======================================== */
 
 /* ---- Reset & Base ---- */
+[hidden] { display: none !important; }
 * {
     margin: 0;
     padding: 0;
@@ -80,10 +81,12 @@ html, body {
     left: 0;
     right: 0;
     padding-top: calc(env(safe-area-inset-top, 0px) + 18px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 126px);
     z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 18px;   /* 组件之间呼吸感：均匀留白，不拥挤、不重叠 */
 }
 
 /* ========================================
@@ -268,7 +271,7 @@ html, body {
     display: flex;
     align-items: flex-start;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 0;   /* 由内容列 gap 统一控制呼吸感 */
 }
 
 /* 整体：轻透冷灰白毛玻璃卡片，纵向排列，宽约屏幕 40%、高与右侧 2×2 网格等高 */
@@ -291,6 +294,13 @@ html, body {
     box-shadow:
         0 10px 28px rgba(40, 28, 34, 0.10),
         inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* 组件被拖到第二页后作为独立块渲染：居中、宽度适中，保持呼吸感 */
+.colorful-widget.widget-standalone {
+    width: 68%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* 顶部装饰带：耳机 → ✧ → ☆ → ··· → ☆ 横向散落 */
@@ -482,13 +492,24 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 18px;   /* 组件之间呼吸感：均匀留白，不拥挤、不重叠 */
     padding-top: calc(env(safe-area-inset-top, 0px) + 18px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 126px);
 }
 
-.tw-card {
+.tw-group {
     position: relative;
     z-index: 1;
     width: 92%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.tw-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
     height: 196px;
     border-radius: 30px;
     background: rgba(248, 250, 252, 0.40);
@@ -607,7 +628,7 @@ html, body {
 
 /* 底部标签 */
 .tw-foot {
-    margin-top: 10px;
+    margin-top: 0;   /* 由内容列 gap 统一控制呼吸感 */
     font-size: 11px;
     font-weight: 600;
     color: #3a3a3a;
@@ -622,7 +643,7 @@ html, body {
     position: relative;
     z-index: 1;
     width: 92%;
-    margin-top: 24px;
+    margin-top: 0;   /* 由内容列 gap 统一控制呼吸感 */
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 18px 6px;
@@ -630,18 +651,50 @@ html, body {
 }
 
 /* ========================================
+   动态新增的空白页（无限加页面）
+   ======================================== */
+.page-extra {
+    position: relative;
+}
+.extra-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;   /* 组件之间呼吸感：均匀留白，不拥挤、不重叠 */
+    padding-top: calc(env(safe-area-inset-top, 0px) + 18px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 126px);
+}
+.extra-apps {
+    width: 92%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px 6px;
+    justify-items: center;
+}
+/* 新增空白页：可容纳被拖进来的大卡片 / 便签组件（竖排，呼吸感） */
+.extra-blocks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+/* ========================================
    第二页：错落聊天消息气泡（dock 上方）
    ======================================== */
 .chat-stack {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 195px);
+    position: relative;   /* 改为文档流内可拖动块，随竖排顺序移动 */
+    width: 100%;
+    margin-top: 0;   /* 由内容列 gap 统一控制呼吸感 */
     display: flex;
     flex-direction: column;
     gap: 9px;
     padding: 0 18px;
-    z-index: 2;
+    z-index: 1;
     pointer-events: none;
 }
 
@@ -893,7 +946,7 @@ html, body {
     position: fixed;
     inset: 0;
     z-index: 100;
-    background: #fce4ec;
+    background: #ffffff;
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
     -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.32, 0.72, 0.32, 1);
@@ -914,9 +967,7 @@ html, body {
     flex-direction: column;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    background:
-        radial-gradient(120% 50% at 80% -5%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 55%),
-        #fce4ec;
+    background: #ffffff;
     -webkit-transition: -webkit-transform 0.32s cubic-bezier(0.32, 0.72, 0.32, 1);
     transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.32, 1);
 }
@@ -1389,49 +1440,1060 @@ html.edit-mode-active, html.edit-mode-active body {
 }
 .edit-done-btn:active { transform: scale(0.96); }
 
+/* 编辑模式 · 添加页面按钮（左上角加号，毛玻璃质感） */
+.edit-add-btn {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: 18px;
+    z-index: 90;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    /* 半透明深色玻璃：降低不透明度、加强模糊，让壁纸透出毛玻璃层次 */
+    background: rgba(40, 40, 40, 0.38);
+    -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%);
+    box-shadow:
+        0 6px 22px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: hidden;
+}
+.edit-add-btn:active { transform: scale(0.92); }
+
+/* 加号的镜面高光（左上角反光，强化玻璃感） */
+.edit-add-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(120% 70% at 20% 12%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 46%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 48%);
+    pointer-events: none;
+}
+.edit-add-btn svg { position: relative; z-index: 1; }
+
+/* 编辑模式 · 「增加页面」弹层菜单（毛玻璃） */
+.edit-add-menu {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 60px);
+    left: 18px;
+    z-index: 95;
+    min-width: 132px;
+    padding: 6px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.24);
+    -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.06);
+    backdrop-filter: blur(40px) saturate(180%) brightness(1.06);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+}
+.edit-add-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    border-radius: 13px;
+    background: transparent;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.edit-add-menu-item:active { background: rgba(255, 255, 255, 0.35); }
+
+/* ========================================
+   组件库面板（添加组件）
+   ======================================== */
+.widget-gallery {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.widget-gallery[hidden] { display: none !important; }
+.wg-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 20, 20, 0.36);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+.wg-sheet {
+    position: relative;
+    width: 100%;
+    max-height: 82vh;
+    padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+    border-radius: 26px 26px 0 0;
+    background: rgba(250, 249, 250, 0.86);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
+    backdrop-filter: blur(30px) saturate(160%);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.18);
+    animation: wg-rise 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes wg-rise {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+.wg-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+.wg-title { font-size: 18px; font-weight: 700; color: #2a2a2a; }
+.wg-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: rgba(0, 0, 0, 0.06);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; touch-action: manipulation; -webkit-appearance: none; appearance: none;
+}
+.wg-close:active { background: rgba(0, 0, 0, 0.12); }
+.wg-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    max-height: calc(82vh - 70px);
+    padding-bottom: 6px;
+    padding-right: 2px;
+}
+.wg-list::-webkit-scrollbar { width: 4px; }
+.wg-list::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.16); border-radius: 2px; }
+.wg-item {
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(40, 28, 34, 0.06);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+}
+.wg-item:active { transform: scale(0.97); background: #faf7f8; }
+.wg-item .wg-preview {
+    width: 100%;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.wg-item .wg-preview svg { max-width: 100%; max-height: 96px; }
+.wg-item .wg-name { font-size: 13px; font-weight: 600; color: #333; }
+
+/* 组件缩略预览（组件库内的小样） */
+.wg-preview .wprev { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.wprev-cosmic {
+    width: 92%; height: 46px; border-radius: 10px;
+    background: rgba(211, 225, 216, 0.30);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    display: flex; align-items: center; gap: 7px; padding: 0 7px; box-sizing: border-box;
+}
+.wprev-cosmic-cover { width: 31px; height: 31px; border-radius: 6px; overflow: hidden; background: #eef2ea; flex: 0 0 auto; }
+.wprev-cosmic-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wprev-cosmic-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.wprev-cosmic-title { font-size: 8px; color: #1a1a1a; line-height: 1; }
+.wprev-cosmic-bar { position: relative; height: 2px; border-radius: 1px; background: rgba(120, 128, 124, 0.22); }
+.wprev-cosmic-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 30%; background: #4a4f4d; border-radius: 1px; }
+.wprev-cosmic-ctrl { font-size: 7px; color: #3f4442; line-height: 1; }
+.wprev-polaroid { position: relative; width: 78px; height: 78px; }
+.wprev-pol-top, .wprev-pol-bottom { position: absolute; background: #fff; box-shadow: 0 2px 6px rgba(40, 28, 34, 0.20); box-sizing: border-box; }
+.wprev-pol-top { width: 36px; height: 46px; left: 50%; top: 4px; transform: translateX(-50%) rotate(6deg); padding: 3px 3px 8px; z-index: 2; }
+.wprev-pol-bottom { width: 38px; height: 50px; left: 50%; top: 21px; transform: translateX(-42%) rotate(-4deg); padding: 3px 3px 8px; z-index: 1; }
+.wprev-pol-img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 1px; }
+.wprev-iscreen { position: relative; width: 120px; height: 64px; border-radius: 12px; background: rgba(206, 217, 233, 0.35); border: 1px solid rgba(255, 255, 255, 0.6); }
+.wprev-iscreen-avatar { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; transform: translate(-50%, -50%); border-radius: 50%; background: #fff; border: 1.5px solid #fff; overflow: hidden; }
+.wprev-iscreen-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+.wprev-iscreen-cap { position: absolute; height: 12px; border-radius: 6px; padding: 0 5px; box-sizing: border-box; display: flex; align-items: center; color: #fff; font-size: 6px; line-height: 1; white-space: nowrap; background: rgba(255, 255, 255, 0.28); }
+.wprev-iscreen-cap.tl { left: 4px; top: 4px; }
+.wprev-iscreen-cap.tr { right: 4px; top: 4px; }
+.wprev-iscreen-cap.bl { left: 4px; bottom: 8px; }
+.wprev-iscreen-cap.br { right: 4px; bottom: 8px; }
+.wprev-iscreen-label { position: absolute; left: 50%; bottom: 2px; transform: translateX(-50%); font-size: 5px; color: #fff; line-height: 1; }
+.wprev-clock { position: relative; width: 62px; height: 62px; border-radius: 12px; background: rgba(206, 217, 233, 0.35); border: 1px solid rgba(255, 255, 255, 0.6); display: flex; align-items: center; justify-content: center; }
+.wprev-clock svg { width: 42px; height: 42px; display: block; }
+.wprev-clock-label { position: absolute; left: 50%; bottom: 3px; transform: translateX(-50%); font-size: 5px; color: #fff; line-height: 1; }
+.wprev-chat { position: relative; width: 108px; height: 62px; border-radius: 12px; background: rgba(244, 244, 245, 0.45); border: 1px solid rgba(255, 255, 255, 0.7); }
+.wprev-chat-b { position: absolute; border-radius: 6px; padding: 3px 5px 4px; box-sizing: border-box; box-shadow: 0 1px 3px rgba(40, 28, 34, 0.10); }
+.wprev-chat-b1 { left: 3px; top: 3px; width: 55%; height: 18px; background: #fff; }
+.wprev-chat-b2 { right: 3px; top: 25px; width: 50%; height: 18px; background: #2a2a2a; }
+.wprev-chat-b3 { left: 5px; bottom: 3px; width: 35%; height: 13px; background: #fff; }
+.wprev-chat-bb { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); font-size: 4.5px; color: #cfd2d6; line-height: 1; }
+.wprev-photoicon { position: relative; width: 108px; height: 62px; border-radius: 12px; background: rgba(244, 244, 245, 0.45); border: 1px solid rgba(255, 255, 255, 0.7); }
+.wprev-pi-photo { position: absolute; left: 4px; top: 4px; width: calc(100% - 8px); height: 70%; border-radius: 7px; overflow: hidden; background: #e9e4e3; }
+.wprev-pi-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wprev-pi-grid { position: absolute; right: 4px; top: 4px; width: 34%; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 4px; }
+.wprev-pi-tile { aspect-ratio: 1; border-radius: 5px; background: #fff; display: flex; align-items: center; justify-content: center; }
+.wprev-pi-tile svg { width: 70%; height: 70%; }
+.wprev-pi-cap { position: absolute; left: 4px; bottom: 2px; font-size: 5px; color: #2b2b2b; line-height: 1; }
+.wprev-mprofile { position: relative; width: 116px; height: 72px; border-radius: 13px; overflow: hidden; background: rgba(28, 28, 30, 0.4); border: 1px solid rgba(255, 255, 255, 0.5); }
+.wprev-mp-top { position: absolute; left: 0; top: 0; width: 100%; height: 58%; background-size: cover; background-position: center; filter: grayscale(1); }
+.wprev-mp-mask { position: absolute; left: 0; bottom: 0; width: 100%; height: 48%; background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.72)); }
+.wprev-mp-avatar { position: absolute; left: 50%; top: 40%; width: 34px; height: 34px; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid #fff; overflow: hidden; z-index: 3; }
+.wprev-mp-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+.wprev-mp-title { position: absolute; left: 50%; top: 60%; transform: translateX(-50%); font-size: 8px; font-weight: 700; color: #111; z-index: 4; line-height: 1; white-space: nowrap; }
+.wprev-mp-pill { position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); width: 68%; height: 13px; border-radius: 7px; background: #fff; z-index: 4; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+.wprev-console { position: relative; width: 116px; height: 48px; border-radius: 12px; background: linear-gradient(160deg, #fff 0%, #f0f0f3 60%, #e4e5e9 100%); border: 1px solid rgba(255,255,255,0.9); box-shadow: inset 0 -3px 5px rgba(180,184,194,0.35), inset 0 2px 4px #fff, 0 4px 9px rgba(40,50,70,0.16); }
+.wprev-c-screen { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 50%; height: 62%; border-radius: 5px; overflow: hidden; background: #dff0ef; border: 1px solid #fff; }
+.wprev-c-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wprev-c-dpad { position: absolute; display: grid; grid-template-columns: repeat(3, 2px); grid-template-rows: repeat(3, 2px); gap: 3px; }
+.wprev-c-dpad i { width: 2px; height: 2px; border-radius: 50%; background: #9aa0aa; }
+.wprev-c-dpad.l { left: 7%; top: 20%; }
+.wprev-c-dpad.r { right: 7%; bottom: 18%; }
+.wprev-c-btn { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #fddcdc, #f4b8b8 46%, #d99a9c); box-shadow: inset 0 -1px 1px rgba(170,90,96,0.5), 0 1px 2px rgba(40,50,70,0.2); }
+.wprev-c-btn.l { left: 7%; bottom: 18%; }
+.wprev-c-btn.r { right: 7%; top: 20%; }
+.wprev-topcard { position: relative; width: 88px; height: 76px; border-radius: 13px; background: rgba(246,246,247,0.4); border: 1px solid rgba(255,255,255,0.6); display: flex; flex-direction: column; align-items: center; padding-top: 6px; box-sizing: border-box; }
+.wprev-tc-avatar { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; }
+.wprev-tc-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wprev-tc-grid { width: 80%; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+.wprev-tc-pill { height: 12px; border-radius: 6px; background: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; }
+.wprev-tc-pill svg { width: 7px; height: 7px; }
+.wprev-tc-deco { margin-top: 4px; font-size: 4px; color: #aaa; letter-spacing: 0.4px; line-height: 1; }
+.wprev-tc-label { font-size: 5px; color: #2b2b2b; font-weight: 600; margin-top: 2px; line-height: 1; }
+.wprev-notecard { position: relative; width: 60px; height: 74px; border-radius: 8px; background: #fff; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.wprev-nc-tape { position: absolute; top: -4px; left: 50%; transform: translateX(-50%) rotate(-2deg); width: 20px; height: 8px; border-radius: 1.5px; background: rgba(200,200,200,0.6); }
+.wprev-nc-bow { width: 30px; height: 18px; margin-top: 13px; }
+.wprev-nc-bow svg { width: 100%; height: 100%; display: block; }
+.wprev-nc-bow img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.wprev-nc-mid { font-size: 4px; color: #8a8a8a; margin-top: 3px; line-height: 1; }
+.wprev-nc-bottom { font-size: 3.5px; color: #2e2e2e; margin-top: 4px; line-height: 1.2; }
+
+/* ========================================
+   新加入的组件（主屏幕组件，可拖可删可编辑）
+   ======================================== */
+.widget-item {
+    position: relative;
+    flex: 0 0 auto;
+    width: 92%;
+    border-radius: 22px;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   自由网格：第二页 / 新增页的应用与组件统一 4 列网格
+   应用占 1 格、小组件占 2 格、大组件占整行 4 格；
+   每项都有独立的 (列, 行) 落点，用 JS 写入显式 grid-column/row，
+   因此「想放哪就放哪」：图标可横向散开、竖排一列、留空，绝不强行整行回填。
+   grid-auto-rows 固定一个应用单元高度，保证落点与呼吸感稳定。
+   ======================================== */
+.page2-apps, .extra-apps {
+    grid-auto-flow: row;       /* 只作兜底，正常项均由显式落点控制 */
+    grid-auto-rows: 92px;      /* 单个应用（图标 58px + 标签 + 行距）单元高度 */
+    align-items: start;
+    align-content: start;
+}
+.page2-apps .widget-item, .extra-apps .widget-item { width: 100%; }
+.page2-apps .widget-item[data-span="2"], .extra-apps .widget-item[data-span="2"] { grid-column: span 2; }
+.page2-apps .widget-item[data-span="4"], .extra-apps .widget-item[data-span="4"] { grid-column: span 4; }
+
+/* 拍立得 / 时钟：2 列 × 2 行，填满格子，内部自适应 */
+.page2-apps .widget-item[data-span="2"] > .w-polaroid,
+.extra-apps .widget-item[data-span="2"] > .w-polaroid {
+    width: 100%;
+    height: 202px;   /* 2 行 = 92*2 + 18 纵向 gap */
+}
+.page2-apps .widget-item[data-span="2"] > .w-clock,
+.extra-apps .widget-item[data-span="2"] > .w-clock {
+    width: 100%;
+    height: 202px;
+    min-height: 0;
+    min-width: 0;
+}
+
+/* 便签：1 列 × 1 行，整体缩小内部元素以适配单格 */
+.page2-apps .widget-item[data-span="1"] > .w-notecard,
+.extra-apps .widget-item[data-span="1"] > .w-notecard {
+    width: 100%;
+    height: 92px;
+    min-height: 0;
+    border-radius: 12px;
+}
+.page2-apps .widget-item[data-span="1"] > .w-notecard .w-nc-bow,
+.extra-apps .widget-item[data-span="1"] > .w-notecard .w-nc-bow {
+    width: 34px;
+    height: 20px;
+    margin-top: 22px;
+}
+.page2-apps .widget-item[data-span="1"] > .w-notecard .w-nc-mid,
+.extra-apps .widget-item[data-span="1"] > .w-notecard .w-nc-mid {
+    font-size: 9px;
+    margin-top: 4px;
+}
+.page2-apps .widget-item[data-span="1"] > .w-notecard .w-nc-bottom,
+.extra-apps .widget-item[data-span="1"] > .w-notecard .w-nc-bottom {
+    font-size: 7px;
+    margin-top: 3px;
+    letter-spacing: 0.2px;
+}
+.page2-apps .widget-item[data-span="1"] > .w-notecard .w-nc-tape,
+.extra-apps .widget-item[data-span="1"] > .w-notecard .w-nc-tape {
+    width: 34px;
+    height: 14px;
+    top: -7px;
+}
+/* 每个组件右上角的删除叉号（编辑态显示） */
+.widget-x {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    z-index: 6;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(60, 60, 60, 0.82);
+    color: #fff;
+    font-size: 15px;
+    line-height: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+}
+.edit-mode-active .widget-x { display: flex; animation: edit-wiggle 0.42s ease-in-out infinite; }
+.widget-x:active { transform: scale(0.9); }
+/* 原始内置组件带 overflow:hidden，删除叉号内嵌于右上角避免被裁切 */
+.widget-x.widget-x-in { top: 8px; right: 8px; }
+
+/* 编辑模式下被选中（可被左上角删除键删除）的组件：浅紫描边高亮 */
+.edit-mode-active .widget-item.widget-selected,
+.edit-mode-active .colorful-widget.widget-selected,
+.edit-mode-active .profile-card.widget-selected,
+.edit-mode-active .tw-group.widget-selected,
+.edit-mode-active .chat-stack.widget-selected {
+    outline: 2px solid rgba(124, 92, 150, 0.55);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(124, 92, 150, 0.14);
+}
+
+/* —— 组件 1：CosmicLove 音乐播放器（顶部） —— */
+.w-cosmic {
+    width: 86%;
+    height: 84px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    background: rgba(211, 225, 216, 0.27);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    backdrop-filter: blur(18px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+        inset 0 0 14px rgba(255, 255, 255, 0.45),
+        0 6px 18px rgba(40, 28, 34, 0.08);
+}
+.w-cosmic-cover {
+    flex: 0 0 auto;
+    width: 63px; height: 63px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #eef2ea;
+    box-shadow: 0 2px 8px rgba(40, 28, 34, 0.10);
+}
+.w-cosmic-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.w-cosmic-info {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: 6px;
+}
+.w-cosmic-row1 {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+}
+.w-cosmic-title { font-size: 13px; color: #1a1a1a; font-weight: 400; white-space: nowrap; }
+.w-cosmic-artist { font-size: 9px; color: #9aa3a0; white-space: nowrap; }
+.w-cosmic-bar {
+    position: relative; height: 3px; border-radius: 2px;
+    background: rgba(120, 128, 124, 0.24);
+}
+.w-cosmic-bar > i {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 30%;
+    border-radius: 2px; background: #4a4f4d;
+}
+.w-cosmic-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    color: #3f4442; font-size: 12px; line-height: 1;
+}
+.w-cosmic-controls span { display: inline-block; }
+
+/* —— 组件 2：CosmicPhone 拍立得叠叠乐 —— */
+.w-polaroid {
+    position: relative;
+    width: 35%;
+    height: 140px;
+}
+.w-pol-sheet {
+    position: absolute;
+    box-sizing: border-box;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(40, 28, 34, 0.20);
+    display: flex;
+    flex-direction: column;
+}
+.w-pol-sheet.w-pol-top {
+    width: 75px; height: 95px;
+    left: 50%; top: 6px;
+    transform: translateX(-50%) rotate(7deg);
+    padding: 7px 7px 15px;
+    z-index: 2;
+}
+.w-pol-sheet.w-pol-bottom {
+    width: 80px; height: 102px;
+    left: 50%; top: 44px;
+    transform: translateX(-42%) rotate(-4deg);
+    padding: 5px 5px 15px;
+    z-index: 1;
+}
+.w-pol-photo {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    background: #eef2ea;
+    border-radius: 1px;
+}
+.w-pol-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.w-pol-watermark {
+    position: absolute;
+    left: 50%; bottom: 3px;
+    transform: translateX(-50%);
+    font-size: 6px;
+    color: rgba(126, 134, 130, 0.62);
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    line-height: 1;
+}
+
+/* —— 组件 3：iScreen 个人展示大组件 —— */
+.w-iscreen {
+    position: relative;
+    width: 90%;
+    height: 27vh;
+    min-height: 190px;
+    border-radius: 28px;
+    box-sizing: border-box;
+    background: rgba(206, 217, 233, 0.27);
+    -webkit-backdrop-filter: blur(22px) saturate(110%);
+    backdrop-filter: blur(22px) saturate(110%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow:
+        inset 0 0 18px rgba(255, 255, 255, 0.35),
+        0 8px 24px rgba(40, 50, 70, 0.12);
+}
+/* 中央圆形头像 */
+.w-iscreen-avatar {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 96px; height: 96px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #ffffff;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(40, 50, 70, 0.18);
+}
+.w-iscreen-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+/* 四角毛玻璃胶囊 */
+.w-iscreen-cap {
+    position: absolute;
+    height: 32px;
+    border-radius: 16px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.22);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 2px 8px rgba(40, 50, 70, 0.10);
+}
+.w-iscreen-cap svg { display: block; flex: 0 0 auto; }
+.w-iscreen-cap .wcap-txt { font-size: 12px; }
+.w-iscreen-cap .wcap-dim { font-size: 13px; }
+.w-iscreen-cap.tl { left: 14px; top: 14px; }
+.w-iscreen-cap.tr { right: 16px; top: 14px; }
+.w-iscreen-cap.bl { left: 14px; bottom: 30px; }
+.w-iscreen-cap.br { right: 16px; bottom: 30px; }
+/* 底部：蝴蝶结 + 对称圆点 */
+.w-iscreen-bow {
+    position: absolute;
+    left: 50%; bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ffffff;
+    font-size: 8px;
+    line-height: 1;
+}
+.w-iscreen-bow svg { display: block; }
+/* 标签 */
+.w-iscreen-label {
+    position: absolute;
+    left: 50%; bottom: 5px;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #ffffff;
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    line-height: 1;
+}
+
+/* —— 组件 4：iScreen 极简时钟 —— */
+.w-clock {
+    position: relative;
+    width: 40%;
+    height: 23vh;
+    min-height: 168px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    background: rgba(206, 217, 233, 0.30);
+    -webkit-backdrop-filter: blur(20px) saturate(110%);
+    backdrop-filter: blur(20px) saturate(110%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+        inset 0 0 16px rgba(255, 255, 255, 0.32),
+        0 6px 20px rgba(40, 50, 70, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.w-clock-face {
+    width: 72%;
+    max-width: 150px;
+    aspect-ratio: 1;
+}
+.w-clock-face svg { width: 100%; height: 100%; display: block; }
+.w-clock-label {
+    position: absolute;
+    left: 50%; bottom: 7px;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #ffffff;
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    line-height: 1;
+}
+
+/* —— 组件 5：Colorful Widget 聊天对话大组件 —— */
+.w-chat {
+    width: 89%;
+    height: 23vh;
+    min-height: 190px;
+    border-radius: 26px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px 6px;
+    background: rgba(244, 244, 245, 0.32);
+    -webkit-backdrop-filter: blur(20px) saturate(115%);
+    backdrop-filter: blur(20px) saturate(115%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+        inset 0 0 16px rgba(255, 255, 255, 0.4),
+        0 6px 20px rgba(40, 28, 34, 0.10);
+}
+.w-chat-bubbles {
+    position: relative;
+    flex: 1;
+    width: 100%;
+}
+.w-chat-bubble {
+    position: absolute;
+    border-radius: 14px;
+    padding: 7px 10px 6px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(40, 28, 34, 0.10);
+}
+.w-chat-bubble .wcb-head {
+    font-size: 9px;
+    color: #b0b0b0;
+    line-height: 1.2;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.w-chat-bubble .wcb-msg {
+    font-size: 13px;
+    line-height: 1.25;
+    word-break: break-word;
+}
+.w-chat-bubble .wcb-meta {
+    position: absolute;
+    right: 9px; bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9px;
+    color: #b8b8b8;
+    line-height: 1;
+}
+.w-chat-bubble .wcb-meta svg { display: block; }
+/* 气泡 1：左上，接收方 */
+.w-chat-b1 { left: 6px; top: 6px; width: 55%; min-height: 40px; background: #ffffff; }
+.w-chat-b1 .wcb-msg { color: #2a2a2a; }
+/* 气泡 2：中右，发送方 */
+.w-chat-b2 { right: 8px; top: 54px; width: 50%; min-height: 42px; background: #2a2a2a; }
+.w-chat-b2 .wcb-msg { color: #ffffff; }
+.w-chat-b2 .wcb-meta { color: #9a9a9a; }
+/* 气泡 3：左下，接收方 */
+.w-chat-b3 { left: 12px; bottom: 4px; width: 35%; min-height: 36px; background: #ffffff; }
+.w-chat-b3 .wcb-msg { color: #111111; font-size: 12px; }
+.w-chat-label {
+    font-size: 11px;
+    color: rgba(235, 237, 240, 0.92);
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    line-height: 1;
+    margin-top: 4px;
+}
+
+/* —— 组件 6：Colorful Widget 照片+图标组合 —— */
+.w-photoicon {
+    width: 89%;
+    height: 20vh;
+    min-height: 168px;
+    border-radius: 22px;
+    box-sizing: border-box;
+    position: relative;
+    padding: 12px 12px 8px;
+    background: rgba(244, 244, 245, 0.35);
+    -webkit-backdrop-filter: blur(20px) saturate(115%);
+    backdrop-filter: blur(20px) saturate(115%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+        inset 0 0 16px rgba(255, 255, 255, 0.4),
+        0 6px 20px rgba(40, 28, 34, 0.10);
+}
+.w-pi-photo {
+    position: absolute;
+    left: 12px; top: 12px;
+    width: calc(100% - 24px); height: 75%;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #e9e4e3;
+    box-shadow: 0 2px 8px rgba(40, 28, 34, 0.12);
+}
+.w-pi-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(0.18) sepia(0.05) contrast(0.96); }
+.w-pi-caption {
+    position: absolute;
+    left: 12px; bottom: 9px;
+    font-size: 11px;
+    color: #2b2b2b;
+    line-height: 1;
+    white-space: nowrap;
+}
+.w-pi-grid {
+    position: absolute;
+    right: 12px; top: 12px;
+    width: 32%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 9px;
+}
+.w-pi-tile {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(40, 28, 34, 0.10);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.w-pi-tile svg { width: 62%; height: 62%; display: block; }
+.w-pi-label {
+    position: absolute;
+    right: 12px; bottom: 9px;
+    font-size: 11px;
+    color: rgba(240, 242, 244, 0.95);
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    line-height: 1;
+}
+
+/* —— 组件 7：Colorful Widget 音乐 Profile 大组件 —— */
+.w-mprofile {
+    position: relative;
+    width: 89%;
+    height: 29vh;
+    min-height: 240px;
+    border-radius: 30px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: rgba(28, 28, 30, 0.42);
+    -webkit-backdrop-filter: blur(18px) saturate(100%);
+    backdrop-filter: blur(18px) saturate(100%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(40, 28, 34, 0.22);
+}
+/* 上半区黑白室内照背景 */
+.w-mp-top {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 58%;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(1);
+}
+.w-mp-top::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(30,30,32,0.10) 0%, rgba(30,30,32,0.34) 100%);
+}
+/* 下半区白色半透明遮罩 */
+.w-mp-bottom-mask {
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%; height: 48%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.68) 30%, rgba(255,255,255,0.78) 100%);
+}
+/* 中央大圆头像 */
+.w-mp-avatar {
+    position: absolute;
+    left: 50%; top: 32%;
+    width: 106px; height: 106px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    overflow: hidden;
+    z-index: 3;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+    animation: mp-breathe 4.2s ease-in-out infinite;
+}
+@keyframes mp-breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50%      { transform: translate(-50%, -50%) scale(1.025); }
+}
+.w-mp-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+/* 右侧手绘空心爱心 */
+.w-mp-heart {
+    position: absolute;
+    right: 16px; top: 14px;
+    z-index: 3;
+    opacity: 0.9;
+}
+.w-mp-heart svg { display: block; }
+/* 下半区文字 */
+.w-mp-text {
+    position: absolute;
+    left: 0; right: 0; top: 59%;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 18px;
+}
+.w-mp-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #111111;
+    line-height: 1.15;
+    white-space: nowrap;
+    letter-spacing: -0.2px;
+}
+.w-mp-handle {
+    font-size: 12px;
+    color: #4a4a4a;
+    line-height: 1.15;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+/* 底部控制胶囊 */
+.w-mp-pill {
+    position: absolute;
+    left: 50%; bottom: 16px;
+    transform: translateX(-50%);
+    width: 75%; height: 40px;
+    border-radius: 20px;
+    background: #ffffff;
+    z-index: 4;
+    box-shadow: 0 4px 14px rgba(40, 28, 34, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    box-sizing: border-box;
+    color: #111111;
+    font-size: 12px;
+    line-height: 1;
+}
+.w-mp-pill svg { display: block; }
+
+/* —— 组件 8：3D 软胶掌机 —— */
+.w-console {
+    width: 74%;
+    height: 122px;
+    border-radius: 28px;
+    box-sizing: border-box;
+    position: relative;
+    background: linear-gradient(160deg, #ffffff 0%, #f2f2f4 55%, #e4e5e9 100%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow:
+        inset 0 -8px 16px rgba(180, 184, 194, 0.35),
+        inset 0 6px 12px rgba(255, 255, 255, 0.95),
+        0 12px 28px rgba(40, 50, 70, 0.16);
+}
+.w-console-body {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 46%);
+    pointer-events: none;
+}
+/* 屏幕区域 */
+.w-c-screen {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%; height: 66%;
+    border-radius: 11px;
+    overflow: hidden;
+    background: #dff0ef;
+    border: 2px solid #ffffff;
+    box-shadow:
+        inset 0 3px 10px rgba(40, 70, 80, 0.28),
+        0 1px 3px rgba(150, 156, 166, 0.4);
+}
+.w-c-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 圆点方向键（3×3） */
+.w-c-dpad {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 6px);
+    grid-template-rows: repeat(3, 6px);
+    gap: 7px;
+}
+.w-c-dpad i {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #9aa0aa;
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.18), 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.w-c-dpad.left { left: 8.5%; top: 22%; }
+/* 圆形功能键（浅粉珊瑚 3D 膨胀） */
+.w-c-btn {
+    position: absolute;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #fddcdc 0%, #f4b8b8 46%, #d99a9c 100%);
+    box-shadow:
+        inset 0 -2px 3px rgba(170, 90, 96, 0.5),
+        inset 0 2px 2px rgba(255, 255, 255, 0.75),
+        0 3px 7px rgba(40, 50, 70, 0.22);
+}
+.w-c-btn.left { left: 8.5%; bottom: 13%; }
+.w-c-btn.right { right: 8.5%; top: 22%; }
+.w-c-dpad.right { right: 8.5%; bottom: 13%; }
+
+/* —— 组件 9：Top Widgets* 个人状态卡 —— */
+.w-topcard {
+    width: 72%;
+    height: 24vh;
+    min-height: 205px;
+    border-radius: 30px;
+    box-sizing: border-box;
+    position: relative;
+    padding: 14px 14px 16px;
+    background: rgba(246, 246, 247, 0.34);
+    -webkit-backdrop-filter: blur(20px) saturate(105%);
+    backdrop-filter: blur(20px) saturate(105%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow:
+        inset 0 0 18px rgba(255, 255, 255, 0.5),
+        0 8px 24px rgba(40, 50, 70, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.w-tc-avatar {
+    width: 82px; height: 82px;
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 10px;
+    flex: 0 0 auto;
+}
+.w-tc-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+.w-tc-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+.w-tc-pill {
+    height: 33px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.52);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 7px rgba(40, 50, 70, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 11px;
+    color: #3a3a3a;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 7px;
+    box-sizing: border-box;
+}
+.w-tc-pill svg { display: block; flex: 0 0 auto; }
+.w-tc-pill span { overflow: hidden; text-overflow: ellipsis; }
+.w-tc-deco {
+    margin-top: 10px;
+    font-size: 10px;
+    color: #a8a8ae;
+    letter-spacing: 1.4px;
+    white-space: nowrap;
+    line-height: 1;
+}
+.w-tc-label {
+    font-size: 12px;
+    color: #2b2b2b;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    line-height: 1;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+/* —— 组件 10：白色日记/便签卡片 —— */
+.w-notecard {
+    width: 44%;
+    height: 22vh;
+    min-height: 180px;
+    border-radius: 17px;
+    box-sizing: border-box;
+    position: relative;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+/* 顶部浅灰胶带/夹子 */
+.w-nc-tape {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 50px; height: 20px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, rgba(205, 205, 205, 0.55), rgba(180, 180, 180, 0.4));
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+/* 蝴蝶结 */
+.w-nc-bow {
+    width: 80px; height: 48px;
+    margin-top: 30px;
+    flex: 0 0 auto;
+}
+.w-nc-bow svg { width: 100%; height: 100%; display: block; }
+.w-nc-bow img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.w-nc-mid {
+    font-size: 12px;
+    color: #8a8a8a;
+    line-height: 1;
+    margin-top: 8px;
+}
+.w-nc-bottom {
+    font-size: 11px;
+    color: #2e2e2e;
+    line-height: 1.3;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+    white-space: normal;
+}
+
 /* 进入编辑模式后：可编辑项目抖动 */
 .edit-mode-active .app-cell,
-.edit-mode-active .colorful-widget {
-    animation: edit-wiggle 0.9s ease-in-out infinite;
+.edit-mode-active .colorful-widget,
+.edit-mode-active .dock-app,
+.edit-mode-active .profile-card,
+.edit-mode-active .tw-group,
+.edit-mode-active .widget-item,
+.edit-mode-active .chat-stack {
+    animation: edit-wiggle 0.42s ease-in-out infinite;
     transform-origin: 50% 60%;
 }
 .edit-mode-active .app-cell:nth-child(odd),
-.edit-mode-active .colorful-widget { animation-delay: 0.05s; }
-.edit-mode-active .app-cell:nth-child(even) { animation-delay: -0.35s; }
+.edit-mode-active .colorful-widget,
+.edit-mode-active .dock-app:nth-child(odd) { animation-delay: 0.04s; }
+.edit-mode-active .app-cell:nth-child(even),
+.edit-mode-active .dock-app:nth-child(even) { animation-delay: -0.21s; }
 
 @keyframes edit-wiggle {
     0%, 100% { transform: rotate(-1.6deg) translateY(0); }
     50%      { transform: rotate(1.6deg) translateY(-1px); }
 }
 
-/* 编辑模式：第一页统一 4 列可编辑网格，dense 紧凑填充（widget 占 2×2，应用 1×1） */
+/* 编辑模式：第一页保持原有 flex 布局，组件尺寸不改变，仅支持左右换位（避免比例失真） */
 .edit-mode-active .note-apps-row {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-flow: row dense;
-    gap: 12px 10px;
-    align-items: start;
+    display: flex;          /* 维持 flex，不再改造成 4 列网格 */
+    align-items: flex-start;
 }
 .edit-mode-active .apps-grid {
-    display: contents; /* 让其 app-cell 直接成为 note-apps-row 的网格子项 */
-    margin: 0;
+    display: grid;          /* 2×2 网格保持不变，应用仍在组件对侧 */
 }
 .edit-mode-active .note-apps-row > .colorful-widget {
-    width: auto;
-    height: auto;
-    margin-left: 0;
-    grid-column: span 2;
-    grid-row: span 2;
+    width: 40%;             /* 保持与非编辑态一致的宽度 */
+    flex: 0 0 auto;
 }
 .edit-mode-active .page2-apps {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-flow: row dense;
-    grid-auto-rows: auto;
+    /* 第二页本就是 4 列网格，编辑态无需改动 */
 }
 
 /* 拖拽中的源项目：缩小、透视，方便看到落点 */
 .edit-mode-active .app-cell.edit-source,
-.edit-mode-active .colorful-widget.edit-source {
+.edit-mode-active .colorful-widget.edit-source,
+.edit-mode-active .dock-app.edit-source,
+.edit-mode-active .profile-card.edit-source,
+.edit-mode-active .tw-group.edit-source,
+.edit-mode-active .widget-item.edit-source,
+.edit-mode-active .chat-stack.edit-source {
     opacity: 0.35;
     animation: none;
     transform: scale(0.9);
@@ -1444,8 +2506,23 @@ html.edit-mode-active, html.edit-mode-active body {
     pointer-events: none;
     opacity: 0.95;
     transform: translate(-50%, -50%) scale(1.18);
-    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.28));
-    -webkit-filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.28));
+}
+
+/* 幽灵去掉昂贵的毛玻璃模糊与投影，移动更顺滑（移动端 GPU 合成） */
+.edit-ghost,
+.edit-ghost * {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+.edit-ghost {
+    filter: none;
+    -webkit-filter: none;
+}
+
+/* 幽灵始终不接收事件（被子元素 pointer-events 覆盖时也强制穿透） */
+.edit-ghost,
+.edit-ghost * {
+    pointer-events: none !important;
 }
 
 /* 编辑模式下禁止翻页手势（保持当前页位置，跨页通过边缘拖拽切换） */
@@ -1454,9 +2531,18 @@ html.edit-mode-active, html.edit-mode-active body {
 }
 .edit-mode-active .app-cell,
 .edit-mode-active .colorful-widget,
-.edit-mode-active .tw-card {
+.edit-mode-active .tw-group,
+.edit-mode-active .profile-card,
+.edit-mode-active .widget-item,
+.edit-mode-active .chat-stack,
+.edit-mode-active .dock-app {
     touch-action: none;
     cursor: grab;
+}
+
+/* 气泡组件默认 pointer-events:none，编辑模式下才允许长按拖动 */
+.edit-mode-active .chat-stack {
+    pointer-events: auto;
 }
 
 /* ========================================
@@ -1925,7 +3011,8 @@ html.edit-mode-active, html.edit-mode-active body {
             <div class="page page-2">
                 <div class="page2-content">
 
-                    <div class="tw-card">
+                    <div class="tw-group">
+                        <div class="tw-card">
                         <div class="tw-nav">
                             <button class="tw-close" type="button" aria-label="关闭">
                                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#8a8a8a" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
@@ -1948,7 +3035,8 @@ html.edit-mode-active, html.edit-mode-active body {
                         </div>
                     </div>
 
-                    <div class="tw-foot">Top Widgets*</div>
+                        <div class="tw-foot" data-editable="text">Top Widgets*</div>
+                    </div>
 
                     <div class="page2-apps">
                         <div class="app-cell">
@@ -2029,6 +3117,40 @@ html.edit-mode-active, html.edit-mode-active body {
 
         <!-- 编辑模式 · 完成按钮 -->
         <button class="edit-done-btn" id="editDoneBtn" type="button" hidden="">完成</button>
+
+        <!-- 编辑模式 · 添加页面按钮（左上角加号，毛玻璃质感） -->
+        <button class="edit-add-btn" id="editAddPageBtn" type="button" hidden="" aria-label="添加页面">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
+        </button>
+
+        <!-- 编辑模式 · 「增加页面 / 添加组件」弹层菜单 -->
+        <div class="edit-add-menu" id="editAddMenu" hidden="">
+            <button class="edit-add-menu-item" id="editAddMenuItem" type="button">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#333333" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
+                <span>增加页面</span>
+            </button>
+            <button class="edit-add-menu-item" id="editAddWidgetItem" type="button">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#333333" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"></rect><rect x="13" y="4" width="7" height="7" rx="2"></rect><rect x="4" y="13" width="7" height="7" rx="2"></rect><rect x="13" y="13" width="7" height="7" rx="2"></rect></svg>
+                <span>添加组件</span>
+            </button>
+        </div>
+
+        <!-- 组件库面板（添加组件） -->
+        <div class="widget-gallery" id="widgetGallery" hidden="">
+            <div class="wg-mask" id="wgMask"></div>
+            <div class="wg-sheet" role="dialog" aria-label="添加组件">
+                <div class="wg-head">
+                    <span class="wg-title">添加组件</span>
+                    <button class="wg-close" id="wgCloseBtn" type="button" aria-label="关闭">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#333333" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+                    </button>
+                </div>
+                <div class="wg-list" id="wgList"></div>
+            </div>
+        </div>
+
+        <!-- 隐藏回收站：被删除的组件移到这里，恢复桌面时可还原内置组件 -->
+        <div id="itemGraveyard" hidden=""></div>
 
         <div class="dock">
             <div class="dock-inner">
@@ -2145,6 +3267,12 @@ html.edit-mode-active, html.edit-mode-active body {
                     <span class="settings-row-chevron">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#c0a0b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
                     </span>
+                </button>
+                <button class="settings-row" id="resetDesktopBtn" type="button">
+                    <span class="settings-row-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#c98a6d" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 0 1 14.7-2.5"></path><path d="M18 3v5h-5"></path><path d="M20 14a8 8 0 0 1-14.7 2.5"></path><path d="M6 21v-5h5"></path></svg>
+                    </span>
+                    <span class="settings-row-label">一键恢复桌面</span>
                 </button>
             </div>
 
@@ -2872,13 +4000,35 @@ html.edit-mode-active, html.edit-mode-active body {
        桌面分页滑动切换
        ======================================== */
     var pagesTrack = $('pagesTrack');
-    var pageDots = document.querySelectorAll('.page-indicator .dot');
     var currentPage = 0;
     var PAGE_COUNT = 2;
 
+    /* 让 .pages-track 宽度 = 页数 × 100%，每页宽度 = 100% / 页数，适配任意页数 */
+    function applyPagesSizing() {
+        if (!pagesTrack) return;
+        pagesTrack.style.width = (PAGE_COUNT * 100) + '%';
+        var pages = pagesTrack.querySelectorAll('.page');
+        var w = (100 / PAGE_COUNT) + '%';
+        for (var i = 0; i < pages.length; i++) pages[i].style.width = w;
+    }
+
+    /* 依据当前页数重建页码指示器（动态页可增可减） */
+    function renderPageIndicator() {
+        var ind = $('pageIndicator');
+        if (!ind) return;
+        ind.innerHTML = '';
+        for (var i = 0; i < PAGE_COUNT; i++) {
+            var d = document.createElement('span');
+            d.className = 'dot' + (i === currentPage ? ' active' : '');
+            d.setAttribute('data-i', String(i));
+            ind.appendChild(d);
+        }
+    }
+
     function updatePageIndicator() {
-        for (var i = 0; i < pageDots.length; i++) {
-            pageDots[i].classList.toggle('active', i === currentPage);
+        var dots = document.querySelectorAll('.page-indicator .dot');
+        for (var i = 0; i < dots.length; i++) {
+            dots[i].classList.toggle('active', i === currentPage);
         }
     }
 
@@ -2893,6 +4043,85 @@ html.edit-mode-active, html.edit-mode-active body {
         updatePageIndicator();
     }
 
+    /* ---- 动态页面网格：0=第一页、1=第二页、>=2=新增空白页 ---- */
+    function pageGridAt(pg) {
+        if (pg === 0) return p1Grid();
+        if (pg === 1) return p2Grid();
+        var page = document.querySelector('.page-extra[data-page="' + pg + '"]');
+        return page ? page.querySelector('.extra-apps') : null;
+    }
+
+    /* 保证动态页 DOM 数量与目标一致（增删空白页并重排尺寸/指示器） */
+    function syncPageCount(count) {
+        count = Math.max(2, Math.floor(count) || 2);
+        while (PAGE_COUNT > count) {
+            var extras = document.querySelectorAll('.page-extra');
+            if (!extras.length) break;
+            extras[extras.length - 1].remove();
+            PAGE_COUNT--;
+        }
+        while (PAGE_COUNT < count) {
+            var pg = PAGE_COUNT;
+            var page = document.createElement('div');
+            page.className = 'page page-extra';
+            page.setAttribute('data-page', String(pg));
+            var content = document.createElement('div');
+            content.className = 'extra-content';
+            var grid = document.createElement('div');
+            grid.className = 'extra-apps';
+            content.appendChild(grid);
+            var blocks = document.createElement('div');
+            blocks.className = 'extra-blocks';
+            content.appendChild(blocks);
+            page.appendChild(content);
+            pagesTrack.appendChild(page);
+            PAGE_COUNT = pg + 1;
+        }
+        applyPagesSizing();
+        renderPageIndicator();
+    }
+
+    /* 添加一个新空白页并跳转过去（无限加页面） */
+    function addPage() {
+        syncPageCount(PAGE_COUNT + 1);
+        if (!Array.isArray(layout.extraPages)) layout.extraPages = [];
+        layout.extraPages.push([]);
+        goToPage(PAGE_COUNT - 1);
+        collectLayout();
+        persistLayout();
+    }
+
+    /* 删除多余空白页，回到默认两页（先搬回元素，避免 APP/组件随页面一起消失） */
+    function removeExtraPages() {
+        var extras = document.querySelectorAll('.page-extra');
+        for (var i = 0; i < extras.length; i++) {
+            var epage = extras[i];
+            var grid = epage.querySelector('.extra-apps');
+            var blocks = epage.querySelector('.extra-blocks');
+            var p1 = p1Grid();
+            var home = document.querySelector('.home-content');
+            if (grid && p1) {
+                while (grid.firstChild) {
+                    var gch = grid.firstChild;
+                    freeClearPos(gch);
+                    p1.appendChild(gch);
+                }
+            }
+            if (blocks && home) {
+                while (blocks.firstChild) home.appendChild(blocks.firstChild);
+            }
+            epage.remove();
+        }
+        PAGE_COUNT = 2;
+        layout.extraPages = [];
+        layout.extraCards = [];
+        layout.widgetPage = 'p1';
+        layout.widgetExtra = -1;
+        applyPagesSizing();
+        renderPageIndicator();
+        if (currentPage > 1) currentPage = 1;
+    }
+
     var swipeStartX = 0;
     var swipeStartY = 0;
     var swipeActive = false;
@@ -2902,13 +4131,15 @@ html.edit-mode-active, html.edit-mode-active body {
 
     function onSwipeStart(e) {
         if (!pagesTrack) return;
-        // 编辑模式下翻页交给编辑引擎（边缘跨页），此处不处理手势
-        if (isEditActive()) return;
+        // 编辑态控制按钮（加号 / 完成 / 增加页面菜单）：按下时不启动翻页手势，
+        // 否则 setPointerCapture 会吞掉移动端合成的 click，导致按钮“点了没反应”
+        if (e.target && e.target.closest && e.target.closest('#editAddPageBtn, #editDoneBtn, #editAddMenu, .widget-gallery')) return;
         // 设置界面打开时、或从 Dock / 设置层上按下时，不触发翻页
         if (settingsScreen && settingsScreen.classList.contains('open')) return;
         if (e.target && e.target.closest && (e.target.closest('.dock') || e.target.closest('.settings-screen'))) return;
-        // 轻点可编辑元素时编辑、滑动时翻页：由「位移」自动区分，这里不拦截可编辑元素
-        // （编辑改由 click 触发，滑动不会产生 click）
+        // 编辑模式下：按在可拖拽元素上时交给编辑引擎（长按拖动）；按在空白处仍可滑动翻页
+        if (isEditActive() && e.target && e.target.closest &&
+            e.target.closest('.app-cell, .colorful-widget, .dock-app, .profile-card, .tw-group, .chat-stack, .widget-item')) return;
         if (e.pointerType === 'mouse' && e.button !== 0) return;
         swipeStartX = e.clientX;
         swipeStartY = e.clientY;
@@ -2922,6 +4153,8 @@ html.edit-mode-active, html.edit-mode-active body {
     }
 
     function onSwipeMove(e) {
+        // 编辑模式下：正在拖拽元素时，翻页交给边缘跨页，不处理手势
+        if (isEditActive() && EDIT.source) return;
         if (!swipeActive || !pagesTrack) return;
         if (e.pointerId !== swipePointerId) return;
         var dx = e.clientX - swipeStartX;
@@ -2971,6 +4204,7 @@ html.edit-mode-active, html.edit-mode-active body {
     var wheelTimer = null;
 
     function onSwipeWheel(e) {
+        if (isEditActive()) return;
         if (!pagesTrack) return;
         if (Math.abs(e.deltaX) < 4) return;
         if (e.cancelable) e.preventDefault();
@@ -2997,16 +4231,21 @@ html.edit-mode-active, html.edit-mode-active body {
         home.addEventListener('lostpointercapture', onSwipeLost);
         // 桌面触控板横向滑动、水平滚轮切页
         home.addEventListener('wheel', onSwipeWheel, { passive: false });
-        updatePageIndicator();
+        applyPagesSizing();
+        renderPageIndicator();
 
-        /* 兜底 1：点按页面指示点直接跳页（滑动失效时仍可切页） */
-        for (var di = 0; di < pageDots.length; di++) {
-            (function (dot, idx) {
-                dot.addEventListener('click', function (e) {
+        /* 兜底 1：点按页面指示点直接跳页（滑动失效时仍可切页，事件委托以支持动态新增页） */
+        var indicator = $('pageIndicator');
+        if (indicator) {
+            indicator.addEventListener('click', function (e) {
+                var dot = e.target && e.target.closest ? e.target.closest('.dot') : null;
+                if (!dot) return;
+                var idx = parseInt(dot.getAttribute('data-i'), 10);
+                if (!isNaN(idx)) {
                     if (e && e.stopPropagation) e.stopPropagation();
                     goToPage(idx);
-                });
-            })(pageDots[di], di);
+                }
+            });
         }
 
         /* 兜底 2：旧 WebView 不支持 PointerEvent 时，用 Touch 事件接管翻页 */
@@ -3063,12 +4302,16 @@ html.edit-mode-active, html.edit-mode-active body {
        ======================================== */
     function syncColorfulWidget() {
         var w = document.querySelector('.colorful-widget');
+        if (!w) return;
         var grid = document.querySelector('.apps-grid');
-        if (!w || !grid) return;
+        // 组件作为独立块（被拖到第二页）时不再与网格等高，恢复自然高度
+        if (!grid || w.parentElement !== grid.parentElement) {
+            w.style.height = '';
+            return;
+        }
         var h = grid.offsetHeight;
-        if (!h) return;
         // 宽度由 CSS（约屏幕 40%）控制，这里只同步高度，与右侧 2×2 网格顶底对齐
-        w.style.height = h + 'px';
+        w.style.height = h ? h + 'px' : '';
     }
 
     /* ========================================
@@ -3148,6 +4391,15 @@ html.edit-mode-active, html.edit-mode-active body {
                 if (err || !dataUrl) return;
                 // 写入 DOM
                 el.src = dataUrl;
+                // 动态组件图片：按 data-widget-key / data-field 持久化
+                var wk = el.getAttribute && el.getAttribute('data-widget-key');
+                var wf = el.getAttribute && el.getAttribute('data-field');
+                if (wk && wf) {
+                    widgetContent[widgetContentKey(wk, wf)] = dataUrl;
+                    persistWidgetContent();
+                    flashEdited(el);
+                    return;
+                }
                 // 写入 config 并持久化
                 var fields = getContentFields();
                 for (var i = 0; i < fields.length; i++) {
@@ -3200,7 +4452,8 @@ html.edit-mode-active, html.edit-mode-active body {
             var val = isHtml ? (el.innerHTML || '') : (el.textContent || '').trim();
             el.removeAttribute('contenteditable');
             el.classList.remove('edit-inline');
-            applyContentToField(getFieldKeyOf(el), val);
+            contentConfig[fieldKey] = val;              // ★ 先写入配置再持久化，文字才不会丢
+            applyContentToField(fieldKey, val);
             persistContentConfig();
             flashEdited(el);
         }
@@ -3281,6 +4534,9 @@ html.edit-mode-active, html.edit-mode-active body {
             var t = ev.target;
             if (!t || !t.closest) return;
 
+            // 长按拖拽刚结束时，短暂吞掉 click，避免误触发文字/图片就地编辑
+            if (EDIT.suppressClickUntil && Date.now() < EDIT.suppressClickUntil) return;
+
             // 1) 点击目标本身就是可编辑元素或在可编辑元素内部
             var editable = t.closest('[data-editable]');
 
@@ -3297,6 +4553,22 @@ html.edit-mode-active, html.edit-mode-active body {
             }
 
             if (!editable) return;
+
+            // 动态组件可编辑元素：按 data-widget-key / data-field 走通用编辑与持久化
+            var wKey = editable.getAttribute && editable.getAttribute('data-widget-key');
+            var wField = editable.getAttribute && editable.getAttribute('data-field');
+            if (wKey && wField) {
+                if (editable.dataset.editing === '1') return;
+                ev.preventDefault();
+                ev.stopPropagation();
+                if (editable.getAttribute('data-editable') === 'image') {
+                    commitActiveEdit();
+                    openImagePickerFor(editable);
+                } else {
+                    beginWidgetTextEdit(editable);
+                }
+                return;
+            }
 
             var field = getFieldKeyOf(editable);
             if (!field) {
@@ -3325,12 +4597,24 @@ html.edit-mode-active, html.edit-mode-active body {
 
     /* 加载已保存配置并应用 */
     function loadContentConfig() {
-        idbGet(CONTENT_KEY).then(function (cfg) {
-            contentConfig = cfg || {};
+        // 1) 同步读取 localStorage 镜像（文字等小数据一定存得住，且无竞态）
+        var fromLocal = null;
+        try {
+            fromLocal = JSON.parse(localStorage.getItem(CONTENT_KEY) || 'null');
+        } catch (e) { fromLocal = null; }
+        if (fromLocal && typeof fromLocal === 'object') {
+            contentConfig = fromLocal;
             applyAllContent();
-        }).catch(function () {
-            contentConfig = {};
-        });
+        }
+
+        // 2) 异步读取 IndexedDB，仅「补齐」本地没有的大图/旧数据，绝不覆盖本地最新值
+        idbGet(CONTENT_KEY).then(function (cfg) {
+            if (cfg && typeof cfg === 'object') {
+                fillMissingFrom(contentConfig, cfg);
+                applyAllContent();
+                mirrorContentConfig();
+            }
+        }).catch(function () {});
     }
 
     function applyAllContent() {
@@ -3341,8 +4625,38 @@ html.edit-mode-active, html.edit-mode-active body {
         }
     }
 
+    /* 用 src 补齐 dst 中缺失的字段，不覆盖 dst 已有值（避免旧数据回滚新编辑） */
+    function fillMissingFrom(dst, src) {
+        if (!src) return dst;
+        for (var k in src) {
+            if (Object.prototype.hasOwnProperty.call(src, k)) {
+                if (dst[k] == null && src[k] != null) dst[k] = src[k];
+            }
+        }
+        return dst;
+    }
+
+    /* 同步写 localStorage 镜像：保证文字修改即使 IndexedDB 不可用也能保存 */
+    function mirrorContentConfig() {
+        try {
+            localStorage.setItem(CONTENT_KEY, JSON.stringify(contentConfig));
+        } catch (e) {
+            // localStorage 溢出（通常是图片 dataUrl 太大）：退化为只保存文字字段
+            try {
+                var textOnly = {};
+                var fields = getContentFields();
+                for (var i = 0; i < fields.length; i++) {
+                    var f = fields[i];
+                    if (!f.image && contentConfig[f.key] != null) textOnly[f.key] = contentConfig[f.key];
+                }
+                localStorage.setItem(CONTENT_KEY, JSON.stringify(textOnly));
+            } catch (e2) { /* 连文字都放不下则放弃本地镜像 */ }
+        }
+    }
+
     function persistContentConfig() {
-        idbSet(CONTENT_KEY, contentConfig).catch(function () {});
+        mirrorContentConfig();                                   // 同步落盘（文字一定保存）
+        idbSet(CONTENT_KEY, contentConfig).catch(function () {}); // 异步镜像（存大图）
     }
 
     function initContentSettings() {
@@ -3419,11 +4733,25 @@ html.edit-mode-active, html.edit-mode-active body {
                     e.preventDefault();
                     fire();
                 });
+                // 再兜底：跨页拖动的 pointer 捕获可能干扰 click/touchend，
+                // pointerup 再补一次（fire 内部 300ms 节流防重复；编辑/拖动态不触发，避免误打开）
+                app.addEventListener('pointerup', function () {
+                    if (EDIT.active) return;
+                    fire();
+                });
             })(dockApps[i]);
         }
 
         // 设置界面导航
         if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
+        // 一键恢复桌面：回到初始排版并关闭设置页
+        var resetDesktopBtn = $('resetDesktopBtn');
+        if (resetDesktopBtn) {
+            resetDesktopBtn.addEventListener('click', function () {
+                resetDesktopLayout();
+                closeSettings();
+            });
+        }
         if (openApiSettingsBtn) {
             openApiSettingsBtn.addEventListener('click', function () {
                 settingsScreen.classList.add('api-visible');
@@ -3491,135 +4819,1839 @@ html.edit-mode-active, html.edit-mode-active body {
         }
     }
 
-    /* ========================================
-       桌面编辑模式（长按抖动拖拽、自动挤位、跨页）
+/* ========================================
+       桌面编辑模式（长按抖动拖拽、自动挤位、跨页、Dock）
        ======================================== */
+    var LAYOUT_KEY = 'home-layout-v1';
+    var DOCK_MAX = 4;
+
+    // 布局状态：每个容器内 item id 的排列顺序（widget:cw 为第一页组件，不进入任何数组）
+    var layout = {
+        apps1: [],       // 第一页 .apps-grid 内应用
+        p2: [],          // 第二页 .page2-apps 内应用
+        dock: [],        // Dock 内应用
+        widgetSide: 'left',  // 第一页组件在左还是右
+        widgetPage: 'p1',    // 便签组件所在页：p1 在 note-apps-row 内 / p2 第二页独立块 / extra 在新增页
+        widgetExtra: -1,     // widgetPage === 'extra' 时所在的新增页页码（>=2）
+        cards1: [],      // 第一页竖排块顺序（profile / note-apps-row）
+        cards2: [],      // 第二页竖排块顺序（tw-card / foot / apps / chat）
+        extraPages: [],  // 动态新增空白页内应用（每页一个 id 数组）
+        extraCards: [],  // 动态新增空白页内被拖进来的大卡片 / 便签组件（每页一个 id 数组）
+        pageCount: 2,    // 当前总页数
+        deleted: [],     // 已删除（移入回收站）的组件 id，用于删除持久化
+        widgetSeq: 0,    // 组件实例自增序号（新组件 id 唯一，不复用）
+        pos: {}          // 第二页/新增页自由网格内每项的落点 { id: {c, r} }（自由摆放，不再整行回填）
+    };
+
+    // 初始排版快照（首次加载时捕获 HTML 源码默认顺序，用于「一键恢复桌面」）
+    var defaultLayout = null;
+
+    /* ========================================
+       组件库（添加组件）：5 个组件的模板定义
+       ======================================== */
+    function svgData(svg) {
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    /* 主屏幕占位图：手绘风 Q 版女孩（圆形头像 / 波点相框中心） */
+    var WG_GIRL = svgData(
+        '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="80" height="80" fill="#f7e7ec"/>' +
+        '<circle cx="40" cy="41" r="15" fill="#f1c9d3"/>' +
+        '<path d="M25 41a15 15 0 0 1 30 0h-3a12 12 0 0 0-24 0z" fill="#a08296"/>' +
+        '<path d="M25 39q-5-6 0-12q7 1 5 8q-2 2-5 4z" fill="#a08296"/>' +
+        '<path d="M55 39q5-6 0-12q-7 1-5 8q2 2 5 4z" fill="#a08296"/>' +
+        '<circle cx="24.5" cy="28" r="4" fill="#d9859d"/>' +
+        '<circle cx="24.5" cy="28" r="1.6" fill="#f4d3dc"/>' +
+        '<circle cx="55.5" cy="28" r="4" fill="#d9859d"/>' +
+        '<circle cx="55.5" cy="28" r="1.6" fill="#f4d3dc"/>' +
+        '<circle cx="34.5" cy="44" r="1.7" fill="#584951"/>' +
+        '<circle cx="45.5" cy="44" r="1.7" fill="#584951"/>' +
+        '<path d="M35 50q5 3 10 0" stroke="#584951" stroke-width="1.3" fill="none" stroke-linecap="round"/>' +
+        '<path d="M40 33l2 2 2-2" fill="none" stroke="#f2a8bb" stroke-width="1.2" stroke-linecap="round"/>' +
+        '</svg>'
+    );
+
+    /* Hello Kitty 风格角色（黑胶中心贴图） */
+    var WG_KITTY = svgData(
+        '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="80" height="80" fill="#f9dce4"/>' +
+        '<circle cx="40" cy="45" r="25" fill="#ffffff"/>' +
+        '<path d="M21 27l6-13 8 7z" fill="#ffffff" stroke="#efe7ea" stroke-width="0.5"/>' +
+        '<path d="M59 27l-6-13-8 7z" fill="#ffffff"/>' +
+        '<path d="M27 25l6-4 5 8-8 2z" fill="#e86a86"/>' +
+        '<path d="M27 25l6-4 6-1-2 8z" fill="#c84c6a"/>' +
+        '<ellipse cx="32.5" cy="45" rx="2.2" ry="3.2" fill="#222"/>' +
+        '<ellipse cx="47.5" cy="45" rx="2.2" ry="3.2" fill="#222"/>' +
+        '<ellipse cx="40" cy="52" rx="2.2" ry="2.4" fill="#e8a13a"/>' +
+        '<path d="M20 54h11M20 60h11M60 54h-11M60 60h-11" stroke="#b9aeb4" stroke-width="1.4" stroke-linecap="round"/>' +
+        '</svg>'
+    );
+
+    /* 小熊（豆包 / 哔哩哔哩 / 饿了么），参数化颜色 */
+    function kittyBearSvg(body, inner) {
+        return '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
+            '<circle cx="14" cy="12" r="4.5" fill="' + body + '"/><circle cx="26" cy="12" r="4.5" fill="' + body + '"/>' +
+            '<circle cx="14" cy="12" r="1.7" fill="' + inner + '"/><circle cx="26" cy="12" r="1.7" fill="' + inner + '"/>' +
+            '<circle cx="20" cy="21" r="13" fill="' + body + '"/>' +
+            '<circle cx="15.5" cy="20" r="1.8" fill="#333"/><circle cx="24.5" cy="20" r="1.8" fill="#333"/>' +
+            '<ellipse cx="20" cy="25" rx="2.4" ry="1.8" fill="#d98b9f"/>' +
+            '</svg>';
+    }
+    /* 小猫（抖音 / 小红书 / 美团），参数化颜色 */
+    function kittyCatSvg(body, inner) {
+        return '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M11 13l3-6 5 5z" fill="' + body + '"/><path d="M29 13l-3-6-5 5z" fill="' + body + '"/>' +
+            '<circle cx="20" cy="21" r="12.5" fill="' + body + '"/>' +
+            '<circle cx="15.5" cy="20" r="1.7" fill="#333"/><circle cx="24.5" cy="20" r="1.7" fill="#333"/>' +
+            '<path d="M20 24l-1.6 1.6 1.6 1.6 1.6-1.6z" fill="' + inner + '"/>' +
+            '<path d="M14.5 27q1.5 2 5.5 2t5.5-2" stroke="#333" stroke-width="0.8" fill="none" stroke-linecap="round"/>' +
+            '</svg>';
+    }
+    /* 兔子（微信） */
+    var WG_RABBIT = '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
+        '<ellipse cx="14" cy="10" rx="3" ry="6" fill="#fff"/><ellipse cx="26" cy="10" rx="3" ry="6" fill="#fff"/>' +
+        '<circle cx="20" cy="21" r="12" fill="#fff"/>' +
+        '<circle cx="16" cy="20" r="1.6" fill="#333"/><circle cx="24" cy="20" r="1.6" fill="#333"/>' +
+        '<path d="M18.5 25q1.5 1.5 3 0" stroke="#333" stroke-width="0.9" fill="none" stroke-linecap="round"/>' +
+        '</svg>';
+    /* 带翅膀小熊（饿了么） */
+    function wingedBearSvg(body, inner) {
+        return '<svg viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M4 18q-3-4-2-9q4 0 6 4z" fill="#fff"/><path d="M40 18q3-4 2-9q-4 0-6 4z" fill="#fff"/>' +
+            '<circle cx="15" cy="12" r="4.5" fill="' + body + '"/><circle cx="29" cy="12" r="4.5" fill="' + body + '"/>' +
+            '<circle cx="15" cy="12" r="1.7" fill="' + inner + '"/><circle cx="29" cy="12" r="1.7" fill="' + inner + '"/>' +
+            '<circle cx="22" cy="21" r="13" fill="' + body + '"/>' +
+            '<circle cx="17.5" cy="20" r="1.8" fill="#333"/><circle cx="26.5" cy="20" r="1.8" fill="#333"/>' +
+            '<ellipse cx="22" cy="25" rx="2.4" ry="1.8" fill="#d98b9f"/>' +
+            '</svg>';
+    }
+    /* 音符小猫（抖音） */
+    var WG_NOTE_CAT = '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M27 6v16M27 6l8 2M24 22q0-5 3-6"/>' +
+        '<circle cx="24" cy="23" r="3" fill="#fff"/><circle cx="29" cy="21" r="3" fill="#fff"/>' +
+        '<path d="M12 13l3-6 5 5z" fill="#fff"/><path d="M29 13l-3-6-5 5z" fill="#fff"/>' +
+        '<circle cx="19" cy="22" r="11" fill="#fff"/>' +
+        '<circle cx="15" cy="21" r="1.6" fill="#333"/><circle cx="23" cy="21" r="1.6" fill="#333"/>' +
+        '<path d="M17 25q2 1.6 4 0" stroke="#333" stroke-width="0.9" fill="none" stroke-linecap="round"/>' +
+        '</svg>';
+    /* 天使光环小熊（哔哩哔哩） */
+    var WG_ANGEL_BEAR = (function () {
+        var inner = '<svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">' +
+            '<ellipse cx="22" cy="7" rx="8" ry="3" fill="none" stroke="#e8b74c" stroke-width="2"/>' +
+            '<circle cx="15" cy="15" r="4.5" fill="#fff"/><circle cx="29" cy="15" r="4.5" fill="#fff"/>' +
+            '<circle cx="15" cy="15" r="1.7" fill="#dfe3e8"/><circle cx="29" cy="15" r="1.7" fill="#dfe3e8"/>' +
+            '<circle cx="22" cy="24" r="13" fill="#fff"/>' +
+            '<circle cx="17.5" cy="23" r="1.8" fill="#333"/><circle cx="26.5" cy="23" r="1.8" fill="#333"/>' +
+            '<ellipse cx="22" cy="28" rx="2.3" ry="1.8" fill="#d98b9f"/></svg>';
+        return inner;
+    })();
+    /* 厨师帽小猫（美团） */
+    var WG_CHEF_CAT = '<svg viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M12 12q0-4 4-4t4 2q0-2 3-2t3 2 4-2q4 0 4 4v2q-6-1-11 1t-11-1z" fill="#fff"/>' +
+        '<path d="M10 13l3-6 5 5z" fill="#fff"/><path d="M30 13l-3-6-5 5z" fill="#fff"/>' +
+        '<circle cx="20" cy="25" r="12" fill="#fff"/>' +
+        '<circle cx="16" cy="24" r="1.6" fill="#333"/><circle cx="24" cy="24" r="1.6" fill="#333"/>' +
+        '<path d="M15 29q2 1.6 5 1.6t5-1.6" stroke="#333" stroke-width="0.9" fill="none" stroke-linecap="round"/>' +
+        '</svg>';
+    /* 音乐符号带翅膀（网易云） */
+    var WG_MUSIC_WING = '<svg viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M4 18q-3-4-2-9q4 0 6 4z" fill="#9aa0a6"/><path d="M40 18q3-4 2-9q-4 0-6 4z" fill="#9aa0a6"/>' +
+        '<path d="M20 8v22M20 8l9 2M17 30q0-5 3-6" stroke="#6b7280" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+        '<circle cx="17" cy="31" r="3" fill="#6b7280"/><circle cx="25" cy="28" r="3" fill="#6b7280"/>' +
+        '</svg>';
+    /* 小猫抱爱心（小红书） */
+    var WG_RED_CAT = '<svg viewBox="0 0 40 44" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M11 13l3-6 5 5z" fill="#fff"/><path d="M29 13l-3-6-5 5z" fill="#fff"/>' +
+        '<circle cx="20" cy="21" r="12" fill="#fff"/>' +
+        '<circle cx="15.5" cy="20" r="1.7" fill="#333"/><circle cx="24.5" cy="20" r="1.7" fill="#333"/>' +
+        '<path d="M20 23l-1.5 1.5 1.5 1.5 1.5-1.5z" fill="#333"/>' +
+        '<path d="M20 30c-3-1.4-4-2.6-4-4a2 2 0 0 1 4-1 2 2 0 0 1 4 1c0 1.4-1 2.6-4 4z" fill="#e86a86"/>' +
+        '</svg>';
+
+    /* 微信 · 两只叠靠的兔子 */
+    var WG_WECHAT = '<svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">' +
+        '<ellipse cx="20" cy="14" rx="4" ry="7" fill="#fff"/><ellipse cx="36" cy="12" rx="4" ry="7" fill="#fff"/>' +
+        '<ellipse cx="27" cy="30" rx="14" ry="11" fill="#fff"/>' +
+        '<ellipse cx="37" cy="34" rx="12" ry="9" fill="#fff"/>' +
+        '<circle cx="24" cy="29" r="1.5" fill="#333"/><circle cx="31" cy="28" r="1.5" fill="#333"/>' +
+        '<path d="M30 33l2 1.2 2-1.2" stroke="#333" stroke-width="0.9" fill="none" stroke-linecap="round"/>' +
+        '</svg>';
+    /* 豆包 · 圆脸小熊 */
+    var WG_DOUBAO = kittyBearSvg('#ffffff', '#e9dce4');
+    /* 抖音 · 音符小猫 */
+    var WG_DOUYIN = WG_NOTE_CAT;
+    /* 哔哩哔哩 · 天使光环小熊 */
+    var WG_BILI = WG_ANGEL_BEAR;
+
+    /* 组件 1：CosmicLove 音乐播放器（顶部） */
+    var WG_APPLE = svgData(
+        '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><linearGradient id="ap" x1="0" y1="0" x2="0.75" y2="1">' +
+        '<stop offset="0" stop-color="#cdd9b2"/><stop offset="0.62" stop-color="#adc49b"/><stop offset="1" stop-color="#8fa985"/></linearGradient></defs>' +
+        '<path d="M40 66c-13 2-20-6-20-18 0-14 8-24 20-30 12 6 20 16 20 30 0 12-7 20-20 18z" fill="url(#ap)"/>' +
+        '<path d="M31 25q9-9 18 0" stroke="#87a07c" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+        '<path d="M40 27q1-8 4-12" stroke="#8a6f4d" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+        '<path d="M44 16q7-3 11 3-8 4-11-3z" fill="#98b784"/>' +
+        '<ellipse cx="30" cy="38" rx="6" ry="9" fill="#ffffff" opacity="0.32" transform="rotate(-25 30 38)"/>' +
+        '<ellipse cx="49" cy="34" rx="3.2" ry="4" fill="#eaf4e9" opacity="0.85"/><ellipse cx="49.6" cy="32.4" rx="1" ry="1.4" fill="#ffffff"/>' +
+        '<ellipse cx="57" cy="48" rx="2.4" ry="3.2" fill="#eaf4e9" opacity="0.85"/><ellipse cx="57.4" cy="46.8" rx="0.8" ry="1.1" fill="#ffffff"/>' +
+        '<ellipse cx="26" cy="52" rx="2" ry="2.6" fill="#eaf4e9" opacity="0.8"/>' +
+        '</svg>'
+    );
+    /* 水果封面图：草莓 / 蜜桃 / 猕猴桃 / 樱桃 */
+    var WG_STRAWBERRY = svgData(
+        '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><linearGradient id="stb" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#ea9a97"/><stop offset="1" stop-color="#c26063"/></linearGradient></defs>' +
+        '<path d="M40 22c3-8-2-15-9-14 6 5 8 8 9 14z" fill="#86c184"/>' +
+        '<path d="M31 8c3 1 5 3 8 6 3-3 5-5 8-6M40 12v4" stroke="#6da06f" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+        '<path d="M40 22c18 2 27 14 27 28 0 14-12 26-27 26S13 64 13 50c0-14 9-26 27-28z" fill="url(#stb)"/>' +
+        '<g fill="#f7e0cd">' +
+        '<ellipse cx="28" cy="42" rx="1.3" ry="2"/><ellipse cx="38" cy="38" rx="1.3" ry="2"/><ellipse cx="48" cy="38" rx="1.3" ry="2"/>' +
+        '<ellipse cx="27" cy="54" rx="1.3" ry="2"/><ellipse cx="37" cy="52" rx="1.3" ry="2"/><ellipse cx="47" cy="52" rx="1.3" ry="2"/><ellipse cx="55" cy="47" rx="1.3" ry="2"/>' +
+        '<ellipse cx="32" cy="64" rx="1.3" ry="2"/><ellipse cx="44" cy="64" rx="1.3" ry="2"/><ellipse cx="52" cy="60" rx="1.3" ry="2"/>' +
+        '</g>' +
+        '<ellipse cx="30" cy="34" rx="4" ry="6" fill="#ffffff" opacity="0.28" transform="rotate(-24 30 34)"/>' +
+        '</svg>'
+    );
+    var WG_PEACH = svgData(
+        '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><linearGradient id="pc" x1="0" y1="0" x2="0.6" y2="1">' +
+        '<stop offset="0" stop-color="#f6d3bd"/><stop offset="0.6" stop-color="#f0a882"/><stop offset="1" stop-color="#d68a6b"/></linearGradient></defs>' +
+        '<path d="M40 18c1-5 4-9 9-11" stroke="#8a7a4f" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+        '<path d="M49 8q9-5 11 4-10 3-11-4z" fill="#a8c08a"/>' +
+        '<path d="M40 26c-15 0-25 11-25 25 0 15 11 26 26 26 15 0 24-11 24-25 0-14-10-26-25-26z" fill="url(#pc)"/>' +
+        '<path d="M40 26c-7 0-13 5-15 12" stroke="#c97a5c" stroke-width="2" fill="none" opacity="0.7" stroke-linecap="round"/>' +
+        '<ellipse cx="30" cy="46" rx="5" ry="8" fill="#ffffff" opacity="0.28" transform="rotate(-28 30 46)"/>' +
+        '</svg>'
+    );
+    var WG_KIWI = svgData(
+        '<svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><radialGradient id="kw" cx="0.5" cy="0.5" r="0.5">' +
+        '<stop offset="0" stop-color="#d9e8a8"/><stop offset="0.6" stop-color="#9cc068"/><stop offset="1" stop-color="#74a044"/>' +
+        '</radialGradient></defs>' +
+        '<rect width="80" height="100" fill="#e7ebec"/>' +
+        '<circle cx="40" cy="50" r="32" fill="#8a6f4d"/>' +
+        '<circle cx="40" cy="50" r="30" fill="url(#kw)"/>' +
+        '<circle cx="40" cy="50" r="9" fill="#e8ecc4"/>' +
+        '<g fill="#2f2f2f">' +
+        '<ellipse cx="59" cy="50" rx="1.6" ry="2.4"/><ellipse cx="56.4" cy="40.5" rx="1.6" ry="2.4"/><ellipse cx="49.5" cy="33.6" rx="1.6" ry="2.4"/>' +
+        '<ellipse cx="40" cy="31" rx="1.6" ry="2.4"/><ellipse cx="30.5" cy="33.6" rx="1.6" ry="2.4"/><ellipse cx="23.6" cy="40.5" rx="1.6" ry="2.4"/>' +
+        '<ellipse cx="21" cy="50" rx="1.6" ry="2.4"/><ellipse cx="23.6" cy="59.5" rx="1.6" ry="2.4"/><ellipse cx="30.5" cy="66.4" rx="1.6" ry="2.4"/>' +
+        '<ellipse cx="40" cy="69" rx="1.6" ry="2.4"/><ellipse cx="49.5" cy="66.4" rx="1.6" ry="2.4"/><ellipse cx="56.4" cy="59.5" rx="1.6" ry="2.4"/>' +
+        '</g>' +
+        '<ellipse cx="30" cy="34" rx="7" ry="4" fill="#ffffff" opacity="0.3"/>' +
+        '</svg>'
+    );
+    var WG_CHERRY = svgData(
+        '<svg viewBox="0 0 120 104" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><linearGradient id="ch" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#e27c7c"/><stop offset="1" stop-color="#b3484c"/></linearGradient></defs>' +
+        '<rect width="120" height="104" fill="#f2e6e2"/>' +
+        '<path d="M48 42q-3-14-16-20" stroke="#7a9a5a" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+        '<path d="M76 36q8-18 20-23" stroke="#7a9a5a" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+        '<path d="M56 20q12-5 16 5-13 3-16-5z" fill="#9ab978"/>' +
+        '<circle cx="50" cy="62" r="25" fill="url(#ch)"/>' +
+        '<circle cx="81" cy="54" r="21" fill="url(#ch)"/>' +
+        '<ellipse cx="44" cy="52" rx="6" ry="8" fill="#ffffff" opacity="0.32" transform="rotate(-30 44 52)"/>' +
+        '<ellipse cx="76" cy="46" rx="4" ry="6" fill="#ffffff" opacity="0.32" transform="rotate(-30 76 46)"/>' +
+        '</svg>'
+    );
+    function buildWidgetCosmic(key) {
+        return '<div class="widget-item w-cosmic" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-cosmic-cover">' +
+                '<img data-editable="image" data-field="cover" data-widget-key="' + key + '" src="' + WG_STRAWBERRY + '" alt="">' +
+            '</div>' +
+            '<div class="w-cosmic-info">' +
+                '<div class="w-cosmic-row1">' +
+                    '<span class="w-cosmic-title" data-editable="text" data-field="title" data-widget-key="' + key + '">CosmicLove</span>' +
+                    '<span class="w-cosmic-artist" data-editable="text" data-field="artist" data-widget-key="' + key + '">{Finne}</span>' +
+                '</div>' +
+                '<div class="w-cosmic-bar"><i></i></div>' +
+                '<div class="w-cosmic-controls">' +
+                    '<span>&#9664;</span><span>&#9654;</span><span>&#9654;&#9654;</span><span>&#9776;</span><span>&#8635;</span>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    }
+
+    /* 组件 2：CosmicPhone 拍立得叠叠乐（叉子特写，低饱和冷调） */
+    var WG_FORK = svgData(
+        '<svg viewBox="0 0 80 110" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="80" height="110" fill="#e7ebec"/>' +
+        '<g fill="#b7bec7">' +
+        '<rect x="24" y="12" width="5" height="30" rx="2.5"/>' +
+        '<rect x="32.5" y="12" width="5" height="30" rx="2.5"/>' +
+        '<rect x="41" y="12" width="5" height="30" rx="2.5"/>' +
+        '<rect x="49.5" y="12" width="5" height="30" rx="2.5"/>' +
+        '</g>' +
+        '<path d="M22 42h36v6h-36z" fill="#aab1bb"/>' +
+        '<path d="M35.5 48h9v52q0 5-4.5 5t-4.5-5z" fill="#b7bec7"/>' +
+        '<ellipse cx="40" cy="54" rx="1.5" ry="7" fill="#ffffff" opacity="0.45"/>' +
+        '</svg>'
+    );
+    function buildWidgetPolaroid(key) {
+        return '<div class="widget-item w-polaroid" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-pol-sheet w-pol-top">' +
+                '<div class="w-pol-photo">' +
+                    '<img data-editable="image" data-field="top" data-widget-key="' + key + '" src="' + WG_PEACH + '" alt="">' +
+                    '<span class="w-pol-watermark" data-editable="text" data-field="mark" data-widget-key="' + key + '">CosmicPhone {Finne}</span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="w-pol-sheet w-pol-bottom">' +
+                '<div class="w-pol-photo"><img data-editable="image" data-field="bottom" data-widget-key="' + key + '" src="' + WG_KIWI + '" alt=""></div>' +
+            '</div>' +
+        '</div>';
+    }
+
+    /* 黑白漫画风格人物（侧脸，长发，粗黑线条，网点阴影） */
+    var WG_MANGA = svgData(
+        '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><pattern id="mh" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.4" cy="1.4" r="1" fill="#111" opacity="0.55"/></pattern></defs>' +
+        '<rect width="100" height="100" fill="#ffffff"/>' +
+        '<path d="M50 12c4-10 18-10 20 2 1 12-4 22-8 30 4 10 6 22 4 32 8 2 12 10 12 18 0 4-3 6-6 6H40c-4 0-7-3-7-7 0-12 3-26 7-36-5-8-7-16-6-25C35 20 41 15 50 12z" fill="#111"/>' +
+        '<path d="M41 20c-8 7-11 17-11 28 0 16 5 26 15 31l5 1 5-5c5-11 5-25-1-38-2-10-7-16-13-17z" fill="#fff" stroke="#111" stroke-width="2.6" stroke-linejoin="round"/>' +
+        '<ellipse cx="33" cy="42" rx="3" ry="4.5" fill="#111"/>' +
+        '<path d="M28 36q5-2 9 0" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+        '<path d="M24 48l-3 7" stroke="#111" stroke-width="2" stroke-linecap="round"/>' +
+        '<path d="M21 60q4 2 7 0" stroke="#111" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+        '<path d="M47 30c6 6 8 14 5 26l-6 2c-3-12-1-22 1-28z" fill="url(#mh)"/>' +
+        '</svg>'
+    );
+    /* 组件 3：iScreen 个人展示大组件 */
+    function buildWidgetIscreen(key) {
+        return '<div class="widget-item w-iscreen" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-iscreen-avatar">' +
+                '<img data-editable="image" data-field="avatar" data-widget-key="' + key + '" src="' + WG_MANGA + '" alt="">' +
+            '</div>' +
+            '<div class="w-iscreen-cap tl">' +
+                '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"><path d="M5 17v-3a7 7 0 0 1 14 0v3"/><rect x="3" y="14" width="4" height="7" rx="2" fill="#ffffff" stroke="none"/><rect x="17" y="14" width="4" height="7" rx="2" fill="#ffffff" stroke="none"/></svg>' +
+                '<span class="wcap-txt" data-editable="text" data-field="name" data-widget-key="' + key + '">soukoku</span>' +
+            '</div>' +
+            '<div class="w-iscreen-cap tr">' +
+                '<svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff"><path d="M12 2c-3.4 2.2-4.6 5.6-4.6 8.4 0 1.8.8 3.1 2 4.2C6.2 16.1 4 18.4 4 22h16c0-3.6-2.2-5.9-5.4-7.4 1.2-1.1 2-2.4 2-4.2 0-2.8-1.2-6.2-4.6-8.4z"/></svg>' +
+                '<span class="wcap-dim">&#43;&#43;</span>' +
+                '<span class="wcap-dim">&#9829;</span>' +
+                '<span class="wcap-dim">&#10013;</span>' +
+            '</div>' +
+            '<div class="w-iscreen-cap bl"><span class="wcap-dim"># &#949; &#9825; 63</span></div>' +
+            '<div class="w-iscreen-cap br">' +
+                '<span class="wcap-dim">&#9829; &#8226;</span>' +
+                '<svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff"><path d="M6 17a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 16 7a4.5 4.5 0 0 1 .6 9H6z"/></svg>' +
+            '</div>' +
+            '<div class="w-iscreen-bow">' +
+                '<span>&#8226;</span>' +
+                '<svg viewBox="0 0 24 24" width="12" height="12" fill="#ffffff"><path d="M12 10C7.5 8 5 4.5 6.5 1.5c2.4.6 4 3.6 5.5 8.5z"/><path d="M12 10c4.5-2 7-5.5 5.5-8.5C15.1 2.1 13.5 5.1 12 10z"/><circle cx="12" cy="11" r="2.2"/></svg>' +
+                '<span>&#8226;</span>' +
+            '</div>' +
+            '<span class="w-iscreen-label" data-editable="text" data-field="label" data-widget-key="' + key + '">iScreen</span>' +
+        '</div>';
+    }
+
+    /* 白色圆点刻度 + 三指针时钟盘（雾中极简效果） */
+    function clockFaceSvg() {
+        var i, d = '';
+        for (i = 0; i < 12; i++) {
+            var a = (i * 30 - 90) * Math.PI / 180;
+            var cx = (60 + 50 * Math.cos(a)).toFixed(1);
+            var cy = (60 + 50 * Math.sin(a)).toFixed(1);
+            d += '<circle cx="' + cx + '" cy="' + cy + '" r="3.4" fill="#ffffff"/>';
+        }
+        return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">' +
+            '<circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>' +
+            d +
+            '<line x1="60" y1="60" x2="34.5" y2="34.5" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>' +
+            '<line x1="60" y1="60" x2="93.9" y2="26.1" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round"/>' +
+            '<line x1="60" y1="64" x2="34" y2="106" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>' +
+            '<circle cx="60" cy="60" r="4.5" fill="#ffffff"/>' +
+            '</svg>';
+    }
+    /* 组件 4：iScreen 极简时钟 */
+    function buildWidgetClock(key) {
+        return '<div class="widget-item w-clock" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-clock-face">' + clockFaceSvg() + '</div>' +
+            '<span class="w-clock-label" data-editable="text" data-field="label" data-widget-key="' + key + '">iScreen</span>' +
+        '</div>';
+    }
+
+    /* 双对勾已读标记（浅灰） */
+    var WG_DBLTICK = '<svg viewBox="0 0 16 12" width="11" height="8" fill="none" stroke="#9a9a9a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l3 3 8-8"/><path d="M8 7l2 2 4-4"/></svg>';
+    /* 组件 5：Colorful Widget 聊天对话大组件 */
+    function buildWidgetChat(key) {
+        return '<div class="widget-item w-chat" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-chat-bubbles">' +
+                '<div class="w-chat-bubble w-chat-b1">' +
+                    '<div class="wcb-head" data-editable="text" data-field="name1" data-widget-key="' + key + '">| Jett</div>' +
+                    '<div class="wcb-msg" data-editable="text" data-field="msg1" data-widget-key="' + key + '">晚上好啊小蛋糕^^一起瓦嘛~</div>' +
+                    '<span class="wcb-meta"><span data-editable="text" data-field="time1" data-widget-key="' + key + '">20:28</span></span>' +
+                '</div>' +
+                '<div class="w-chat-bubble w-chat-b2">' +
+                    '<div class="wcb-msg" data-editable="text" data-field="msg2" data-widget-key="' + key + '">好啊jett!(o^^o)</div>' +
+                    '<span class="wcb-meta"><span data-editable="text" data-field="time2" data-widget-key="' + key + '">20:29</span>' + WG_DBLTICK + '</span>' +
+                '</div>' +
+                '<div class="w-chat-bubble w-chat-b3">' +
+                    '<div class="wcb-msg" data-editable="text" data-field="msg3" data-widget-key="' + key + '">我保护你~</div>' +
+                    '<span class="wcb-meta"><span data-editable="text" data-field="time3" data-widget-key="' + key + '">20:30</span></span>' +
+                '</div>' +
+            '</div>' +
+            '<span class="w-chat-label" data-editable="text" data-field="label" data-widget-key="' + key + '">Colorful Widget</span>' +
+        '</div>';
+    }
+
+    var WIDGET_TYPES = {
+        cosmic: { label: 'CosmicLove 音乐播放器', build: buildWidgetCosmic },
+        polaroid: { label: 'CosmicPhone 拍立得叠叠乐', build: buildWidgetPolaroid },
+        iscreen: { label: 'iScreen 个人展示', build: buildWidgetIscreen },
+        clock: { label: 'iScreen 极简时钟', build: buildWidgetClock },
+        chat: { label: '聊天对话大组件', build: buildWidgetChat },
+        photoicon: { label: '图片', build: buildWidgetPhotoicon },
+        mprofile: { label: '音乐 Profile', build: buildWidgetMprofile },
+        console8: { label: '软胶掌机', build: buildWidgetConsole },
+        topcard: { label: '个人状态卡', build: buildWidgetTopcard },
+        notecard: { label: '日记便签卡', build: buildWidgetNotecard }
+    };
+
+    /* 白色毛绒小熊戴黑色耳机，趴在格纹布上（低饱和黑白/暖灰） */
+    var WG_PUPPY = svgData(
+        '<svg viewBox="0 0 120 104" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="120" height="104" fill="#e5dfda"/>' +
+        '<g stroke="#d4ccc5" stroke-width="1"><line x1="0" y1="26" x2="120" y2="26"/><line x1="0" y1="52" x2="120" y2="52"/><line x1="0" y1="78" x2="120" y2="78"/><line x1="30" y1="0" x2="30" y2="104"/><line x1="60" y1="0" x2="60" y2="104"/><line x1="90" y1="0" x2="90" y2="104"/></g>' +
+        '<ellipse cx="58" cy="80" rx="38" ry="17" fill="#f5f2f0"/>' +
+        '<circle cx="34" cy="40" r="12" fill="#f6f3f1"/><circle cx="34" cy="40" r="5.5" fill="#d9d2ce"/>' +
+        '<circle cx="82" cy="40" r="12" fill="#f6f3f1"/><circle cx="82" cy="40" r="5.5" fill="#d9d2ce"/>' +
+        '<circle cx="58" cy="56" r="25" fill="#f8f5f3"/>' +
+        '<path d="M35 43a24 24 0 0 1 46 0" fill="none" stroke="#1a1a1a" stroke-width="5.5" stroke-linecap="round"/>' +
+        '<rect x="29" y="39" width="9" height="17" rx="4" fill="#1a1a1a"/>' +
+        '<rect x="78" y="39" width="9" height="17" rx="4" fill="#1a1a1a"/>' +
+        '<circle cx="49" cy="56" r="3.2" fill="#1a1a1a"/><circle cx="67" cy="56" r="3.2" fill="#1a1a1a"/>' +
+        '<ellipse cx="58" cy="64" rx="4.2" ry="3.2" fill="#2a2a2a"/>' +
+        '<path d="M58 67v3M58 70q-3.2 2.2-6.5 0M58 70q3.2 2.2 6.5 0" stroke="#2a2a2a" stroke-width="1.5" fill="none" stroke-linecap="round"/>' +
+        '</svg>'
+    );
+    /* 四个纯白底图标 */
+    var WG_ICON_MEMORY =
+        '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M24 16c-5-3.6-8.5-6.4-8.5-10 0-2.9 2.3-5 5.2-5 2.3 0 3.3 1.1 3.3 1.1s1-1.1 3.3-1.1c2.9 0 5.2 2.1 5.2 5 0 3.6-3.5 6.4-8.5 10z" fill="#1a1a1a"/>' +
+        '<path d="M24 42c-7.4-5-11-8-11-13.2 0-3.7 3-6.6 6.8-6.6 3 0 4.2 1.5 4.2 1.5s1.2-1.5 4.2-1.5c3.8 0 6.8 2.9 6.8 6.6 0 5.2-3.6 8.2-11 13.2z" fill="#1a1a1a"/>' +
+        '</svg>';
+    var WG_ICON_WEATHER =
+        '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round">' +
+        '<line x1="24" y1="4" x2="24" y2="9"/><line x1="24" y1="39" x2="24" y2="44"/>' +
+        '<line x1="4" y1="24" x2="9" y2="24"/><line x1="39" y1="24" x2="44" y2="24"/>' +
+        '<line x1="10" y1="10" x2="13.5" y2="13.5"/><line x1="34.5" y1="34.5" x2="38" y2="38"/>' +
+        '<line x1="10" y1="38" x2="13.5" y2="34.5"/><line x1="34.5" y1="13.5" x2="38" y2="10"/>' +
+        '<circle cx="24" cy="24" r="12"/>' +
+        '<circle cx="20" cy="23" r="1.3" fill="#1a1a1a" stroke="none"/><circle cx="28" cy="23" r="1.3" fill="#1a1a1a" stroke="none"/>' +
+        '<path d="M19 27q5 3.5 10 0"/>' +
+        '</svg>';
+    var WG_ICON_CALC =
+        '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+        '<circle cx="15.5" cy="15" r="5.5" fill="#1a1a1a"/><circle cx="15.5" cy="15" r="2.2" fill="#8a8a8a"/>' +
+        '<circle cx="32.5" cy="15" r="5.5" fill="#1a1a1a"/><circle cx="32.5" cy="15" r="2.2" fill="#8a8a8a"/>' +
+        '<circle cx="24" cy="22" r="11.5" fill="#1a1a1a"/>' +
+        '<circle cx="20.5" cy="21" r="1.4" fill="#ffffff"/><circle cx="27.5" cy="21" r="1.4" fill="#ffffff"/>' +
+        '<ellipse cx="24" cy="25.5" rx="2" ry="1.5" fill="#ffffff"/>' +
+        '<ellipse cx="24" cy="38" rx="10" ry="7.5" fill="#1a1a1a"/>' +
+        '<ellipse cx="24" cy="39" rx="5.5" ry="4.8" fill="#f2f2f2"/>' +
+        '<ellipse cx="17.5" cy="44" rx="3.8" ry="2.8" fill="#1a1a1a"/>' +
+        '<ellipse cx="30.5" cy="44" rx="3.8" ry="2.8" fill="#1a1a1a"/>' +
+        '</svg>';
+    var WG_ICON_CANDLE =
+        '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M24 5c1.8 2.6 2.8 4.5 2.8 6.4A2.8 2.8 0 0 1 24 14.2a2.8 2.8 0 0 1-2.8-2.8C21.2 9.5 22.2 7.6 24 5z" fill="#f2a03c"/>' +
+        '<path d="M24 8.5c.8 1.2 1.3 2.2 1.3 3.4 0 .8-.5 1.4-1.3 1.4s-1.3-.6-1.3-1.4c0-1.2.5-2.2 1.3-3.4z" fill="#fff3c9"/>' +
+        '<rect x="20" y="14" width="8" height="14" rx="2" fill="#f8f6f3" stroke="#ccc7c1" stroke-width="1.1"/>' +
+        '<rect x="19" y="22" width="10" height="20" rx="4" fill="#eef3f6" fill-opacity="0.7" stroke="#b6c0ca" stroke-width="1.3"/>' +
+        '<rect x="20" y="26" width="8" height="4" rx="1" fill="#f8f6f3"/>' +
+        '<line x1="23" y1="33" x2="23" y2="39" stroke="#ccd6dd" stroke-width="1.1"/>' +
+        '</svg>';
+    function wPiTile(innerSvg) {
+        return '<div class="w-pi-tile">' + innerSvg + '</div>';
+    }
+    /* 组件 6：Colorful Widget 照片+图标组合 */
+    function buildWidgetPhotoicon(key) {
+        return '<div class="widget-item w-photoicon" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-pi-photo"><img data-editable="image" data-field="photo" data-widget-key="' + key + '" src="' + WG_CHERRY + '" alt=""></div>' +
+            '<span class="w-pi-caption" data-editable="text" data-field="caption" data-widget-key="' + key + '">+&#176;*&#12363;&#12431;&#12356;&#12356;&#22818;&#9825;*+&#176;</span>' +
+            '<span class="w-pi-label" data-editable="text" data-field="label" data-widget-key="' + key + '">Colorful Widget</span>' +
+        '</div>';
+    }
+
+    /* 黑白室内照（椅子/家具轮廓） */
+    var WG_ROOM = svgData(
+        '<svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="300" height="160" fill="#b9b6b2"/>' +
+        '<rect x="18" y="54" width="86" height="62" fill="#8f8d8a"/>' +
+        '<rect x="24" y="60" width="30" height="28" fill="#6f6e6c"/>' +
+        '<rect x="58" y="60" width="40" height="20" fill="#d7d3cf"/>' +
+        '<rect x="120" y="70" width="70" height="46" fill="#40403f"/>' +
+        '<rect x="130" y="58" width="7" height="30" fill="#2e2e2d"/>' +
+        '<rect x="172" y="58" width="7" height="30" fill="#2e2e2d"/>' +
+        '<rect x="200" y="44" width="60" height="72" fill="#545351"/>' +
+        '<rect x="44" y="16" width="60" height="32" fill="#3a3a38"/>' +
+        '<rect x="206" y="10" width="46" height="26" fill="#2f2f2e"/>' +
+        '<rect x="12" y="142" width="276" height="18" fill="#7f7d79"/>' +
+        '</svg>'
+    );
+    /* 金发女孩托腮照（暖色调） */
+    var WG_BLONDE = svgData(
+        '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="100" height="100" fill="#d9a96b"/>' +
+        '<path d="M28 60c-6 22 4 34 22 34 18 0 28-12 22-34-2 4-6 6-10 6-8 0-12-6-14-14-2 8-6 14-14 14-4 0-7-2-9-6z" fill="#e8c293"/>' +
+        '<path d="M33 26c-3-11 7-16 17-14 8 2 14 9 14 17 0 14-10 24-22 28-12-4-22-14-22-28 4-1 9-2 13-3z" fill="#f0cea0"/>' +
+        '<path d="M31 30c-2-8 3-11 9-10 4 1 7 4 8 8z" fill="#f6dbb5"/>' +
+        '<circle cx="50" cy="36" r="25" fill="#f2cda3"/>' +
+        '<circle cx="50" cy="38" r="20" fill="#f6d9b2"/>' +
+        '<path d="M36 40q5-4 10 0" stroke="#8a6234" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+        '<path d="M54 40q5-4 10 0" stroke="#8a6234" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+        '<circle cx="42" cy="42" r="2.4" fill="#5a3f22"/>' +
+        '<circle cx="58" cy="42" r="2.4" fill="#5a3f22"/>' +
+        '<path d="M47 48q3 2.4 6 0" stroke="#b06a50" stroke-width="1.7" fill="none" stroke-linecap="round"/>' +
+        '<path d="M50 52q-2 5-8 5" stroke="#f6d9b2" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+        '<path d="M24 72c6 4 12 6 20 6" stroke="#8a6234" stroke-width="3.4" fill="none" stroke-linecap="round" opacity="0.5"/>' +
+        '</svg>'
+    );
+    function mpHeart() {
+        return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.6-9.2C1.1 7.6 3.1 4.5 6 4.5c2 0 3.6 1.2 4.3 2.9l1.7 3 1.7-3c.7-1.7 2.3-2.9 4.3-2.9 2.9 0 4.9 3.1 3.6 6.3C19.5 15.4 12 20 12 20z"/></svg>';
+    }
+    function mpPlay() {
+        return '<svg viewBox="0 0 24 24" width="12" height="12" fill="#111111"><path d="M7 4.6v14.8c0 .9 1 1.5 1.8 1L21 12.2c.7-.5.7-1.5 0-2L8.8 2.6c-.8-.5-1.8.1-1.8 1z"/></svg>';
+    }
+    function mpHeadphones() {
+        return '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round"><path d="M4 16v-5a8 8 0 0 1 16 0v5"/><rect x="3" y="14" width="4" height="7" rx="2" fill="#111111" stroke="none"/><rect x="17" y="14" width="4" height="7" rx="2" fill="#111111" stroke="none"/></svg>';
+    }
+    function mpHeartSmall() {
+        return '<svg viewBox="0 0 24 24" width="12" height="12" fill="#111111"><path d="M12 21C8 17.6 3 13.6 3 9.4 3 6.4 5.2 4.3 8 4.3c1.9 0 3.3 1.1 4 2.4.7-1.3 2.1-2.4 4-2.4 2.8 0 5 2.1 5 5.1 0 4.2-5 8.2-9 11.6z"/></svg>';
+    }
+    function mpWave() {
+        return '<svg viewBox="0 0 20 12" width="16" height="10" fill="#111111">' +
+            '<rect x="1" y="5" width="1.6" height="2"/><rect x="4" y="1.5" width="1.6" height="9"/><rect x="7" y="4" width="1.6" height="4"/>' +
+            '<rect x="10" y="0.5" width="1.6" height="11"/><rect x="13" y="3" width="1.6" height="6"/><rect x="16" y="5" width="1.6" height="2"/>' +
+            '</svg>';
+    }
+    /* 组件 7：Colorful Widget 音乐 Profile 大组件 */
+    function buildWidgetMprofile(key) {
+        return '<div class="widget-item w-mprofile" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-mp-top" style="background-image:url(' + WG_ROOM + ')"></div>' +
+            '<div class="w-mp-bottom-mask"></div>' +
+            '<div class="w-mp-avatar"><img data-editable="image" data-field="avatar" data-widget-key="' + key + '" src="' + WG_BLONDE + '" alt=""></div>' +
+            '<div class="w-mp-heart">' + mpHeart() + '</div>' +
+            '<div class="w-mp-text">' +
+                '<span class="w-mp-title" data-editable="text" data-field="title" data-widget-key="' + key + '">All my love is gone</span>' +
+                '<span class="w-mp-handle" data-editable="text" data-field="handle" data-widget-key="' + key + '">@ ROS&#201;</span>' +
+            '</div>' +
+            '<div class="w-mp-pill">' +
+                mpPlay() +
+                '<span style="color:#c9c9c9">|</span>' +
+                mpHeadphones() +
+                mpPlay() +
+                mpHeartSmall() +
+                mpWave() +
+            '</div>' +
+        '</div>';
+    }
+
+    /* 浅蓝绿海水中的两只蓝色海星（海洋风，低饱和冷调） */
+    var WG_SEA = svgData(
+        '<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><linearGradient id="sG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe9ea"/><stop offset="1" stop-color="#8fc6cd"/></linearGradient></defs>' +
+        '<rect width="200" height="130" fill="url(#sG)"/>' +
+        '<ellipse cx="52" cy="98" rx="60" ry="14" fill="#b7dfe0" opacity="0.7"/>' +
+        '<ellipse cx="150" cy="120" rx="70" ry="12" fill="#9fd2d6" opacity="0.7"/>' +
+        /* 上方完整海星 */
+        '<g transform="translate(96 44)">' +
+            '<path d="M0-17L-4-6 -15-6 -6 2 -10 13 0 7 10 13 6 2 15-6 4-6Z" fill="#5aa7c8"/>' +
+            '<circle cx="0" cy="0" r="2" fill="#bfe2ec"/>' +
+        '</g>' +
+        '<g transform="translate(96 44)" fill="#82bdd6"><circle cx="-2" cy="-5" r="0.9"/><circle cx="2" cy="-5" r="0.9"/><circle cx="0" cy="-8" r="0.9"/></g>' +
+        /* 下方海星（偏下，部分） */
+        '<g transform="translate(140 82) scale(0.8)">' +
+            '<path d="M0-15L-3-5 -13-5 -5 2 -8 12 0 6 8 12 5 2 13-5 3-5Z" fill="#4c94b6"/>' +
+            '<circle cx="0" cy="0" r="1.7" fill="#bfe2ec"/>' +
+        '</g>' +
+        /* 透明气泡 */
+        '<circle cx="38" cy="46" r="6" fill="none" stroke="#e9f7f6" stroke-width="1.4" opacity="0.9"/>' +
+        '<circle cx="44" cy="40" r="2" fill="#eaf8f7" opacity="0.9"/>' +
+        '<circle cx="150" cy="40" r="8" fill="none" stroke="#dcf2ef" stroke-width="1.5" opacity="0.9"/>' +
+        '<circle cx="156" cy="34" r="2.6" fill="#eaf8f7" opacity="0.9"/>' +
+        '<circle cx="118" cy="74" r="4.5" fill="none" stroke="#d8eded" stroke-width="1.2" opacity="0.85"/>' +
+        '<circle cx="60" cy="66" r="5" fill="none" stroke="#d8eeee" stroke-width="1.2" opacity="0.8"/>' +
+        '<ellipse cx="26" cy="30" rx="9" ry="3" fill="#eef9f8" opacity="0.5" transform="rotate(-24 26 30)"/>' +
+        '</svg>'
+    );
+    function wcDpad(cls) {
+        return '<span class="w-c-dpad ' + cls + '">' +
+            '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' +
+        '</span>';
+    }
+    /* 组件 8：3D 软胶掌机 */
+    function buildWidgetConsole(key) {
+        return '<div class="widget-item w-console" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<span class="w-console-body"></span>' +
+            '<div class="w-c-screen"><img data-editable="image" data-field="screen" data-widget-key="' + key + '" src="' + WG_SEA + '" alt=""></div>' +
+            wcDpad('left') +
+            '<span class="w-c-btn left"></span>' +
+            '<span class="w-c-btn right"></span>' +
+            wcDpad('right') +
+        '</div>';
+    }
+
+    /* 浅黄/米白卡通熊头（轻松熊/角落生物风，3D 膨胀软胶质感，头顶绿叶） */
+    var WG_BEAR = svgData(
+        '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><radialGradient id="brG" cx="0.35" cy="0.28" r="0.8">' +
+        '<stop offset="0" stop-color="#fdf6df"/><stop offset="0.55" stop-color="#f4e6bd"/><stop offset="1" stop-color="#e3cfa0"/>' +
+        '</radialGradient></defs>' +
+        '<circle cx="50" cy="54" r="37" fill="url(#brG)"/>' +
+        '<circle cx="29" cy="34" r="11.5" fill="url(#brG)"/>' +
+        '<circle cx="71" cy="34" r="11.5" fill="url(#brG)"/>' +
+        '<circle cx="29" cy="34" r="4.5" fill="#e9d4a6" opacity="0.8"/>' +
+        '<circle cx="71" cy="34" r="4.5" fill="#e9d4a6" opacity="0.8"/>' +
+        /* 豆豆眼 */
+        '<circle cx="38" cy="56" r="2.4" fill="#3f3427"/>' +
+        '<circle cx="62" cy="56" r="2.4" fill="#3f3427"/>' +
+        /* 小鼻 */
+        '<ellipse cx="50" cy="62" rx="4.2" ry="3" fill="#8a7557"/>' +
+        '<path d="M50 65v3M50 68q-2.6 1.8-5.4 0M50 68q2.6 1.8 5.4 0" stroke="#8a7557" stroke-width="1.3" fill="none" stroke-linecap="round"/>' +
+        /* 腮红 */
+        '<circle cx="33" cy="64" r="3.4" fill="#f2c7b6" opacity="0.7"/>' +
+        '<circle cx="67" cy="64" r="3.4" fill="#f2c7b6" opacity="0.7"/>' +
+        /* 头顶绿叶子 */
+        '<path d="M52 18c0-5 4-8 8-8-1 6-3 8-8 8z" fill="#7fbf7a"/>' +
+        '<path d="M52 17c.5-4.4 3.6-7 8-8.4-1 6-3 8.4-8 8.4z" fill="#a7d6a2"/>' +
+        '<line x1="52" y1="19" x2="50" y2="25" stroke="#7fbf7a" stroke-width="1.6" stroke-linecap="round"/>' +
+        '</svg>'
+    );
+    function tcIcon(pathD) {
+        return '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#464646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + pathD + '</svg>';
+    }
+    var TC_HEADPHONES = tcIcon('<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="2"/><rect x="17" y="14" width="4" height="7" rx="2"/>');
+    var TC_CLOUD = tcIcon('<path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.4-2A4.5 4.5 0 0 0 7 18z"/>');
+    var TC_HEART = tcIcon('<path d="M12 20s-7.5-4.6-9.6-9.2C1.1 7.6 3.1 4.5 6 4.5c2 0 3.6 1.2 4.3 2.9L12 9.5l1.7-2.1c.7-1.7 2.3-2.9 4.3-2.9 2.9 0 4.9 3.1 3.6 6.3C19.5 15.4 12 20 12 20z"/>');
+    var TC_SPARK = tcIcon('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>');
+    function tcPill(icon, text) {
+        return '<span class="w-tc-pill">' + icon + '<span>' + text + '</span></span>';
+    }
+    /* 组件 9：Top Widgets* 个人状态卡 */
+    function buildWidgetTopcard(key) {
+        return '<div class="widget-item w-topcard" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<div class="w-tc-avatar"><img data-editable="image" data-field="avatar" data-widget-key="' + key + '" src="' + WG_BEAR + '" alt=""></div>' +
+            '<div class="w-tc-grid">' +
+                tcPill(TC_HEADPHONES, '&#12362;&#22990;&#12385;&#12419;&#12435;') +
+                tcPill(TC_CLOUD, 'Clima bom') +
+                tcPill(TC_HEART, '&#1059;&#1076;&#1072;&#1095;&#1072;') +
+                tcPill(TC_SPARK, '&#45817;&#49888;&#51060; &#51339;&#50500;&#50836;') +
+            '</div>' +
+            '<span class="w-tc-deco">&#183;&#183;&#183;&#9675;&#9675;&#183;&#127872;&#183;&#9675;&#9675;&#183;&#183;&#183;</span>' +
+            '<span class="w-tc-label" data-editable="text" data-field="label" data-widget-key="' + key + '">Top Widgets*</span>' +
+        '</div>';
+    }
+
+    /* 白色缎面丝带蝴蝶结（3D 高光阴影） */
+    var WG_BOW = svgData(
+        '<svg viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><linearGradient id="bowG" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#f2f2f4"/><stop offset="1" stop-color="#d8d9dd"/>' +
+        '</linearGradient></defs>' +
+        /* 左翅膀 */
+        '<path d="M58 32C48 22 40 12 22 14 10 16 6 26 12 34c6 8 24 14 46 4z" fill="url(#bowG)"/>' +
+        '<path d="M58 30C52 24 46 18 34 18c-6 0-10 4-12 8 2 10 14 20 38 12z" fill="#ffffff" opacity="0.55"/>' +
+        /* 右翅膀 */
+        '<path d="M62 32c10-10 18-20 36-18 12 2 16 12 10 20-6 8-24 14-46 4z" fill="url(#bowG)"/>' +
+        '<path d="M62 30c6-6 12-12 24-12 6 0 10 4 12 8-2 10-14 20-38 12z" fill="#ffffff" opacity="0.5"/>' +
+        /* 中间结 */
+        '<ellipse cx="60" cy="36" rx="15" ry="11" fill="#f4f4f6"/>' +
+        '<path d="M50 30q10 12 20 0" stroke="#b9bac0" stroke-width="2" fill="none"/>' +
+        '<ellipse cx="60" cy="30" rx="4" ry="3" fill="#ffffff" opacity="0.8"/>' +
+        /* 飘带垂尾 */
+        '<path d="M54 44l-4 14 4 2 3-12z" fill="#ececef"/>' +
+        '<path d="M66 44l4 14-4 2-3-12z" fill="#e4e4e7"/>' +
+        '</svg>'
+    );
+    /* 组件 10：白色日记/便签卡片 */
+    function buildWidgetNotecard(key) {
+        return '<div class="widget-item w-notecard" data-widget-key="' + key + '">' +
+            '<button class="widget-x" type="button">&times;</button>' +
+            '<span class="w-nc-tape"></span>' +
+            '<div class="w-nc-bow"><img src="' + WG_BOW + '" alt=""></div>' +
+            '<span class="w-nc-mid" data-editable="text" data-field="mid" data-widget-key="' + key + '">&#24184;&#31119;&#24708;&#24708;&#38477;&#20020;</span>' +
+            '<span class="w-nc-bottom" data-editable="text" data-field="bottom" data-widget-key="' + key + '">+&#128062;+./ &#51339;&#51008; &#44592;&#48516; &#176;,&#127859;</span>' +
+        '</div>';
+    }
+
+    /* ---- 组件身份与内容持久化 ---- */
+    function isWidgetId(id) { return typeof id === 'string' && id.indexOf('widget:') === 0; }
+    /* 动态组件：widget:* 但排除内置 widget:cw（后者在静态 HTML 中且由 widgetPage 管理） */
+    function isDynamicWidgetId(id) { return isWidgetId(id) && id !== 'widget:cw'; }
+    function widgetTypeOf(id) { return String(id || '').replace(/^widget:/, '').replace(/:\d+$/, ''); }
+    function newWidgetKey(type) {
+        layout.widgetSeq = (Number(layout.widgetSeq) || 0) + 1;
+        return 'widget:' + type + ':' + layout.widgetSeq;
+    }
+    /* 组件在自由网格里的占格（列数）：拍立得/时钟 2×2，便签 1×1，其余大组件整行 4 列 */
+    function widgetSpan(type) {
+        if (type === 'polaroid' || type === 'clock') return 2;
+        if (type === 'notecard') return 1;
+        return 4;
+    }
+    /* 组件占行数：拍立得/时钟固定 2 行，便签 1 行，其余按实际高度换算 */
+    function widgetRowSpan(type) {
+        if (type === 'polaroid' || type === 'clock') return 2;
+        if (type === 'notecard') return 1;
+        return 0;   // 0 = 交由 freeRowSpan 按高度换算
+    }
+    /* 按 id 构建组件实例（含 data-id，便于拖拽/持久化识别） */
+    function instantiateWidget(id) {
+        var type = widgetTypeOf(id);
+        var def = WIDGET_TYPES[type];
+        if (!def) return null;
+        var holder = document.createElement('div');
+        holder.innerHTML = def.build(id);
+        var el = holder.firstElementChild;
+        if (el) {
+            el.setAttribute('data-id', id);
+            el.setAttribute('data-span', String(widgetSpan(type)));
+        }
+        return el;
+    }
+
+    /* 组件内容（文字/图片）独立于内置 contentConfig 存储，按 widgetKey|field 组织 */
+    var WIDGET_CONTENT_KEY = 'widget-content-config';
+    var widgetContent = {};
+    function widgetContentKey(widgetKey, field) { return widgetKey + '|' + field; }
+    function widgetFieldEl(widgetKey, field) {
+        return document.querySelector('.widget-item[data-widget-key="' + widgetKey + '"] [data-field="' + field + '"]');
+    }
+    function applyWidgetField(widgetKey, field, value) {
+        var el = document.querySelector('[data-widget-key="' + widgetKey + '"][data-field="' + field + '"]');
+        if (!el) return;
+        if (el.getAttribute('data-editable') === 'image') { el.src = value; }
+        else { el.textContent = value; }
+    }
+    function applyAllWidgetContent() {
+        for (var k in widgetContent) {
+            if (!Object.prototype.hasOwnProperty.call(widgetContent, k)) continue;
+            var sep = k.indexOf('|');
+            if (sep < 0) continue;
+            applyWidgetField(k.slice(0, sep), k.slice(sep + 1), widgetContent[k]);
+        }
+    }
+    function mirrorWidgetContent() {
+        try {
+            localStorage.setItem(WIDGET_CONTENT_KEY, JSON.stringify(widgetContent));
+        } catch (e) {
+            try {
+                var textOnly = {};
+                for (var k in widgetContent) {
+                    var v = widgetContent[k];
+                    if (typeof v === 'string' && v.indexOf('data:') !== 0) textOnly[k] = v;
+                }
+                localStorage.setItem(WIDGET_CONTENT_KEY, JSON.stringify(textOnly));
+            } catch (e2) {}
+        }
+    }
+    function persistWidgetContent() {
+        mirrorWidgetContent();
+        idbSet(WIDGET_CONTENT_KEY, widgetContent).catch(function () {});
+    }
+    function loadWidgetContent() {
+        try { widgetContent = JSON.parse(localStorage.getItem(WIDGET_CONTENT_KEY) || '{}'); } catch (e) { widgetContent = {}; }
+        idbGet(WIDGET_CONTENT_KEY).then(function (cfg) {
+            if (cfg && typeof cfg === 'object') {
+                for (var k in cfg) { if (widgetContent[k] == null) widgetContent[k] = cfg[k]; }
+                applyAllWidgetContent();
+            }
+        }).catch(function () {});
+    }
+
+    /* ---- 组件库缩略预览 ---- */
+    function widgetPreviewHtml(type) {
+        if (type === 'cosmic') {
+            return '<div class="wprev wprev-cosmic">' +
+                '<span class="wprev-cosmic-cover"><img src="' + WG_STRAWBERRY + '" alt=""></span>' +
+                '<span class="wprev-cosmic-info">' +
+                    '<span class="wprev-cosmic-title">CosmicLove</span>' +
+                    '<span class="wprev-cosmic-bar"><i></i></span>' +
+                    '<span class="wprev-cosmic-ctrl">&#9664; &#9654; &#9654;&#9654; &#9776; &#8635;</span>' +
+                '</span>' +
+            '</div>';
+        }
+        if (type === 'polaroid') {
+            return '<div class="wprev wprev-polaroid">' +
+                '<span class="wprev-pol-top"><img class="wprev-pol-img" src="' + WG_PEACH + '" alt=""></span>' +
+                '<span class="wprev-pol-bottom"><img class="wprev-pol-img" src="' + WG_KIWI + '" alt=""></span>' +
+            '</div>';
+        }
+        if (type === 'iscreen') {
+            return '<div class="wprev wprev-iscreen">' +
+                '<span class="wprev-iscreen-avatar"><img src="' + WG_MANGA + '" alt=""></span>' +
+                '<span class="wprev-iscreen-cap tl">&#9833; soukoku</span>' +
+                '<span class="wprev-iscreen-cap tr">&#9830; &#9829; &#10013;</span>' +
+                '<span class="wprev-iscreen-cap bl"># &#949; &#9825; 63</span>' +
+                '<span class="wprev-iscreen-cap br">&#9829; &#8226;</span>' +
+                '<span class="wprev-iscreen-label">iScreen</span>' +
+            '</div>';
+        }
+        if (type === 'clock') {
+            return '<div class="wprev wprev-clock">' +
+                clockFaceSvg() +
+                '<span class="wprev-clock-label">iScreen</span>' +
+            '</div>';
+        }
+        if (type === 'chat') {
+            return '<div class="wprev wprev-chat">' +
+                '<span class="wprev-chat-b wprev-chat-b1"></span>' +
+                '<span class="wprev-chat-b wprev-chat-b2"></span>' +
+                '<span class="wprev-chat-b wprev-chat-b3"></span>' +
+                '<span class="wprev-chat-bb">Colorful Widget</span>' +
+            '</div>';
+        }
+        if (type === 'photoicon') {
+            return '<div class="wprev wprev-photoicon">' +
+                '<span class="wprev-pi-photo"><img src="' + WG_CHERRY + '" alt=""></span>' +
+                '<span class="wprev-pi-cap">+&#176;*&#12363;&#12431;&#12356;&#12356;&#22818;&#9825;*+&#176;</span>' +
+            '</div>';
+        }
+        if (type === 'mprofile') {
+            return '<div class="wprev wprev-mprofile">' +
+                '<span class="wprev-mp-top" style="background-image:url(' + WG_ROOM + ')"></span>' +
+                '<span class="wprev-mp-mask"></span>' +
+                '<span class="wprev-mp-avatar"><img src="' + WG_BLONDE + '" alt=""></span>' +
+                '<span class="wprev-mp-title">All my love is gone</span>' +
+                '<span class="wprev-mp-pill"></span>' +
+            '</div>';
+        }
+        if (type === 'console8') {
+            return '<div class="wprev wprev-console">' +
+                '<span class="wprev-c-screen"><img src="' + WG_SEA + '" alt=""></span>' +
+                '<span class="wprev-c-dpad l"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>' +
+                '<span class="wprev-c-btn l"></span>' +
+                '<span class="wprev-c-btn r"></span>' +
+                '<span class="wprev-c-dpad r"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>' +
+            '</div>';
+        }
+        if (type === 'topcard') {
+            return '<div class="wprev wprev-topcard">' +
+                '<span class="wprev-tc-avatar"><img src="' + WG_BEAR + '" alt=""></span>' +
+                '<span class="wprev-tc-grid">' +
+                    '<span class="wprev-tc-pill"></span><span class="wprev-tc-pill"></span>' +
+                    '<span class="wprev-tc-pill"></span><span class="wprev-tc-pill"></span>' +
+                '</span>' +
+                '<span class="wprev-tc-deco">&#183;&#183;&#183;&#9675;&#9675;&#183;&#127872;&#183;&#9675;&#9675;&#183;&#183;&#183;</span>' +
+                '<span class="wprev-tc-label">Top Widgets*</span>' +
+            '</div>';
+        }
+        if (type === 'notecard') {
+            return '<div class="wprev wprev-notecard">' +
+                '<span class="wprev-nc-tape"></span>' +
+                '<span class="wprev-nc-bow"><img src="' + WG_BOW + '" alt=""></span>' +
+                '<span class="wprev-nc-mid">&#24184;&#31119;&#24708;&#24708;&#38477;&#20020;</span>' +
+                '<span class="wprev-nc-bottom">+&#128062;+./ &#51339;&#51008; &#44592;&#48516; &#176;,&#127859;</span>' +
+            '</div>';
+        }
+        return '';
+    }
+    function showWidgetGallery() {
+        var g = $('widgetGallery');
+        if (g) g.hidden = false;
+    }
+    function hideWidgetGallery() {
+        var g = $('widgetGallery');
+        if (g) g.hidden = true;
+    }
+    function populateWidgetGallery() {
+        var list = $('wgList');
+        if (!list) return;
+        var html = '';
+        for (var key in WIDGET_TYPES) {
+            var def = WIDGET_TYPES[key];
+            html += '<div class="wg-item" data-widget-type="' + key + '">' +
+                '<div class="wg-preview">' + widgetPreviewHtml(key) + '</div>' +
+                '<span class="wg-name">' + def.label + '</span></div>';
+        }
+        list.innerHTML = html;
+        var items = list.querySelectorAll('.wg-item');
+        for (var i = 0; i < items.length; i++) {
+            (function (node) {
+                node.addEventListener('click', function (e) {
+                    if (e && e.stopPropagation) e.stopPropagation();
+                    addWidget(node.getAttribute('data-widget-type'));
+                    hideWidgetGallery();
+                });
+            })(items[i]);
+        }
+    }
+
+    /* ---- 添加 / 删除组件 ---- */
+    function addWidget(type) {
+        var def = WIDGET_TYPES[type];
+        if (!def) return;
+        var id = newWidgetKey(type);
+        var el = instantiateWidget(id);
+        if (!el) return;
+        // 第二页 / 新增页：组件按自由网格落点加入（自动就近找空位）；第一页：保持竖排大块
+        var placed = false;
+        if (currentPage >= 1) {
+            var grid = pageGridAt(currentPage);
+            if (grid) {
+                grid.appendChild(el);
+                placeFree(grid, el, 0, 0);
+                placed = true;
+            }
+        }
+        if (!placed) {
+            var col = pageColumn(0);
+            if (!col) col = pageColumn(currentPage);
+            if (!col) col = document.querySelector('.home-content');
+            if (!col) { var home = document.querySelector('.home-screen'); if (home) home.appendChild(el); return; }
+            col.appendChild(el);
+        }
+        if (EDIT.selected) EDIT.selected.classList.remove('widget-selected');
+        EDIT.selected = el;
+        el.classList.add('widget-selected');
+        collectLayout();
+        persistLayout();
+        applyAllWidgetContent();
+    }
+    /* 组件是否「可删除」（动态组件 + 屏幕内置原始组件） */
+    function isDeletableComponent(el) {
+        if (!el || !el.classList) return false;
+        return el.classList.contains('widget-item') ||
+            el.classList.contains('colorful-widget') ||
+            el.classList.contains('profile-card') ||
+            el.classList.contains('tw-group') ||
+            el.classList.contains('chat-stack');
+    }
+    function deleteWidgetEl(el) {
+        if (!el || !isDeletableComponent(el)) return false;
+        if (EDIT.source === el) { EDIT.source = null; EDIT.sourceId = null; }
+        if (EDIT.selected === el) EDIT.selected = null;
+        var id = idOf(el);
+        if (el.classList.contains('widget-item')) {
+            // 动态组件：直接移除，布局数组不再包含它即完成删除持久化
+            el.remove();
+            collectLayout();
+            persistLayout();
+            return true;
+        }
+        // 屏幕内置原始组件：记入 deleted 并移入回收站，跨刷新保持删除
+        if (id && layout.deleted.indexOf(id) < 0) layout.deleted.push(id);
+        var g = document.getElementById('itemGraveyard');
+        if (g) g.appendChild(el); else el.remove();
+        collectLayout();
+        persistLayout();
+        return true;
+    }
+    /* 载入布局后，把曾删除的内置组件从 DOM 中移除（跨刷新兜底） */
+    function sweepDeleted() {
+        if (!Array.isArray(layout.deleted)) return;
+        var g = document.getElementById('itemGraveyard');
+        for (var i = 0; i < layout.deleted.length; i++) {
+            var el = getEl(layout.deleted[i]);
+            if (el && el.parentElement !== g) {
+                if (g) g.appendChild(el); else el.remove();
+            }
+        }
+    }
+    /* 给屏幕内置原始组件补上右上角删除叉号（编辑态显示） */
+    function ensureOriginalDeleteButtons() {
+        var selectors = ['.colorful-widget', '.profile-card', '.tw-group', '.chat-stack'];
+        for (var i = 0; i < selectors.length; i++) {
+            var el = document.querySelector(selectors[i]);
+            if (!el) continue;
+            if (el.querySelector(':scope > .widget-x')) continue;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'widget-x widget-x-in';
+            btn.setAttribute('aria-label', '删除组件');
+            btn.innerHTML = '&times;';
+            el.appendChild(btn);
+        }
+    }
+    /* 恢复桌面时清空所有动态组件（内置内容由 defaultLayout 还原） */
+    function removeDynamicWidgets() {
+        var els = document.querySelectorAll('.widget-item');
+        for (var i = 0; i < els.length; i++) els[i].remove();
+    }
+    /* 载入已持久化布局后，重建尚不在 DOM 中的动态组件（挂到隐藏回收站，待 renderAll 重新落位） */
+    function ensureWidgetDom() {
+        var want = {};
+        function scan(arr) {
+            if (!Array.isArray(arr)) return;
+            for (var i = 0; i < arr.length; i++) {
+                if (isDynamicWidgetId(arr[i])) want[arr[i]] = true;
+            }
+        }
+        scan(layout.cards1); scan(layout.cards2);
+        if (Array.isArray(layout.extraCards)) layout.extraCards.forEach(scan);
+        if (Array.isArray(layout.extraPages)) layout.extraPages.forEach(scan);
+        scan(layout.apps1); scan(layout.p2); scan(layout.dock);
+        var tmp = document.getElementById('itemGraveyard');
+        for (var id in want) {
+            if (getEl(id)) continue;
+            var el = instantiateWidget(id);
+            if (!el) continue;
+            if (tmp) tmp.appendChild(el);
+        }
+        applyAllWidgetContent();
+    }
+
+    /* ---- 组件文字就地编辑（写入 widgetContent 而非 contentConfig） ---- */
+    function beginWidgetTextEdit(el) {
+        if (el.dataset && el.dataset.editing === '1') return;
+        commitActiveEdit();
+        el.dataset.editing = '1';
+        var wKey = el.getAttribute('data-widget-key');
+        var wField = el.getAttribute('data-field');
+        el.setAttribute('contenteditable', 'true');
+        el.classList.add('edit-inline');
+        el.focus({ preventScroll: true });
+        function commit() {
+            if (el.dataset.editing !== '1') return;
+            el.dataset.editing = '0';
+            var val = (el.textContent || '').trim();
+            el.removeAttribute('contenteditable');
+            el.classList.remove('edit-inline');
+            widgetContent[widgetContentKey(wKey, wField)] = val;
+            applyWidgetField(wKey, wField, val);
+            persistWidgetContent();
+            flashEdited(el);
+        }
+        function onKey(ev) {
+            if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); commit(); }
+            if (ev.key === 'Escape') { ev.preventDefault(); commit(); }
+        }
+        var rng = document.createRange();
+        rng.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(rng);
+        setTimeout(function () {
+            el.addEventListener('blur', function handler() { commit(); el.removeEventListener('blur', handler); });
+            el.addEventListener('keydown', function handler(ev) {
+                onKey(ev);
+                if (ev.key === 'Escape' || (ev.key === 'Enter' && !ev.shiftKey)) el.removeEventListener('keydown', handler);
+            });
+        }, 50);
+    }
+
     var EDIT = {
-        active: false,
-        source: null,        // 当前拖拽的源元素
-        ghost: null,         // 跟随手指的幽灵
+        active: false,       // 抖动编辑模式
+        source: null,        // 当前拖拽的元素（保留在网格内作占位）
+        sourceId: null,
+        selected: null,      // 最近长按选中的元素（供左上角删除键删除）
+        ghost: null,
         pointerId: null,
-        lastTarget: null,    // 上一个落点，用于自动挤位
-        pageCols: 4,         // 编辑网格列数
-        LONG_PRESS_MS: 500,
+        lastX: 0, lastY: 0,
+        LONG_PRESS_MS: 520,
         pressTimer: null,
         pressEl: null,
         pressX: 0, pressY: 0,
-        startX: 0, startY: 0,
+        _pressPointerId: null,
         edgeCooldown: 0,
-        moved: false,
-        dropTimer: null,
-        _flat: false,
-        _appGrid: null,
-        _pressEvt: null
+        edgeHeld: false,
+        edgeEnterAt: 0,     // 进入边缘夹缝的时间戳（用于「持续停留才翻页」防误触）
+        edgeSide: '',       // 当前停留的边缘方向 'L' / 'R' / ''
+        EDGE_PX: 54,        // 拖拽至屏幕边缘多宽内才进入翻页判定（px，收窄防误触）
+        EDGE_HOLD_MS: 500,  // 需持续停留在边缘该时长才翻页（ms）
+        pageAnimTimer: null,// 边缘翻页过渡动画清理句柄
+        raf: 0,             // requestAnimationFrame 句柄（节流）
+        pendingX: 0, pendingY: 0,
+        lastKey: '',        // 上次落点 key，避免每帧重复 DOM 重排
+        suppressClickUntil: 0,  // 长按后短暂吞掉 click，防误触编辑
+        moved: false
     };
 
     function isEditActive() { return EDIT.active; }
 
-    /* ---- 展平第一页网格：编辑期间把 app 直接从 apps-grid 提到 note-apps-row 下 ---- */
-    function flattenPageOne() {
-        if (EDIT._flat) return;
-        var row = document.querySelector('.note-apps-row');
-        var grid = document.querySelector('.apps-grid');
-        if (!row) return;
-        EDIT._appGrid = grid;
-        if (grid) {
-            // 逐一手动移动 app-cell 到 row（保持顺序），避免把 grid 容器一并移动
-            var cells = Array.prototype.slice.call(grid.children);
-            for (var i = 0; i < cells.length; i++) {
-                if (cells[i].classList && cells[i].classList.contains('app-cell')) {
-                    row.appendChild(cells[i]);
+    /* ---- 稳定 id：所有应用（含 Dock）统一 app:名字 命名，跨容器移动保持身份 ---- */
+    function ensureItemIds() {
+        var cw = document.querySelector('.colorful-widget');
+        if (cw && !cw.getAttribute('data-id')) cw.setAttribute('data-id', 'widget:cw');
+
+        var cells = document.querySelectorAll('.app-cell, .dock-app');
+        for (var i = 0; i < cells.length; i++) {
+            var el = cells[i];
+            if (el.getAttribute('data-id')) continue;
+            var name = '';
+            if (el.classList.contains('app-cell')) {
+                var lbl = el.querySelector('.app-label');
+                name = lbl ? lbl.textContent.replace(/\s+/g, '').trim() : ('app-' + i);
+            } else {
+                var nm = el.querySelector('.dock-app-name');
+                name = el.getAttribute('data-name') || (nm ? nm.textContent.replace(/\s+/g, '').trim() : ('dock-' + i));
+            }
+            el.setAttribute('data-id', 'app:' + name);
+        }
+
+        // 竖排大卡片（外观不变，仅用于跨块重排与持久化）
+        ensureCardIds(document.querySelector('.home-content'));
+        ensureCardIds(document.querySelector('.page2-content'));
+    }
+
+    function ensureCardIds(container) {
+        if (!container) return;
+        var i = 0;
+        Array.prototype.forEach.call(container.children, function (c) {
+            i++;
+            if (c.getAttribute && !c.getAttribute('data-id')) {
+                var cls = (typeof c.className === 'string') ? c.className.split(' ')[0] : 'block';
+                c.setAttribute('data-id', 'card:' + cls + ':' + i);
+            }
+        });
+    }
+
+    function getEl(id) { return document.querySelector('[data-id="' + id + '"]'); }
+    function idOf(el) { return el && el.getAttribute ? el.getAttribute('data-id') : null; }
+    function isAppId(id) { return typeof id === 'string' && id.indexOf('app:') === 0; }
+
+    function p1Grid() { return document.querySelector('.apps-grid'); }
+    function p2Grid() { return document.querySelector('.page2-apps'); }
+    function dockInner() { return document.querySelector('.dock-inner'); }
+    function noteRow() { return document.querySelector('.note-apps-row'); }
+    function pageColumn(page) {
+        if (page === 0) return document.querySelector('.home-content');
+        if (page === 1) return document.querySelector('.page2-content');
+        return extraBlocks(page);
+    }
+    /* 新增空白页（page >= 2）内可容纳大卡片 / 便签组件的竖排区块 */
+    function extraBlocks(page) {
+        var p = document.querySelector('.page-extra[data-page="' + page + '"]');
+        return p ? p.querySelector('.extra-blocks') : null;
+    }
+
+    /* 容器内带 data-id 的可排序子项（含 widget，若在容器内） */
+    function movableChildren(container) {
+        var out = [];
+        if (!container) return out;
+        for (var i = 0; i < container.children.length; i++) {
+            var c = container.children[i];
+            if (c && c.getAttribute && c.getAttribute('data-id')) out.push(c);
+        }
+        return out;
+    }
+
+    /* 自由网格内除 source 外的所有可排序项（应用 + 组件），用于计算落点与挤位 */
+    function gridPeers(container, excludeEl) {
+        var all = movableChildren(container);
+        var out = [];
+        for (var i = 0; i < all.length; i++) {
+            if (all[i] !== excludeEl) out.push(all[i]);
+        }
+        return out;
+    }
+
+    /* 容器内作为「应用」的子项（app-cell / dock-app，不含 widget） */
+    function appItems(container, exclude) {
+        var out = [];
+        if (!container) return out;
+        for (var i = 0; i < container.children.length; i++) {
+            var c = container.children[i];
+            if (c === exclude) continue;
+            if (c.classList && (c.classList.contains('app-cell') || c.classList.contains('dock-app'))) out.push(c);
+        }
+        return out;
+    }
+
+    function zoneOfEl(el) {
+        if (!el) return 'p1';
+        if (el.classList && el.classList.contains('colorful-widget')) return 'widget';
+        if (el.closest && el.closest('.dock-inner')) return 'dock';
+        if (el.closest && el.closest('.page2-apps')) return 'p2';
+        return 'p1';
+    }
+
+    /* ---- 读取当前 DOM 顺序 ---- */
+    function collectLayout() {
+        layout.apps1 = movableChildren(p1Grid()).map(idOf);
+        layout.p2 = movableChildren(p2Grid()).map(idOf);
+        layout.dock = movableChildren(dockInner()).map(idOf);
+        layout.cards1 = movableChildren(document.querySelector('.home-content')).map(idOf);
+        layout.cards2 = movableChildren(document.querySelector('.page2-content')).map(idOf);
+        layout.pageCount = PAGE_COUNT;
+        layout.extraPages = [];
+        layout.extraCards = [];
+        for (var pg = 2; pg < PAGE_COUNT; pg++) {
+            layout.extraPages.push(movableChildren(pageGridAt(pg)).map(idOf));
+            layout.extraCards.push(movableChildren(extraBlocks(pg)).map(idOf));
+        }
+        var row = noteRow();
+        var first = row ? row.firstElementChild : null;
+        layout.widgetSide = (first && first.classList && first.classList.contains('colorful-widget')) ? 'left' : 'right';
+        var cw = getEl('widget:cw');
+        layout.widgetExtra = -1;
+        if (cw) {
+            var pp = cw.parentElement;
+            if (pp && pp.classList && pp.classList.contains('extra-blocks')) {
+                var host = pp.closest('.page-extra');
+                layout.widgetPage = 'extra';
+                layout.widgetExtra = host ? parseInt(host.getAttribute('data-page'), 10) : 2;
+            } else if (pp === document.querySelector('.page2-content')) {
+                layout.widgetPage = 'p2';
+            } else {
+                layout.widgetPage = 'p1';
+            }
+        } else {
+            layout.widgetPage = 'p1';
+        }
+        // 采集自由网格落点（第二页 / 新增页）
+        layout.pos = {};
+        var fg2 = p2Grid();
+        if (fg2) freeGridChildren(fg2).forEach(function (el) { layout.pos[idOf(el)] = freePosOf(el); });
+        for (var fp = 2; fp < PAGE_COUNT; fp++) {
+            var fgp = pageGridAt(fp);
+            if (!fgp) continue;
+            freeGridChildren(fgp).forEach(function (el) { layout.pos[idOf(el)] = freePosOf(el); });
+        }
+    }
+
+    /* ---- FLIP 动画工具 ---- */
+    function rectMap(els) {
+        var m = {};
+        for (var i = 0; i < els.length; i++) {
+            if (els[i] && idOf(els[i])) m[idOf(els[i])] = els[i].getBoundingClientRect();
+        }
+        return m;
+    }
+
+    function animateFlip(els, firstRects) {
+        for (var i = 0; i < els.length; i++) {
+            (function (node) {
+                var b = firstRects[idOf(node)];
+                if (!b) return;
+                var a = node.getBoundingClientRect();
+                var dx = b.left - a.left, dy = b.top - a.top;
+                if (dx * dx + dy * dy < 4) return;
+                var prevAnim = node.style.animation;
+                node.style.animation = 'none';
+                node.style.transition = 'none';
+                node.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+                void node.offsetWidth;
+                node.style.transition = 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1)';
+                node.style.transform = '';
+                setTimeout(function () {
+                    node.style.transition = '';
+                    node.style.transform = '';
+                    node.style.animation = prevAnim;
+                }, 230);
+            })(els[i]);
+        }
+    }
+
+    /* ---- 重排容器 DOM，并做 FLIP 位移动画 ---- */
+    function renderIds(container, ids) {
+        if (!container || !ids) return;
+        var els = movableChildren(container);
+        var first = rectMap(els);
+        for (var k = 0; k < ids.length; k++) {
+            var el = getEl(ids[k]);
+            if (el) container.appendChild(el);
+        }
+        animateFlip(els, first);
+    }
+
+    /* 第一页组件左右位置（组件与 .apps-grid 是兄弟，保持 flex 布局，组件尺寸不变） */
+    function renderWidgetSide() {
+        var row = noteRow();
+        var cw = getEl('widget:cw');
+        var grid = p1Grid();
+        if (!row || !cw || !grid) return;
+        // 组件已被删除：留在回收站，不重新塞回第一页
+        if (Array.isArray(layout.deleted) && layout.deleted.indexOf('widget:cw') >= 0) return;
+        // 组件在第二页或新增页：作为独立块存在，位置由 cards2 / extraCards 顺序管理，不再塞回第一页行内
+        if (layout.widgetPage === 'p2' || layout.widgetPage === 'extra') {
+            cw.classList.add('widget-standalone');
+            cw.style.marginLeft = '';
+            cw.style.marginRight = '';
+            return;
+        }
+        cw.classList.remove('widget-standalone');
+        var left = layout.widgetSide !== 'right';
+        if (left) {
+            if (grid.previousSibling !== cw) row.insertBefore(cw, grid);
+            // 回落 CSS 默认：组件靠左（7.5%）零右距，网格左 14px 右 7.5%
+            cw.style.marginLeft = '';
+            cw.style.marginRight = '';
+            grid.style.marginLeft = '';
+            grid.style.marginRight = '';
+        } else {
+            if (cw.previousSibling !== grid) row.insertBefore(grid, cw);
+            // 组件靠右：网格左 7.5% 零右距，组件左 14px 右 7.5%（与左侧对称）
+            cw.style.marginLeft = '14px';
+            cw.style.marginRight = '7.5%';
+            grid.style.marginLeft = '7.5%';
+            grid.style.marginRight = '0';
+        }
+    }
+
+    function renderAll() {
+        renderIds(p1Grid(), layout.apps1);
+        renderIds(p2Grid(), layout.p2);
+        renderIds(dockInner(), layout.dock);
+        renderIds(document.querySelector('.home-content'), layout.cards1);
+        renderIds(document.querySelector('.page2-content'), layout.cards2);
+        for (var pg = 2; pg < PAGE_COUNT; pg++) {
+            var ids = (Array.isArray(layout.extraPages) && layout.extraPages[pg - 2]) || [];
+            renderIds(pageGridAt(pg), ids);
+            var cids = (Array.isArray(layout.extraCards) && layout.extraCards[pg - 2]) || [];
+            renderIds(extraBlocks(pg), cids);
+        }
+        renderWidgetSide();
+        applyFreeLayoutAll();
+        try { syncColorfulWidget(); } catch (e) {}
+    }
+
+    /* 渲染/载入后把自由网格（第二页 / 新增页）内所有项按 layout.pos 摆好；
+       缺省落点则从左到右、从上到下就近补位（保持首次加载的默认观感） */
+    function applyFreeLayoutAll() {
+        var g = p2Grid();
+        if (g) applyFreeGridContainer(g);
+        for (var pg = 2; pg < PAGE_COUNT; pg++) {
+            var gr = pageGridAt(pg);
+            if (gr) applyFreeGridContainer(gr);
+        }
+    }
+    function applyFreeGridContainer(container) {
+        if (!container) return;
+        if (!layout.pos) layout.pos = {};
+        var occ = {};
+        var kids = freeGridChildren(container);
+        for (var i = 0; i < kids.length; i++) {
+            var el = kids[i];
+            var cs = freeColSpan(el), rs = freeRowSpan(el);
+            var p = layout.pos[idOf(el)];
+            var cell = null;
+            if (p && typeof p.c === 'number' && typeof p.r === 'number' && freeFits(occ, p.c, p.r, cs, rs)) {
+                cell = { c: p.c, r: p.r };
+            }
+            if (!cell) {
+                for (var r = 0; r < 40 && !cell; r++)
+                    for (var c = 0; c + cs <= FREE_COLS; c++)
+                        if (freeFits(occ, c, r, cs, rs)) { cell = { c: c, r: r }; break; }
+            }
+            if (!cell) cell = { c: 0, r: 0 };
+            freeSetPos(el, cell.c, cell.r);
+            for (var cc = cell.c; cc < cell.c + cs; cc++)
+                for (var rr = cell.r; rr < cell.r + rs; rr++)
+                    occ[cc + ':' + rr] = true;
+        }
+    }
+
+    /* ---- Dock 与页面应用互相转换（保持 data-id，仅换结构与类） ---- */
+    function toDockApp(cell) {
+        if (!cell || cell.classList.contains('dock-app')) return cell;
+        var tile = cell.querySelector('.app-tile');
+        var label = cell.querySelector('.app-label');
+        var name = label ? label.textContent.replace(/\s+/g, '').trim() : String(idOf(cell) || '').replace('app:', '');
+        cell.className = 'dock-app';
+        cell.setAttribute('data-name', name);
+        if (tile) tile.className = 'dock-app-icon';
+        if (label) label.className = 'dock-app-name';
+        cell.classList.add('edit-source');
+        return cell;
+    }
+
+    function toGridApp(dock) {
+        if (!dock || dock.classList.contains('app-cell')) return dock;
+        var icon = dock.querySelector('.dock-app-icon');
+        var nm = dock.querySelector('.dock-app-name');
+        dock.className = 'app-cell';
+        if (icon) icon.className = 'app-tile';
+        if (nm) nm.className = 'app-label';
+        dock.classList.add('edit-source');
+        return dock;
+    }
+
+    /* ---- 落点序列号计算 ---- */
+    function gridIndexAt(container, x, y, excludeEl) {
+        var items = gridPeers(container, excludeEl);
+        for (var i = 0; i < items.length; i++) {
+            var r = items[i].getBoundingClientRect();
+            if (y < r.top + r.height / 2) return i;
+            if (y < r.bottom && x < r.left + r.width / 2) return i;
+        }
+        return items.length;
+    }
+
+    function dockIndexAt(x, excludeEl) {
+        var items = appItems(dockInner(), excludeEl);
+        for (var i = 0; i < items.length; i++) {
+            var r = items[i].getBoundingClientRect();
+            if (x < r.left + r.width / 2) return i;
+        }
+        return items.length;
+    }
+
+    function zoneAtPoint(x, y) {
+        var dock = document.querySelector('.dock');
+        if (dock) {
+            var dr = dock.getBoundingClientRect();
+            if (x >= dr.left && x <= dr.right && y >= dr.top && y <= dr.bottom) return 'dock';
+        }
+        return currentPage;   // 页号（0/1/2/...），支持任意新增页
+    }
+
+    /* ---- 把 source 按序号插入容器（自动挤位 + FLIP） ---- */
+    function insertAppAt(container, source, idx) {
+        if (!container || !source) return;
+        var els = movableChildren(container);
+        var first = rectMap(els);
+        var others = gridPeers(container, source);
+        var ref = idx < others.length ? others[idx] : null;
+        var changed = false;
+        if (ref) {
+            if (source.nextSibling !== ref) { container.insertBefore(source, ref); changed = true; }
+        } else {
+            if (source !== container.lastChild) { container.appendChild(source); changed = true; }
+        }
+        if (changed) animateFlip(els, first);
+    }
+
+    /* =====================================================
+       自由网格（第二页 / 新增页）核心：
+       应用 1×1 格，小组件 2 列、大组件整行 4 列，行数按测量高度决定；
+       每项独立 (col,row) 落点写入显式 grid-column / grid-row，
+       落点被占时按「同列向下→同列向上→左右就近」找空位，绝不互相重叠。
+       ===================================================== */
+    var FREE_COLS = 4;         // 4 列
+    var FREE_CELL_H = 92;      // 单行高度（px）
+
+    function freeIsApp(el) {
+        return !!(el && el.classList && (el.classList.contains('app-cell') || el.classList.contains('dock-app')));
+    }
+    /* 占列数：应用 1；小组件 2；大组件 4 */
+    function freeColSpan(el) {
+        if (!el) return 1;
+        if (freeIsApp(el)) return 1;
+        var id = idOf(el);
+        var t = id ? widgetTypeOf(id) : '';
+        return widgetSpan(t || 'x');
+    }
+    /* 占行数：应用 1；拍立得/时钟固定 2 行，便签 1 行，其余按实际高度换算 */
+    function freeRowSpan(el) {
+        if (!el) return 1;
+        if (freeIsApp(el)) return 1;
+        var t = idOf(el) ? widgetTypeOf(idOf(el)) : '';
+        var fixed = widgetRowSpan(t);
+        if (fixed > 0) return fixed;
+        var h = el.offsetHeight || FREE_CELL_H;
+        var r = Math.round(h / FREE_CELL_H);
+        if (r < 1) r = 1; if (r > 4) r = 4;
+        return r;
+    }
+    function freeGridChildren(container) {
+        var out = [];
+        if (!container) return out;
+        for (var i = 0; i < container.children.length; i++) {
+            var c = container.children[i];
+            if (c && c.getAttribute && c.getAttribute('data-id')) out.push(c);
+        }
+        return out;
+    }
+    function freePosOf(el) {
+        var c = parseInt(el.getAttribute('data-fcol'), 10);
+        var r = parseInt(el.getAttribute('data-frow'), 10);
+        if (isNaN(c) || c < 0) c = 0;
+        if (isNaN(r) || r < 0) r = 0;
+        return { c: c, r: r };
+    }
+    function freeSetPos(el, c, r) {
+        r = Math.max(0, r);
+        c = Math.max(0, Math.min(c, FREE_COLS - freeColSpan(el)));
+        el.setAttribute('data-fcol', String(c));
+        el.setAttribute('data-frow', String(r));
+        el.style.gridColumnStart = String(c + 1);
+        el.style.gridColumnEnd = 'span ' + freeColSpan(el);
+        el.style.gridRowStart = String(r + 1);
+        el.style.gridRowEnd = 'span ' + freeRowSpan(el);
+    }
+    function freeClearPos(el) {
+        if (!el) return;
+        el.removeAttribute('data-fcol');
+        el.removeAttribute('data-frow');
+        el.style.gridColumnStart = '';
+        el.style.gridColumnEnd = '';
+        el.style.gridRowStart = '';
+        el.style.gridRowEnd = '';
+    }
+    /* 当前容器内（排除 excludeEl）被占用的格子集合 */
+    function freeOccupied(container, excludeEl) {
+        var occ = {};
+        var kids = freeGridChildren(container);
+        for (var i = 0; i < kids.length; i++) {
+            var k = kids[i];
+            if (k === excludeEl) continue;
+            var p = freePosOf(k);
+            var cs = freeColSpan(k), rs = freeRowSpan(k);
+            for (var cc = p.c; cc < p.c + cs; cc++)
+                for (var rr = p.r; rr < p.r + rs; rr++)
+                    if (cc < FREE_COLS) occ[cc + ':' + rr] = true;
+        }
+        return occ;
+    }
+    function freeFits(occ, c, r, cs, rs) {
+        if (c < 0 || r < 0 || c + cs > FREE_COLS) return false;
+        for (var cc = c; cc < c + cs; cc++)
+            for (var rr = r; rr < r + rs; rr++)
+                if (occ[cc + ':' + rr]) return false;
+        return true;
+    }
+    /* 就近找空位：优先保留期望列，被占时同列下移/上移，再左右扩散 */
+    function freeNearestCell(container, wantC, wantR, cs, rs, excludeEl) {
+        var occ = freeOccupied(container, excludeEl);
+        var maxC = FREE_COLS - cs;
+        if (wantC < 0) wantC = 0; if (wantC > maxC) wantC = maxC;
+        if (wantR < 0) wantR = 0;
+        if (freeFits(occ, wantC, wantR, cs, rs)) return { c: wantC, r: wantR };
+        for (var r = wantR + 1; r <= wantR + 60; r++)
+            if (freeFits(occ, wantC, r, cs, rs)) return { c: wantC, r: r };
+        for (r = wantR - 1; r >= 0; r--)
+            if (freeFits(occ, wantC, r, cs, rs)) return { c: wantC, r: r };
+        for (var d = 1; d <= maxC; d++) {
+            for (var sign = 0; sign < 2; sign++) {
+                var c = wantC + (sign ? d : -d);
+                if (c < 0 || c > maxC) continue;
+                for (var r2 = wantR; r2 <= wantR + 60; r2++)
+                    if (freeFits(occ, c, r2, cs, rs)) return { c: c, r: r2 };
+            }
+        }
+        var maxUsed = 0;
+        for (var key in occ) { var rr = parseInt(key.split(':')[1], 10); if (rr > maxUsed) maxUsed = rr; }
+        return { c: 0, r: maxUsed + 1 };
+    }
+    /* 把元素放入自由网格指定期望落点（自动让位、写入显式位置） */
+    function placeFree(grid, el, wantC, wantR) {
+        if (!grid || !el) return null;
+        if (el.parentElement !== grid) grid.appendChild(el);
+        var cs = freeColSpan(el), rs = freeRowSpan(el);
+        var cell = freeNearestCell(grid, wantC, wantR, cs, rs, el);
+        freeSetPos(el, cell.c, cell.r);
+        return cell;
+    }
+    /* 由指针坐标推算出期望落点（列/行），用于拖拽时「跟着手指走」 */
+    function freeCellAtPoint(grid, x, y, el) {
+        var rect = grid.getBoundingClientRect();
+        if (rect.width < 10) return { c: 0, r: 0 };
+        var cs = freeColSpan(el);
+        var col = Math.floor((x - rect.left) / (rect.width / FREE_COLS));
+        col = Math.max(0, Math.min(col, FREE_COLS - cs));
+        var stride = FREE_CELL_H + 18;   // 行高 + 纵向 gap
+        var row = Math.floor((y - rect.top) / stride);
+        return { c: col, r: Math.max(0, row) };
+    }
+
+    /* 纯地图版就近找空位（供推挤重排增量使用，occ 为占用表） */
+    function freeMarkOcc(occ, c, r, cs, rs) {
+        for (var cc = c; cc < c + cs; cc++)
+            for (var rr = r; rr < r + rs; rr++)
+                occ[cc + ':' + rr] = true;
+    }
+    function freeNearestInMap(occ, wantC, wantR, cs, rs) {
+        var maxC = FREE_COLS - cs;
+        if (wantC < 0) wantC = 0; if (wantC > maxC) wantC = maxC;
+        if (wantR < 0) wantR = 0;
+        if (freeFits(occ, wantC, wantR, cs, rs)) return { c: wantC, r: wantR };
+        for (var r = wantR + 1; r <= wantR + 60; r++)
+            if (freeFits(occ, wantC, r, cs, rs)) return { c: wantC, r: r };
+        for (r = wantR - 1; r >= 0; r--)
+            if (freeFits(occ, wantC, r, cs, rs)) return { c: wantC, r: r };
+        for (var d = 1; d <= maxC; d++) {
+            for (var sign = 0; sign < 2; sign++) {
+                var c = wantC + (sign ? d : -d);
+                if (c < 0 || c > maxC) continue;
+                for (var r2 = wantR; r2 <= wantR + 60; r2++)
+                    if (freeFits(occ, c, r2, cs, rs)) return { c: c, r: r2 };
+            }
+        }
+        var maxUsed = -1;
+        for (var key in occ) {
+            var rr = parseInt(key.split(':')[1], 10);
+            if (rr > maxUsed) maxUsed = rr;
+        }
+        return { c: 0, r: maxUsed + 1 };
+    }
+
+    /* =====================================================
+       推挤重排（碰撞检测 + 自动避让）：
+       被拖动项「严格落进手指指向的格子」；若与已有图标重叠，
+       原有图标连锁避让——各自滑到离自己最近的空位，绝不互相挤压；
+       全部位移用 FLIP 位移动画平滑过渡，做到指哪打哪、松手落定。
+       ===================================================== */
+    function freePushReflow(container, source, wantC, wantR) {
+        if (!container || !source) return;
+        if (source.parentElement !== container) container.appendChild(source);
+        var cs = freeColSpan(source), rs = freeRowSpan(source);
+        if (wantC < 0) wantC = 0;
+        if (wantC > FREE_COLS - cs) wantC = FREE_COLS - cs;
+        if (wantR < 0) wantR = 0;
+
+        var all = freeGridChildren(container);   // 含 source
+        var first = rectMap(all);
+
+        // 1) 被拖动项锁定到手指目标格
+        var occ = {};
+        freeMarkOcc(occ, wantC, wantR, cs, rs);
+        var finalCells = {};
+        finalCells[idOf(source)] = { c: wantC, r: wantR };
+
+        // 2) 其余项：能原位保留则原位，与拖动项或彼此相撞则就近避让
+        for (var i = 0; i < all.length; i++) {
+            var el = all[i];
+            if (el === source) continue;
+            var ocs = freeColSpan(el), ors = freeRowSpan(el);
+            var cur = freePosOf(el);
+            var cell = freeFits(occ, cur.c, cur.r, ocs, ors)
+                ? cur
+                : freeNearestInMap(occ, cur.c, cur.r, ocs, ors);
+            finalCells[idOf(el)] = cell;
+            freeMarkOcc(occ, cell.c, cell.r, ocs, ors);
+        }
+
+        // 3) 写入最终落点
+        for (var k = 0; k < all.length; k++) {
+            var el2 = all[k];
+            var fc = finalCells[idOf(el2)];
+            if (fc) freeSetPos(el2, fc.c, fc.r);
+        }
+
+        // 4) FLIP 位移动画（原有图标避让 + 拖动项到位，一起平滑滑入）
+        animateFlip(all, first);
+    }
+
+    /* ---- 布局持久化 ---- */
+    function persistLayout() {
+        try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch (e) {}
+    }
+
+    function sanitizeLayout(l) {
+        var base = {
+            apps1: [], p2: [], dock: [], widgetSide: 'left', widgetPage: 'p1', widgetExtra: -1,
+            cards1: [], cards2: [], extraPages: [], extraCards: [], pageCount: 2,
+            deleted: (l && Array.isArray(l.deleted)) ? l.deleted : [],
+            widgetSeq: (l && typeof l.widgetSeq === 'number') ? Math.floor(l.widgetSeq) : 0,
+            pos: (l && l.pos && typeof l.pos === 'object') ? l.pos : {}
+        };
+        var placed = {};
+        var zoneCont = {
+            apps1: p1Grid(), p2: p2Grid(), dock: dockInner(),
+            cards1: document.querySelector('.home-content'),
+            cards2: document.querySelector('.page2-content')
+        };
+        var savedArr = {
+            apps1: (l && Array.isArray(l.apps1)) ? l.apps1 : null,
+            p2: (l && Array.isArray(l.p2)) ? l.p2 : null,
+            dock: (l && Array.isArray(l.dock)) ? l.dock : null,
+            cards1: (l && Array.isArray(l.cards1)) ? l.cards1 : null,
+            cards2: (l && Array.isArray(l.cards2)) ? l.cards2 : null
+        };
+        var zones = ['apps1', 'p2', 'dock', 'cards1', 'cards2'];
+        zones.forEach(function (zone) {
+            var arr = savedArr[zone] || [];
+            for (var i = 0; i < arr.length; i++) {
+                var id = arr[i];
+                if (placed[id]) continue;
+                // 动态组件（widget:* 且非内置 widget:cw）在载入时尚未重建 DOM，需保留待后续 ensureWidgetDom 重建
+                if (!getEl(id) && !isDynamicWidgetId(id)) continue;
+                base[zone].push(id);
+                placed[id] = zone;
+            }
+        });
+        // 动态页：先按存储恢复页数与各页应用（只接收 app 身份项）
+        var ep = (l && Array.isArray(l.extraPages)) ? l.extraPages : [];
+        base.pageCount = Math.max(2, (l && typeof l.pageCount === 'number') ? Math.floor(l.pageCount) : 2 + ep.length);
+        for (var p = 0; p < base.pageCount - 2; p++) {
+            var srcArr = (p < ep.length && Array.isArray(ep[p])) ? ep[p] : [];
+            var row = [];
+            for (var q = 0; q < srcArr.length; q++) {
+                var id2 = srcArr[q];
+                if (isAppId(id2) && getEl(id2) && !placed[id2]) {
+                    row.push(id2);
+                    placed[id2] = 'extra' + p;
                 }
             }
+            base.extraPages.push(row);
         }
-        row.setAttribute('data-edit-flat', '1');
-        EDIT._flat = true;
-    }
-
-    /* 退出时还原：把 app 移回 apps-grid */
-    function unflattenPageOne() {
-        if (!EDIT._flat) return;
-        EDIT._flat = false;
-        var row = document.querySelector('.note-apps-row');
-        var grid = EDIT._appGrid || document.querySelector('.apps-grid');
-        if (row && grid) {
-            var apps = Array.prototype.slice.call(row.children).filter(function (c) {
-                return c.classList && c.classList.contains('app-cell');
+        // 动态页组件（大卡片 / 便签组件 / 动态组件，仅接收 card:* / widget:cw / 动态 widget:*）
+        var ec = (l && Array.isArray(l.extraCards)) ? l.extraCards : [];
+        for (var e2 = 0; e2 < base.pageCount - 2; e2++) {
+            var carr = [];
+            var earr = (e2 < ec.length && Array.isArray(ec[e2])) ? ec[e2] : [];
+            for (var e3 = 0; e3 < earr.length; e3++) {
+                var cid = earr[e3];
+                var isCardLike = cid && (cid.indexOf('card:') === 0 || cid === 'widget:cw' || isDynamicWidgetId(cid));
+                if (isCardLike && !placed[cid] && (getEl(cid) || isDynamicWidgetId(cid))) {
+                    carr.push(cid);
+                    placed[cid] = 'extraCard' + e2;
+                }
+            }
+            base.extraCards.push(carr);
+        }
+        // 迁移：历史版本把动态组件误存进竖排块（cards2 / extraCards），统一归入自由网格
+        var mig2 = base.cards2;
+        base.cards2 = [];
+        for (var mm = 0; mm < mig2.length; mm++) {
+            var mId = mig2[mm];
+            if (isDynamicWidgetId(mId)) base.p2.push(mId);
+            else base.cards2.push(mId);
+        }
+        for (var mp = 0; mp < base.extraCards.length; mp++) {
+            var mSrc = base.extraCards[mp];
+            var mKept = [];
+            for (var mq = 0; mq < mSrc.length; mq++) {
+                var mId2 = mSrc[mq];
+                if (isDynamicWidgetId(mId2) && base.extraPages[mp]) base.extraPages[mp].push(mId2);
+                else mKept.push(mId2);
+            }
+            base.extraCards[mp] = mKept;
+        }
+        // 剩余未放置项按默认容器归属
+        zones.forEach(function (zone) {
+            movableChildren(zoneCont[zone]).forEach(function (el) {
+                var id = idOf(el);
+                if (id && !placed[id]) { base[zone].push(id); placed[id] = zone; }
             });
-            for (var i = 0; i < apps.length; i++) {
-                grid.appendChild(apps[i]);
+        });
+        base.widgetSide = (l && l.widgetSide === 'right') ? 'right' : 'left';
+        if (l && l.widgetPage === 'extra' && typeof l.widgetExtra === 'number' && l.widgetExtra >= 2) {
+            base.widgetPage = 'extra';
+            base.widgetExtra = l.widgetExtra;
+        } else if (l && l.widgetPage === 'p2') {
+            base.widgetPage = 'p2';
+            base.widgetExtra = -1;
+        } else {
+            base.widgetPage = 'p1';
+            base.widgetExtra = -1;
+        }
+        return base;
+    }
+
+    function loadLayout() {
+        try {
+            var raw = localStorage.getItem(LAYOUT_KEY);
+            if (!raw) return;
+            var saved = JSON.parse(raw);
+            if (!saved || typeof saved !== 'object') return;
+            layout = sanitizeLayout(saved);
+        } catch (e) {}
+    }
+
+    /* 捕获当前 HTML 源码默认排版（仅在首次加载、DOM 尚未被重排时调用） */
+    function captureDefaultLayout() {
+        return {
+            apps1: movableChildren(p1Grid()).map(idOf),
+            p2: movableChildren(p2Grid()).map(idOf),
+            dock: movableChildren(dockInner()).map(idOf),
+            widgetSide: 'left',
+            widgetPage: 'p1',
+            widgetExtra: -1,
+            cards1: movableChildren(document.querySelector('.home-content')).map(idOf),
+            cards2: movableChildren(document.querySelector('.page2-content')).map(idOf),
+            extraPages: [],
+            extraCards: [],
+            pageCount: 2,
+            pos: {}
+        };
+    }
+
+    /* 一键恢复桌面：清除持久化布局，回到初始排版 */
+    function resetDesktopLayout() {
+        // 退出编辑态（不清除本次拖动结果，直接丢弃当前布局）
+        if (EDIT.active) {
+            EDIT.active = false;
+            if (EDIT.raf) { cancelAnimationFrame(EDIT.raf); EDIT.raf = 0; }
+            document.documentElement.classList.remove('edit-mode-active');
+            var doneBtn = $('editDoneBtn');
+            if (doneBtn) doneBtn.hidden = true;
+            var addBtn = $('editAddPageBtn');
+            if (addBtn) addBtn.hidden = true;
+            var delBtn = $('editDelBtn');
+            if (delBtn) delBtn.hidden = true;
+            hideAddMenu();
+            if (EDIT.ghost) { EDIT.ghost.remove(); EDIT.ghost = null; }
+            if (EDIT.source) { EDIT.source.classList.remove('edit-source'); EDIT.source = null; }
+            if (EDIT.selected) { EDIT.selected.classList.remove('widget-selected'); }
+            clearPressTimer();
+            EDIT.pressEl = null;
+            EDIT.pointerId = null;
+            EDIT.selected = null;
+            EDIT.lastKey = '';
+            try { document.body.style.overscrollBehavior = ''; } catch (err) {}
+        }
+        // 清除持久化并恢复默认快照
+        try { localStorage.removeItem(LAYOUT_KEY); } catch (e) {}
+        layout = defaultLayout ? JSON.parse(JSON.stringify(defaultLayout)) : {
+            apps1: [], p2: [], dock: [], widgetSide: 'left', widgetPage: 'p1', widgetExtra: -1, cards1: [], cards2: [], extraPages: [], extraCards: [], pageCount: 2, pos: {}
+        };
+        layout.deleted = [];
+        removeExtraPages();
+        removeDynamicWidgets();
+        try { widgetContent = {}; persistWidgetContent(); } catch (e) {}
+        renderAll();
+        collectLayout();
+        persistLayout();
+        goToPage(0);
+    }
+
+    /* Dock 容量：超过上限时把最右侧多余项顶回第一页（优先顶出非当前拖动项） */
+    function enforceDockMax() {
+        var dockEl = dockInner();
+        if (!dockEl) return;
+        var apps = appItems(dockEl, null);
+        while (apps.length > DOCK_MAX) {
+            var overflow = null;
+            for (var i = apps.length - 1; i >= 0; i--) {
+                if (apps[i] !== EDIT.source) { overflow = apps[i]; break; }
             }
-        }
-        if (row) row.removeAttribute('data-edit-flat');
-        EDIT._appGrid = null;
-    }
-
-    function getContainerForPage(p) {
-        return p < 1 ? document.querySelector('.note-apps-row') : document.querySelector('.page2-apps');
-    }
-
-    /* 该容器内参与排序的网格子项序号（不含源），返回落点 index */
-    function insertionIndex(container, x, y) {
-        var kids = [];
-        for (var i = 0; i < container.children.length; i++) {
-            var c = container.children[i];
-            if (c === EDIT.source) continue;
-            kids.push(c);
-        }
-        for (var k = 0; k < kids.length; k++) {
-            var r = kids[k].getBoundingClientRect();
-            if (!r.width && !r.height) continue;
-            var before = (y < r.top + r.height / 2) || (y >= r.top && y < r.bottom && x < r.left + r.width / 2);
-            var rowBlocked = y >= r.top - 4 && y <= r.bottom + 4 && x < r.right;
-            if (before && (rowBlocked || y < r.top + r.height / 2)) {
-                return k;
-            }
-        }
-        return kids.length;
-    }
-
-    /* 把源按落点序号重排到容器中（自动挤位） */
-    function reorderTo(container, x, y) {
-        if (!container) return;
-        var idx = insertionIndex(container, x, y);
-        var kids = [];
-        for (var i = 0; i < container.children.length; i++) {
-            var c = container.children[i];
-            if (c !== EDIT.source) kids.push(c);
-        }
-        var ref = idx < kids.length ? kids[idx] : null;
-        if (ref && EDIT.source.nextSibling !== ref) {
-            container.insertBefore(EDIT.source, ref);
-        } else if (!ref && EDIT.source !== container.lastChild) {
-            container.appendChild(EDIT.source);
+            if (!overflow) overflow = apps[apps.length - 1];
+            toGridApp(overflow);
+            overflow.classList.remove('edit-source');
+            var p1 = p1Grid();
+            if (p1) p1.appendChild(overflow);
+            apps = appItems(dockEl, null);
         }
     }
 
     /* ---- 长按识别 ---- */
     function onPressStart(e) {
         if (settingsScreen && settingsScreen.classList.contains('open')) return;
-        if (e.target && e.target.closest && e.target.closest('.dock')) return;
-        // 可编辑元素不触发长按进入编辑模式
-        if (e.target && e.target.closest && e.target.closest('[data-editable]')) return;
-        var target = e.target && e.target.closest ? e.target.closest('.app-cell, .colorful-widget') : null;
-        if (!target) return;
         if (e.pointerType === 'mouse' && e.button !== 0) return;
+        var t = e.target;
+        if (t && t.closest && t.closest('.widget-gallery, .edit-add-menu')) return;
+        // 可编辑元素（图片/文字）默认不触发长按；但三块大卡片几乎整块可编辑，长按仍需能拖动
+        var isCardLike = t && t.closest && t.closest('.profile-card, .tw-group, .chat-stack');
+        if (!isCardLike && t && t.closest && t.closest('[data-editable]')) return;
+        var target = t && t.closest ? t.closest('.app-cell, .colorful-widget, .dock-app, .profile-card, .tw-group, .chat-stack, .widget-item') : null;
+        if (!target) return;
         clearPressTimer();
         EDIT.pressEl = target;
         EDIT.pressX = e.clientX;
         EDIT.pressY = e.clientY;
-        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
-        EDIT._pressEvt = { clientX: e.clientX, clientY: e.clientY, pointerId: e.pointerId };
+        EDIT._pressPointerId = e.pointerId;
+        // 注意：此处不 setPointerCapture。pointerdown 阶段捕获指针会让 iOS WebView
+        // 取消 click 合成并吞掉 touchend，导致「点设置图标没反应」。捕获推迟到
+        // 真正开始拖动（beginDrag）时再做。
         EDIT.pressTimer = setTimeout(function () {
             EDIT.pressTimer = null;
             if (!EDIT.pressEl) return;
-            enterEditMode(EDIT.pressEl, EDIT._pressEvt);
-            EDIT._pressEvt = null;
+            // 长按触发拖拽：吞掉随后的 click，避免误触文字/图片就地编辑
+            EDIT.suppressClickUntil = Date.now() + 450;
+            enterEditMode(EDIT.pressEl, EDIT.pressX, EDIT.pressY, EDIT._pressPointerId);
+            EDIT.pressEl = null;
         }, EDIT.LONG_PRESS_MS);
     }
 
     function onPressMove(e) {
-        if (EDIT.active) { onEditDragMove(e); return; }
+        if (EDIT.active && EDIT.source) { onEditDragMove(e); return; }
         if (!EDIT.pressEl) return;
         var dx = Math.abs(e.clientX - EDIT.pressX);
         var dy = Math.abs(e.clientY - EDIT.pressY);
@@ -3629,43 +6661,65 @@ html.edit-mode-active, html.edit-mode-active body {
     function onPressEndOrCancel(e) {
         if (EDIT.active) { onEditDragEnd(e); return; }
         clearPressTimer();
-        if (EDIT.active && e.target && !(e.target.closest && (e.target.closest('.app-cell,.colorful-widget,.edit-done-btn')))) {
-            exitEditMode();
-        }
         EDIT.pressEl = null;
-        EDIT._pressEvt = null;
     }
 
     function clearPressTimer() {
         if (EDIT.pressTimer) { clearTimeout(EDIT.pressTimer); EDIT.pressTimer = null; }
     }
 
-    /* ---- 进入编辑模式 ---- */
-    function enterEditMode(source, e) {
-        if (EDIT.active) return;
+    /* ---- 进入编辑模式（已处于编辑态时，直接抓取新元素继续拖） ---- */
+    function enterEditMode(source, x, y, pointerId) {
+        if (EDIT.active) { beginDrag(source, x, y, pointerId); return; }
         EDIT.active = true;
-        if (e && e.stopPropagation) e.stopPropagation();
         document.documentElement.classList.add('edit-mode-active');
         var doneBtn = $('editDoneBtn');
         if (doneBtn) doneBtn.hidden = false;
-        flattenPageOne();
-        goToPage(currentPage);
+        var addBtn = $('editAddPageBtn');
+        if (addBtn) addBtn.hidden = false;
+        var delBtn = $('editDelBtn');
+        if (delBtn) delBtn.hidden = false;
         try { document.body.style.overscrollBehavior = 'none'; } catch (err) {}
-        beginDrag(source, e);
+        beginDrag(source, x, y, pointerId);
     }
 
     /* ---- 开始拖拽 ---- */
-    function beginDrag(source, e) {
+    function beginDrag(source, x, y, pointerId) {
+        if (EDIT.ghost) { EDIT.ghost.remove(); EDIT.ghost = null; }
+        if (EDIT.source) EDIT.source.classList.remove('edit-source');
         EDIT.source = source;
-        EDIT.lastTarget = null;
-        EDIT.pointerId = e ? e.pointerId : null;
-        // 幽灵：克隆源外观（跟随手指，松手时判定位放回）
-        var ghost = source.cloneNode(true);
-        ghost.className = 'edit-ghost';
-        document.body.appendChild(ghost);
-        EDIT.ghost = ghost;
+        EDIT.sourceId = idOf(source);
+        if (EDIT.selected && EDIT.selected !== source) EDIT.selected.classList.remove('widget-selected');
+        EDIT.selected = source;
+        if (source.classList && isDeletableComponent(source)) source.classList.add('widget-selected');
+        EDIT.pointerId = pointerId != null ? pointerId : null;
+        EDIT.lastKey = '';
+        EDIT.pendingX = x; EDIT.pendingY = y;
+        EDIT.ghost = makeGhost(source);
         source.classList.add('edit-source');
-        positionGhost(e ? e.clientX : 0, e ? e.clientY : 0);
+        positionGhost(x, y);
+        // 进入真实拖动后才捕获指针，确保拖动过程中 pointermove/up 可靠送达；
+        // （home-screen 为全屏容器，pointerup 后浏览器会自动释放捕获）
+        if (EDIT.pointerId != null) {
+            var captureHost = document.querySelector('.home-screen');
+            if (captureHost && captureHost.setPointerCapture) {
+                try { captureHost.setPointerCapture(EDIT.pointerId); } catch (err) {}
+            }
+        }
+    }
+
+    function makeGhost(source) {
+        var ghost = source.cloneNode(true);
+        var r = source.getBoundingClientRect();
+        ghost.className = source.className;
+        ghost.classList.add('edit-ghost');
+        ghost.style.width = r.width + 'px';
+        ghost.style.height = r.height + 'px';
+        ghost.style.margin = '0';
+        ghost.style.animation = 'none';
+        ghost.style.transition = 'none';
+        document.body.appendChild(ghost);
+        return ghost;
     }
 
     function positionGhost(x, y) {
@@ -3674,90 +6728,342 @@ html.edit-mode-active, html.edit-mode-active body {
         EDIT.ghost.style.top = y + 'px';
     }
 
-    /* ---- 拖拽移动：自动挤位 + 跨页 ---- */
+    /* ---- 拖拽移动：自动挤位 + 跨页 + Dock（rAF 节流，减少回流卡顿） ---- */
     function onEditDragMove(e) {
         if (!EDIT.active || !EDIT.source) return;
-        if (e.pointerId != null && EDIT.pointerId != null && e.pointerId !== EDIT.pointerId) return;
-        positionGhost(e.clientX, e.clientY);
-        handleEdgeAutopage(e.clientX);
-        // 手指所在容器
-        var container = currentPage < 1 ? document.querySelector('.note-apps-row') : document.querySelector('.page2-apps');
-        // 若源已因跨页进入另一容器，则用源所在容器
-        if (container && !container.contains(EDIT.source)) {
-            var srcGrid = EDIT.source.parentNode;
-            container = (srcGrid && (srcGrid.classList.contains('note-apps-row') || srcGrid.classList.contains('page2-apps')))
-                ? srcGrid : container;
+        if (EDIT.pointerId != null && e.pointerId != null && e.pointerId !== EDIT.pointerId) return;
+        EDIT.lastX = e.clientX; EDIT.lastY = e.clientY;
+        EDIT.pendingX = e.clientX;
+        EDIT.pendingY = e.clientY;
+        positionGhost(e.clientX, e.clientY);   // 纯写样式，不读布局，交给 GPU
+        if (!EDIT.raf) EDIT.raf = requestAnimationFrame(flushDrag);
+    }
+
+    /* 每帧最多执行一次：跨页/换位/落点计算与 DOM 重排集中在此 */
+    function flushDrag() {
+        EDIT.raf = 0;
+        var src = EDIT.source;
+        if (!EDIT.active || !src) return;
+        var x = EDIT.pendingX, y = EDIT.pendingY;
+
+        // 组件（便签）可跨任意页：第一页左右换位，拖到后续页则为独立块
+        if (src.classList.contains('colorful-widget')) {
+            moveWidgetLive(x, y);
+            return;
         }
-        /* 用元素命中的落点进行精确挤位 */
-        var el = document.elementFromPoint(e.clientX, e.clientY);
-        var hit = el && el.closest ? el.closest('.app-cell, .colorful-widget') : null;
-        if (hit && hit !== EDIT.source && hit.parentNode) {
-            var par = hit.parentNode;
-            if (par && par.contains(EDIT.source)) {
-                var before = e.clientY < hit.getBoundingClientRect().top + hit.getBoundingClientRect().height / 2;
-                if (before) { if (hit.previousSibling !== EDIT.source) par.insertBefore(EDIT.source, hit); }
-                else { if (hit.nextSibling !== EDIT.source) par.insertBefore(EDIT.source, hit.nextSibling); }
+
+        // 竖排大卡片：跨页上下换位（含新增页）；动态组件则在第二页/新增页进入自由网格
+        if (isCard(src)) {
+            if (src.classList.contains('widget-item')) {
+                moveWidgetToGridLive(x, y);
                 return;
             }
+            moveCardLive(x, y);
+            return;
         }
-        if (container) reorderTo(container, e.clientX, e.clientY);
+
+        handleEdgeAutopage(x);
+        var zone = zoneAtPoint(x, y);
+        var key, idx;
+        if (zone === 'dock') {
+            idx = dockIndexAt(x, src);
+            key = zone + ':' + idx;
+        } else if (zone >= 1) {
+            // 自由网格：用指针推算的 (列,行) 作去重键，跟着手指走
+            var fg = pageGridAt(zone);
+            var fcell = fg ? freeCellAtPoint(fg, x, y, src) : { c: 0, r: 0 };
+            idx = fcell.r * FREE_COLS + fcell.c;
+            key = zone + ':f:' + fcell.c + ':' + fcell.r;
+        } else {
+            idx = gridIndexAt(zoneGrid(zone), x, y, src);
+            key = zone + ':' + idx;
+        }
+        if (EDIT.lastKey === key) return;      // 落点未变，跳过重排
+        EDIT.lastKey = key;
+        moveSourceToZone(zone, x, y, idx);
     }
 
-    /* ---- 边缘跨页（拖拽到屏幕左右边缘自动切页） ---- */
-    function handleEdgeAutopage(x) {
+    function zoneGrid(zone) { return pageGridAt(zone); }
+
+    function moveWidgetLive(x, y) {
+        var src = EDIT.source;
+        if (!src) return;
+        handleEdgeAutopage(x);   // 便签组件可迁移到任意页（含新增页）
+        var pg = currentPage;
+        if (pg >= 1) {
+            // 跨到第二页或新增页：作为独立块参与目标页竖排换位
+            layout.widgetPage = (pg === 1) ? 'p2' : 'extra';
+            layout.widgetExtra = (pg >= 2) ? pg : -1;
+            if (!src.classList.contains('widget-standalone')) src.classList.add('widget-standalone');
+            src.style.marginLeft = '';
+            src.style.marginRight = '';
+            var col = pageColumn(pg);
+            var idx = cardIndexAt(columnSlots(col), y, src);
+            var key = 'w' + pg + ':' + idx;
+            if (EDIT.lastKey === key) return;
+            EDIT.lastKey = key;
+            insertCardAt(col, src, idx);
+            return;
+        }
+        // 回到第一页：重新塞回 note-apps-row，并支持左右换位
+        layout.widgetPage = 'p1';
+        layout.widgetExtra = -1;
+        var right = x > window.innerWidth / 2;
+        var newSide = right ? 'right' : 'left';
+        var needAttach = (src.parentElement !== noteRow());
+        var needSide = (layout.widgetSide !== newSide);
+        if (!needAttach && !needSide) return;
+        var els = [];
+        var cw = getEl('widget:cw');
+        if (cw) els.push(cw);
+        var apps = movableChildren(p1Grid());
+        for (var i = 0; i < apps.length; i++) els.push(apps[i]);
+        var first = rectMap(els);
+        layout.widgetSide = newSide;
+        renderWidgetSide();
+        animateFlip(els, first);
+    }
+
+    /* ---- 竖排大卡片：在当前页内容列内按指针 Y 上下换位（FLIP，不重叠、比例不变） ---- */
+    function isCard(el) {
+        if (!el || !el.classList) return false;
+        return el.classList.contains('profile-card') || el.classList.contains('tw-group') || el.classList.contains('chat-stack') || el.classList.contains('widget-item');
+    }
+
+    function columnSlots(container) {
+        var out = [];
+        if (!container) return out;
+        for (var i = 0; i < container.children.length; i++) out.push(container.children[i]);
+        return out;
+    }
+
+    function cardIndexAt(slots, y, excludeEl) {
+        for (var i = 0; i < slots.length; i++) {
+            var s = slots[i];
+            if (s === excludeEl) continue;
+            var r = s.getBoundingClientRect();
+            if (y < r.top + r.height / 2) return i;
+        }
+        return slots.length;
+    }
+
+    function cardRects(els) {
+        var a = [];
+        for (var i = 0; i < els.length; i++) a.push(els[i].getBoundingClientRect());
+        return a;
+    }
+
+    function cardFlip(els, first) {
+        for (var i = 0; i < els.length; i++) {
+            (function (node, b) {
+                var a = node.getBoundingClientRect();
+                var dx = b.left - a.left, dy = b.top - a.top;
+                if (dx * dx + dy * dy < 4) return;
+                node.style.transition = 'none';
+                node.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+                void node.offsetWidth;
+                node.style.transition = 'transform 0.22s cubic-bezier(0.34,1.56,0.64,1)';
+                node.style.transform = '';
+                setTimeout(function () {
+                    node.style.transition = '';
+                    node.style.transform = '';
+                }, 230);
+            })(els[i], first[i]);
+        }
+    }
+
+    function insertCardAt(container, source, idx) {
+        if (!container || !source) return;
+        var slots = columnSlots(container);
+        var first = cardRects(slots);
+        var others = [];
+        for (var i = 0; i < slots.length; i++) if (slots[i] !== source) others.push(slots[i]);
+        var ref = idx < others.length ? others[idx] : null;
+        var changed = false;
+        if (ref) {
+            if (source.nextSibling !== ref) { container.insertBefore(source, ref); changed = true; }
+        } else {
+            if (source !== container.lastElementChild) { container.appendChild(source); changed = true; }
+        }
+        if (changed) {
+            cardFlip(slots, first);
+            try { syncColorfulWidget(); } catch (e) {}
+        }
+    }
+
+    function moveCardLive(x, y) {
+        var src = EDIT.source;
+        if (!src) return;
+        // 大卡片跨页：拖动到左右边缘自动翻页（含新增页），落点按目标页内容列计算
+        handleEdgeAutopage(x);
+        var pg = Math.min(currentPage, PAGE_COUNT - 1);
+        var col = pageColumn(pg);
+        var idx = cardIndexAt(columnSlots(col), y, src);
+        var key = 'blk:' + pg + ':' + idx;
+        if (EDIT.lastKey === key) return;
+        EDIT.lastKey = key;
+        insertCardAt(col, src, idx);
+    }
+
+    /* ---- 动态组件：在第一页保持竖排块；第二页/新增页进入自由网格，跟着手指落位 ---- */
+    function moveWidgetToGridLive(x, y) {
+        var src = EDIT.source;
+        if (!src) return;
+        handleEdgeAutopage(x);
+        var pg = Math.min(currentPage, PAGE_COUNT - 1);
+        if (pg === 0) {
+            freeClearPos(src);
+            var col = pageColumn(0);
+            var idx0 = cardIndexAt(columnSlots(col), y, src);
+            var key0 = 'wcol:0:' + idx0;
+            if (EDIT.lastKey === key0) return;
+            EDIT.lastKey = key0;
+            insertCardAt(col, src, idx0);
+            return;
+        }
+        var grid = pageGridAt(pg);
+        if (!grid) return;
+        if (!src.getAttribute('data-span')) src.setAttribute('data-span', String(widgetSpan(widgetTypeOf(idOf(src)))));
+        var cell = freeCellAtPoint(grid, x, y, src);
+        var key = 'gw' + pg + ':' + cell.c + ':' + cell.r;
+        if (EDIT.lastKey === key) return;
+        EDIT.lastKey = key;
+        freePushReflow(grid, src, cell.c, cell.r);
+    }
+
+    function moveSourceToZone(zone, x, y, idx) {
+        var src = EDIT.source;
+        if (!src) return;
+        if (zone === 'dock') {
+            freeClearPos(src);
+            var dockEl = dockInner();
+            if (!src.classList.contains('dock-app')) src = EDIT.source = toDockApp(src);
+            insertAppAt(dockEl, src, (idx != null ? idx : dockIndexAt(x, src)));
+        } else if (zone >= 1) {
+            // 第二页 / 新增页：自由网格，拖动项精确落到手指格子，原有图标碰撞避让
+            var grid = pageGridAt(zone);
+            if (!grid) return;
+            if (!src.classList.contains('app-cell')) src = EDIT.source = toGridApp(src);
+            var cell = freeCellAtPoint(grid, x, y, src);
+            freePushReflow(grid, src, cell.c, cell.r);
+        } else {
+            // 第一页：保持竖排整块（顺序流位）
+            freeClearPos(src);
+            var grid1 = pageGridAt(zone);
+            if (!grid1) return;
+            if (!src.classList.contains('app-cell')) src = EDIT.source = toGridApp(src);
+            insertAppAt(grid1, src, (idx != null ? idx : gridIndexAt(grid1, x, y, src)));
+        }
+    }
+
+    /* ---- 边缘跨页（拖拽到屏幕左右边缘并「持续停留」才翻页，防误触：
+           先收窄夹缝，再要求指针停留满 EDGE_HOLD_MS；一旦离开夹缝即重置计时） ---- */
+    function handleEdgeAutopage(x, maxPage) {
         var now = Date.now();
-        var nearRight = x > window.innerWidth - 44;
-        var nearLeft = x < 44;
-        var canNext = currentPage < PAGE_COUNT - 1;
-        var canPrev = currentPage > 0;
-        if (((nearRight && canNext) || (nearLeft && canPrev)) && (now - EDIT.edgeCooldown > 500)) {
-            EDIT.edgeCooldown = now;
-            var targetPage = (nearRight && canNext) ? currentPage + 1 : currentPage - 1;
-            var dest = getContainerForPage(targetPage);
-            // 跨页：源物理移入目标容器，随网格重排
-            if (dest && EDIT.source && EDIT.source.parentNode !== dest) {
-                dest.appendChild(EDIT.source);
-            }
-            goToPage(targetPage);
-            // 切页后落点仅在目标页重新计算一次
-            EDIT.lastTarget = null;
-            EDIT.edgeCooldown = now;
+        var edge = EDIT.EDGE_PX;
+        var nearRight = x > window.innerWidth - edge;
+        var nearLeft = x < edge;
+        var side = nearRight ? 'R' : (nearLeft ? 'L' : '');
+        if (!side) {
+            EDIT.edgeSide = '';
+            EDIT.edgeEnterAt = 0;
+            EDIT.edgeHeld = false;
+            return;
         }
+        var last = (maxPage != null ? maxPage : PAGE_COUNT - 1);
+        if (last < 0) last = 0;
+        if (side === 'R' && currentPage >= last) { EDIT.edgeSide = ''; EDIT.edgeEnterAt = 0; return; }
+        if (side === 'L' && currentPage <= 0) { EDIT.edgeSide = ''; EDIT.edgeEnterAt = 0; return; }
+        // 第一次进入该侧夹缝：只记时间，暂不翻页
+        if (EDIT.edgeSide !== side) {
+            EDIT.edgeSide = side;
+            EDIT.edgeEnterAt = now;
+            EDIT.edgeHeld = false;
+            return;
+        }
+        if (now - EDIT.edgeEnterAt < EDIT.EDGE_HOLD_MS) return;   // 停留时长未达标，忍住
+        if (now - EDIT.edgeCooldown < 520) return;                // 刚翻过页，冷却防连翻
+        EDIT.edgeCooldown = now;
+        EDIT.edgeSide = '';
+        EDIT.edgeEnterAt = 0;
+        EDIT.edgeHeld = true;
+        goToPageAnimated(side === 'R' ? currentPage + 1 : currentPage - 1);
     }
 
-    /* ---- 松手 / 结束拖拽 ---- */
+    /* ---- 带过渡动画的整页切换（用于拖拽触发的边缘翻页，视觉顺滑） ---- */
+    function goToPageAnimated(index) {
+        if (index < 0) index = 0;
+        if (index > PAGE_COUNT - 1) index = PAGE_COUNT - 1;
+        currentPage = index;
+        if (pagesTrack) {
+            pagesTrack.style.transition = 'transform 0.26s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            pagesTrack.style.transform = 'translateX(' + (-index * 100 / PAGE_COUNT) + '%)';
+            clearTimeout(EDIT.pageAnimTimer);
+            EDIT.pageAnimTimer = setTimeout(function () {
+                if (pagesTrack) pagesTrack.style.transition = '';
+            }, 300);
+        }
+        updatePageIndicator();
+    }
+
+    /* ---- 松手：放下（保留抖动编辑态，可继续拖其它项） ---- */
     function onEditDragEnd(e) {
         if (!EDIT.active) return;
+        if (EDIT.raf) { cancelAnimationFrame(EDIT.raf); EDIT.raf = 0; }
         if (EDIT.ghost) { EDIT.ghost.remove(); EDIT.ghost = null; }
         if (EDIT.source) {
             EDIT.source.classList.remove('edit-source');
+            enforceDockMax();
+            collectLayout();
+            persistLayout();
             EDIT.source = null;
+            EDIT.sourceId = null;
         }
-        EDIT.lastTarget = null;
         EDIT.pointerId = null;
+        EDIT.pressEl = null;
+        EDIT.lastKey = '';
     }
 
     /* ---- 退出编辑模式 ---- */
     function exitEditMode() {
         if (!EDIT.active) return;
         EDIT.active = false;
+        if (EDIT.raf) { cancelAnimationFrame(EDIT.raf); EDIT.raf = 0; }
         document.documentElement.classList.remove('edit-mode-active');
         var doneBtn = $('editDoneBtn');
         if (doneBtn) doneBtn.hidden = true;
+        var addBtn = $('editAddPageBtn');
+        if (addBtn) addBtn.hidden = true;
+        var delBtn = $('editDelBtn');
+        if (delBtn) delBtn.hidden = true;
+        hideAddMenu();
         if (EDIT.ghost) { EDIT.ghost.remove(); EDIT.ghost = null; }
         if (EDIT.source) { EDIT.source.classList.remove('edit-source'); EDIT.source = null; }
+        if (EDIT.selected) { EDIT.selected.classList.remove('widget-selected'); EDIT.selected = null; }
         clearPressTimer();
-        EDIT.lastTarget = null;
-        // 还原第一页网格结构
-        unflattenPageOne();
-        // 恢复 Dense 布局并回到整页位置
-        syncColorfulWidget();
+        EDIT.pressEl = null;
+        EDIT.pointerId = null;
+        enforceDockMax();
+        collectLayout();
+        persistLayout();
+        renderAll();
+        try { document.body.style.overscrollBehavior = ''; } catch (err) {}
         goToPage(currentPage);
     }
 
-    /* ---- 初始化编辑模式 ----
-       注意：与翻页手势共用 home 的 pointer 事件，但编辑模式开启时翻页被短路 */
+    /* ---- 初始化编辑模式：
+       分配稳定 id → 载入布局 → 应用顺序 → 同步内存，并挂指针事件 ---- */
     function initEditMode() {
+        try { ensureItemIds(); } catch (e) {}
+        try { defaultLayout = captureDefaultLayout(); } catch (e) {}
+        try { loadWidgetContent(); } catch (e) {}
+        try { loadLayout(); } catch (e) {}
+        try { syncPageCount(layout.pageCount); } catch (e) {}
+        try { ensureWidgetDom(); } catch (e) {}
+        try { ensureOriginalDeleteButtons(); } catch (e) {}
+        try { sweepDeleted(); } catch (e) {}
+        try { renderAll(); } catch (e) {}
+        try { collectLayout(); } catch (e) {}
         var home = document.querySelector('.home-screen');
         if (!home) return;
         home.addEventListener('pointerdown', onPressStart);
@@ -3767,10 +7073,71 @@ html.edit-mode-active, html.edit-mode-active body {
         home.addEventListener('lostpointercapture', onPressEndOrCancel);
         var doneBtn = $('editDoneBtn');
         if (doneBtn) doneBtn.addEventListener('click', exitEditMode);
-        // 编辑模式下禁止滚轮翻页
-        home.addEventListener('wheel', function (e) {
-            if (EDIT.active && e.cancelable) e.preventDefault();
-        }, { passive: false });
+        var addBtn = $('editAddPageBtn');
+        if (addBtn) addBtn.addEventListener('click', function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            toggleAddMenu();
+        });
+        var addItem = $('editAddMenuItem');
+        if (addItem) addItem.addEventListener('click', function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            hideAddMenu();
+            addPage();
+        });
+        // 「添加组件」：打开组件库面板
+        try { populateWidgetGallery(); } catch (e) {}
+        var addWidgetItem = $('editAddWidgetItem');
+        if (addWidgetItem) addWidgetItem.addEventListener('click', function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            hideAddMenu();
+            showWidgetGallery();
+        });
+        var wgClose = $('wgCloseBtn');
+        if (wgClose) wgClose.addEventListener('click', function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            hideWidgetGallery();
+        });
+        var wgMask = $('wgMask');
+        if (wgMask) wgMask.addEventListener('click', function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            hideWidgetGallery();
+        });
+        // 左上角删除键：删除当前选中的组件
+        var delBtn = $('editDelBtn');
+        if (delBtn) delBtn.addEventListener('click', function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            if (EDIT.selected && EDIT.selected.classList) {
+                deleteWidgetEl(EDIT.selected);
+            }
+        });
+        // 组件右上角 × 号：删除该组件（事件委托，覆盖动态新增项）
+        document.addEventListener('click', function (e) {
+            var x = e && e.target && e.target.closest ? e.target.closest('.widget-x') : null;
+            if (!x) return;
+            if (e && e.stopPropagation) e.stopPropagation();
+            if (e && e.preventDefault) e.preventDefault();
+            var widget = x.closest && x.closest('.widget-item, .colorful-widget, .profile-card, .tw-group, .chat-stack');
+            if (widget) deleteWidgetEl(widget);
+        }, true);
+        // 点击其它区域关闭菜单
+        document.addEventListener('pointerdown', function (e) {
+            var t = e && e.target;
+            var m = $('editAddMenu');
+            if (!m || m.hidden) return;
+            if (t && t.closest && (t.closest('#editAddMenu') || t.closest('#editAddPageBtn'))) return;
+            hideAddMenu();
+        });
+    }
+
+    /* ---- 「增加页面」菜单开关（毛玻璃下拉） ---- */
+    function hideAddMenu() {
+        var m = $('editAddMenu');
+        if (m) m.hidden = true;
+    }
+    function toggleAddMenu() {
+        var m = $('editAddMenu');
+        if (!m) return;
+        m.hidden = !m.hidden;
     }
 
     /* ========================================
@@ -4381,6 +7748,30 @@ html.edit-mode-active, html.edit-mode-active body {
         getStoredPasscode: getStoredPasscode,
         setStoredPasscode: setStoredPasscode,
         lockUnlocked: function () { return lockUnlocked; }
+    };
+    /* 自动化测试 / 调试：暴露占格逻辑与少量操作入口（不影响正常运行） */
+    window._debug = {
+        widgetSpan: widgetSpan,
+        widgetRowSpan: widgetRowSpan,
+        goToPage: goToPage,
+        addWidget: addWidget,
+        getPage: function () { return currentPage; },
+        spanOf: function (id) {
+            var el = getEl(id);
+            if (!el) return null;
+            return { c: freeColSpan(el), r: freeRowSpan(el), fcol: el.getAttribute('data-fcol'), frow: el.getAttribute('data-frow') };
+        },
+        gridWidgets: function () {
+            var g = p2Grid();
+            if (!g) return [];
+            var out = [];
+            var kids = freeGridChildren(g);
+            for (var i = 0; i < kids.length; i++) {
+                var k = kids[i];
+                out.push({ id: idOf(k), c: freeColSpan(k), r: freeRowSpan(k), fcol: k.getAttribute('data-fcol'), frow: k.getAttribute('data-frow'), cols: k.style.gridColumnEnd, rows: k.style.gridRowEnd });
+            }
+            return out;
+        }
     };
 })();
 </script>
